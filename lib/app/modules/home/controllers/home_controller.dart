@@ -13,6 +13,8 @@ class HomeController extends GetxController {
   PageController pageController = PageController();
   RxInt currentPage = 0.obs;
 
+  RxDouble sliceDuration = 30.0.obs;
+
   Future<void> pickVideo() async {
     await requestPermissions();
     final result = await FilePicker.platform.pickFiles(type: FileType.video);
@@ -28,7 +30,10 @@ class HomeController extends GetxController {
     if (selectedVideo.value == null) return;
 
     videoParts.clear();
-    final parts = await VideoService.splitVideo(selectedVideo.value!);
+    final parts = await VideoService.splitBySS(
+      videoFile: selectedVideo.value!,
+      sliceDuration: sliceDuration.value,
+    );
     videoParts.addAll(parts);
   }
 

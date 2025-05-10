@@ -92,14 +92,12 @@ class HomeView extends GetView<HomeController> {
                                 icon: const Icon(Icons.cut),
                                 label: const Text('Découper'),
                                 onPressed: () {
-                                  if (!GetPlatform.isMobile) {
-                                    Get.snackbar(
-                                      'Erreur',
-                                      'Disponible uniquement sur Android/iOS',
-                                    );
-                                    return;
-                                  }
-                                  Get.to(() => const ProcessingView());
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return const TimeSlicingSheet();
+                                    },
+                                  );
                                 },
                               ),
                             ],
@@ -148,6 +146,76 @@ class HomeView extends GetView<HomeController> {
           );
         },
       ),
+    );
+  }
+}
+
+class TimeSlicingSheet extends GetWidget<HomeController> {
+  const TimeSlicingSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (controller) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Choisir la durée de découpage',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Obx(
+                      () => Text(
+                        '${controller.sliceDuration.value.toInt()} secondes',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Slider(
+                      min: 1,
+                      max: 60,
+                      divisions: 10,
+                      value: controller.sliceDuration.value,
+                      onChanged: (value) {
+                        controller.sliceDuration.value = value;
+                        controller.update();
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                      ),
+                      onPressed: () {
+                        if (!GetPlatform.isMobile) {
+                          Get.snackbar(
+                            'Erreur',
+                            'Disponible uniquement sur Android/iOS',
+                          );
+                          return;
+                        }
+                        Get.back();
+                        Get.to(() => const ProcessingView());
+                      },
+                      child: const Text('Confirmer'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
