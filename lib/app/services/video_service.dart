@@ -2,8 +2,11 @@ import 'dart:io';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class VideoService {
   static Future<List<File>> splitVideo(
@@ -84,6 +87,8 @@ class VideoService {
         '$sliceDuration',
         '-i',
         videoFile.path,
+        '-vf',
+        "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
         '-c:v',
         'mpeg4',
         '-b:v',
@@ -111,4 +116,22 @@ class VideoService {
 
     return videoParts;
   }
+
+  static Future<void> shareVideos(List<File> videoParts) async {
+    final filesToShare =
+        videoParts
+            .where((file) => file.existsSync())
+            .map((file) => XFile(file.path))
+            .toList();
+
+    if (filesToShare.isEmpty) {
+      Get.snackbar('Erreur', 'Aucune vidéo à partager.');
+      return;
+    }
+    SharePlus.instance.share(
+      ShareParams(text: 'Voici mes découpages 🎬✂️', files: filesToShare),
+    );
+  }
+
+
 }

@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as p;
+import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class SaveSegmentsService {
   static int _splitCounter = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -12,14 +11,6 @@ class SaveSegmentsService {
     if (segments.isEmpty) {
       throw Exception("Aucun segment à enregistrer.");
     }
-
-    // Demander la permission de stockage (Android uniquement)
-    // if (Platform.isAndroid) {
-    //   final status = await Permission.storage.request();
-    //   if (!status.isGranted) {
-    //     throw Exception('Permission non accordée pour accéder au stockage.');
-    //   }
-    // }
 
     final String folderName = 'VideoSpliter/Split$_splitCounter';
     _splitCounter++;
@@ -47,8 +38,7 @@ class SaveSegmentsService {
     }
 
     Get.back();
-    Get.snackbar(
-      'Succès',
+    showSnackBar(
       'Vidéos enregistrées dans ${Platform.isAndroid ? 'Download/$folderName' : folderName}',
     );
   }

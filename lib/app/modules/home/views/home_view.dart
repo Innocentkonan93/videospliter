@@ -13,8 +13,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
-
+    controller.clearAll();
     return Scaffold(
       body: GetBuilder<HomeController>(
         init: controller,
@@ -181,7 +180,7 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
                       ),
                     ),
                     Slider(
-                      min: 1,
+                      min: 10,
                       max: 60,
                       divisions: 10,
                       value: controller.sliceDuration.value,
