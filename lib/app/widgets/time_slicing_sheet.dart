@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
@@ -37,9 +36,9 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
                       ),
                     ),
                     Slider(
-                      min: 10,
-                      max: 60,
-                      divisions: 10,
+                      min: 1,
+                      max: 30,
+                      divisions: 30,
                       value: controller.sliceDuration.value,
                       onChanged: (value) {
                         controller.sliceDuration.value = value;
