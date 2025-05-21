@@ -86,7 +86,7 @@ class AdMobService {
   }
 
   /// Interstitiel
-  void loadInterstitialAd({Function()? onAdDismissed}) {
+  void loadInterstitialAd({Function()? onAdReady, Function()? onAdDismissed}) {
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: AdRequest(),
@@ -105,13 +105,18 @@ class AdMobService {
               print('Interstitial failed: $error');
             },
           );
-          _interstitialAd!.show();
+          if (onAdReady != null)
+            onAdReady(); // ✅ on déclenche l’affichage ensuite
         },
         onAdFailedToLoad: (error) {
           print('Interstitial load error: $error');
         },
       ),
     );
+  }
+
+  void showInterstitialAd() {
+    _interstitialAd?.show();
   }
 
   /// Rewarded

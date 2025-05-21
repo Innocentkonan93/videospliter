@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
@@ -61,29 +62,29 @@ class HomeView extends GetView<HomeController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // if (controller.banner != null)
-                          //   SafeArea(
-                          //     child: FutureBuilder(
-                          //       future: controller.banner?.load(),
-                          //       builder: (context, snapshot) {
-                          //         if (snapshot.connectionState ==
-                          //                 ConnectionState.done &&
-                          //             controller.banner != null) {
-                          //           return Container(
-                          //             alignment: Alignment.center,
-                          //             width:
-                          //                 controller.banner!.size.width
-                          //                     .toDouble(),
-                          //             height:
-                          //                 controller.banner!.size.height
-                          //                     .toDouble(),
-                          //             child: AdWidget(ad: controller.banner!),
-                          //           );
-                          //         }
-                          //         return const SizedBox();
-                          //       },
-                          //     ),
-                          //   ),
+                          if (controller.banner != null)
+                            SafeArea(
+                              child: FutureBuilder(
+                                future: controller.banner?.load(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      controller.banner != null) {
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      width:
+                                          controller.banner!.size.width
+                                              .toDouble(),
+                                      height:
+                                          controller.banner!.size.height
+                                              .toDouble(),
+                                      child: AdWidget(ad: controller.banner!),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
+                              ),
+                            ),
                           const Spacer(),
 
                           const Text(
@@ -110,7 +111,9 @@ class HomeView extends GetView<HomeController> {
                           controller.selectedVideo.value == null
                               ? Center(
                                 child: ElevatedButton.icon(
-                                  onPressed: controller.pickVideo,
+                                  onPressed: () {
+                                    controller.pickVideo();
+                                  },
                                   label: Text(
                                     'Sélectionner une vidéo',
                                     style: theme.textTheme.titleMedium
@@ -217,6 +220,13 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     Container(),
                                   ],
+                                ),
+                                Text(
+                                  "Mes découpages",
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    // fontWeight: FontWeight.w800,
+                                    color: AppColors.white,
+                                  ),
                                 ),
                               ],
                             ),

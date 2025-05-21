@@ -38,11 +38,22 @@ class _ResultViewState extends State<ResultView> {
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            leading: BackButton(
-              onPressed: () {
-                Get.back();
-                controller.clearAll();
-              },
+            leading: Visibility(
+              visible: !controller.canSelectVideo.value,
+              replacement: IconButton(
+                onPressed: () {
+                  controller.canSelectVideo.value = false;
+                  controller.selectedVideoParts.clear();
+                  controller.update();
+                },
+                icon: const Icon(Icons.close),
+              ),
+              child: BackButton(
+                onPressed: () {
+                  Get.back();
+                  controller.clearAll();
+                },
+              ),
             ),
             title: Text(
               controller.canSelectVideo.value

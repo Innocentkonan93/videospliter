@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
-import 'package:video_spliter/app/services/file_service.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 
 class MyCutoutsView extends StatefulWidget {
   const MyCutoutsView({super.key});
@@ -25,30 +25,37 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
   }
 
   Future<void> _loadCutoutFolders() async {
-    Directory baseDir;
+    try {
+      Directory? baseDir;
 
-    if (Platform.isAndroid) {
-      baseDir = Directory('/storage/emulated/0/Download/VideoSpliter');
-    } else if (Platform.isIOS) {
-      final appDocDir = await getApplicationDocumentsDirectory();
-      baseDir = Directory(p.join(appDocDir.path, 'VideoSpliter'));
-    } else {
-      return; // plateforme non supportée
+      if (Platform.isAndroid) {
+        final dir = await getExternalStorageDirectory();
+        if (dir == null) return;
+        baseDir = Directory(p.join(dir.path, appName));
+      } else if (Platform.isIOS) {
+        final appDocDir = await getApplicationDocumentsDirectory();
+        baseDir = Directory(p.join(appDocDir.path, appName));
+      } else {
+        return; // plateforme non supportée
+      }
+
+      if (!await baseDir.exists()) return;
+
+      final List<Directory> folders =
+          baseDir.listSync().whereType<Directory>().toList();
+
+      setState(() {
+        splitFolders = folders;
+      });
+    } catch (e) {
+      print('❌ Erreur lors du chargement des dossiers : $e');
     }
-
-    if (!await baseDir.exists()) return;
-
-    final List<Directory> folders =
-        baseDir.listSync().whereType<Directory>().toList();
-
-    setState(() {
-      splitFolders = folders;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
+
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) {
@@ -76,7 +83,7 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                       itemCount: splitFolders.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // ou 3
+                            crossAxisCount: 2,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 5,
                             childAspectRatio: 1,
@@ -84,31 +91,47 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                       itemBuilder: (context, index) {
                         final folder = splitFolders[index];
                         final folderName = p.basename(folder.path);
-                        final createdAt = folder.statSync().modified;
+
+                        DateTime? createdAt;
+                        try {
+                          createdAt = folder.statSync().modified;
+                        } catch (_) {
+                          createdAt = null;
+                        }
+
                         return GestureDetector(
                           onTap: () async {
-                            // 🔁 Lire les fichiers mp4 dans le dossier
-                            final List<FileSystemEntity> entities =
-                                folder.listSync();
-                            final parts =
-                                entities
-                                    .whereType<File>()
-                                    .where((file) => file.path.endsWith('.mp4'))
-                                    .map((f) => File(f.path))
-                                    .toList();
+                            try {
+                              final List<FileSystemEntity> entities =
+                                  folder.listSync();
 
-                            if (parts.isEmpty) {
-                              Get.snackbar(
-                                'Aucun fichier',
-                                'Ce dossier est vide',
+                              final parts =
+                                  entities
+                                      .whereType<File>()
+                                      .where(
+                                        (file) => file.path
+                                            .toLowerCase()
+                                            .endsWith('.mp4'),
+                                      )
+                                      .toList();
+
+                              if (parts.isEmpty) {
+                                Get.snackbar(
+                                  'Aucun fichier',
+                                  'Ce dossier ne contient aucun fichier vidéo',
+                                );
+                                return;
+                              }
+
+                              Get.to(
+                                () => ResultView(parts: parts, isSaved: true),
                               );
-                              return;
+                            } catch (e) {
+                              Get.snackbar(
+                                'Erreur',
+                                'Impossible d’ouvrir ce dossier : $e',
+                              );
                             }
-
-                            // 🧭 Naviguer vers la vue de résultat avec les fichiers
-                            Get.to(
-                              () => ResultView(parts: parts, isSaved: true),
-                            );
                           },
                           child: Column(
                             children: [
@@ -136,7 +159,11 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                                   ),
                                 ),
                               ),
-                              Text(createdAt.toString()),
+                              Text(
+                                createdAt != null
+                                    ? createdAt.toString()
+                                    : 'Date inconnue',
+                              ),
                             ],
                           ),
                         );

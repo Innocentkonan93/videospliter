@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
@@ -7,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
@@ -60,6 +62,7 @@ class VideoService {
     required File videoFile,
     required double sliceDuration,
   }) async {
+    HomeController homeController = Get.find<HomeController>();
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
       throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
     }
@@ -67,7 +70,6 @@ class VideoService {
     final videoParts = <File>[];
     final tempDir = await getTemporaryDirectory();
 
-    // 🔍 Étape 1 : obtenir la durée totale
     final mediaInfoSession = await FFprobeKit.getMediaInformation(
       videoFile.path,
     );
@@ -76,10 +78,32 @@ class VideoService {
 
     int index = 0;
     double start = 0;
+    final totalSegments = (totalDuration / sliceDuration).ceil();
 
     while (start < totalDuration) {
       final output =
-          '${tempDir.path}/cut_it_${index.toString().padLeft(3, '0')}.mp4';
+          '${tempDir.path}/cut_it_${DateTime.now().millisecondsSinceEpoch}_$index.mp4';
+
+      // final command = [
+      //   '-ss',
+      //   '$start',
+      //   '-t',
+      //   '$sliceDuration',
+      //   '-i',
+      //   '"${videoFile.path}"',
+      //   '-vf',
+      //   "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
+      //   '-c:v',
+      //   'mpeg4',
+      //   '-b:v',
+      //   '1M',
+      //   '-c:a',
+      //   'aac',
+      //   '-strict',
+      //   'experimental',
+      //   '-y',
+      //   '"$output"',
+      // ].join(' ');
 
       final command = [
         '-ss',
@@ -87,19 +111,19 @@ class VideoService {
         '-t',
         '$sliceDuration',
         '-i',
-        videoFile.path,
+        '"${videoFile.path}"',
         '-vf',
         "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
         '-c:v',
         'mpeg4',
-        '-b:v',
-        '1M',
+        '-qscale:v',
+        '2', // ✅ qualité élevée
         '-c:a',
         'aac',
-        '-strict',
-        'experimental',
+        '-b:a',
+        '128k',
         '-y',
-        output,
+        '"$output"',
       ].join(' ');
 
       final session = await FFmpegKit.execute(command);
@@ -108,6 +132,7 @@ class VideoService {
         videoParts.add(File(output));
       } else {
         final logs = await session.getAllLogsAsString();
+        log(logs ?? 'Erreur FFmpeg sur le segment $index');
         showSnackBar(
           "Erreur FFmpeg sur le segment $index\n$logs",
           isError: true,
@@ -115,8 +140,10 @@ class VideoService {
         throw Exception("Erreur FFmpeg sur le segment $index\n$logs");
       }
 
-      start += sliceDuration;
       index++;
+      start += sliceDuration;
+      homeController.progress.value = index / totalSegments; // 👈 progression
+      homeController.update();
     }
 
     return videoParts;
@@ -134,9 +161,13 @@ class VideoService {
       Get.snackbar('Erreur', 'Aucune vidéo à partager.');
       return;
     }
-    await SharePlus.instance.share(
-      ShareParams(text: 'Voici mes découpages 🎬✂️', files: filesToShare),
+    await SharePlus.instance.share(ShareParams(files: filesToShare));
+    adMobService.loadInterstitialAd(
+      onAdDismissed: () {},
+      onAdReady: () {
+        print('ad ready');
+        adMobService.showInterstitialAd();
+      },
     );
-    adMobService.loadInterstitialAd(onAdDismissed: () {});
   }
 }

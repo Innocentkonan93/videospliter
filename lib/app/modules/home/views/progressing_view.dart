@@ -51,36 +51,78 @@ class _ProcessingViewState extends State<ProcessingView> {
   }
 
   Future<void> _processVideo() async {
-    await controller.splitVideo();
-    await Future.delayed(const Duration(seconds: 1));
-    Get.off(() => ResultView(parts: controller.videoParts));
+    final parts = await controller.splitVideo();
+    if (parts != null) {
+      await controller.initVideoControllers(parts);
+      await Future.delayed(const Duration(seconds: 1));
+      Get.off(() => ResultView(parts: controller.videoParts));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Obx(
-              () => AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: Text(
-                  messages[_messageIndex.value],
-                  key: ValueKey(messages[_messageIndex.value]),
-                  style: const TextStyle(fontSize: 16),
-                ),
+      body: GetBuilder<HomeController>(
+        init: controller,
+        builder: (context) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Obx(
+                    () => AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder:
+                          (child, animation) =>
+                              FadeTransition(opacity: animation, child: child),
+                      child: Text(
+                        messages[_messageIndex.value],
+                        key: ValueKey(messages[_messageIndex.value]),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // SizedBox(
+                  //   height: 40,
+                  //   width: 40,
+                  //   child: CircularProgressIndicator(color: AppColors.primary),
+                  // ),
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(
+                      begin: 0,
+                      end: controller.progress.value,
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    builder: (context, value, _) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: LinearProgressIndicator(
+                          value: value,
+                          minHeight: 12,
+                          backgroundColor: Colors.grey[300],
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "${(controller.progress.value * 100).toStringAsFixed(1)} %",
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 40,
-              width: 40,
-              child: CircularProgressIndicator(color: AppColors.primary),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

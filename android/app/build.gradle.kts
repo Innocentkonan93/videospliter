@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.meetsum.video_spliter"
     compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.2.12479018"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

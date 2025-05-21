@@ -4,8 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
@@ -28,21 +30,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   BannerAd? banner;
   final successfulCuts = 0.obs;
   DateTime? _pausedTime;
+  RxDouble progress = 0.0.obs;
   final _interstitialRecentlyShown = false.obs;
 
   Future<void> pickVideo() async {
-    await requestPermissions();
-    final result = await FilePicker.platform.pickFiles(type: FileType.video);
+    try {
+      await requestPermissions();
+      final result = await FilePicker.platform.pickFiles(type: FileType.video);
 
-    if (result != null && result.files.single.path != null) {
-      selectedVideo.value = File(result.files.single.path!);
+      if (result != null && result.files.single.path != null) {
+        selectedVideo.value = File(result.files.single.path!);
+      }
+
+      update();
+    } catch (e) {
+      showSnackBar(e.toString());
     }
-
-    update();
   }
 
-  Future<void> splitVideo() async {
-    if (selectedVideo.value == null) return;
+  Future<List<File>?> splitVideo() async {
+    if (selectedVideo.value == null) return null;
 
     videoParts.clear();
     final parts = await VideoService.splitBySS(
@@ -50,15 +57,19 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       sliceDuration: sliceDuration.value,
     );
     videoParts.addAll(parts);
+    return parts;
   }
 
   Future<void> saveSegments() async {
     await SaveSegmentsService.saveSegments(videoParts);
     selectedVideo.value = null;
-    videoParts.clear();
+    clearAll();
     adMobService.loadInterstitialAd(
       onAdDismissed: () {
         update();
+      },
+      onAdReady: () {
+        adMobService.showInterstitialAd();
       },
     );
   }
@@ -82,7 +93,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void selectVideoPart(File part) {
-    selectedVideoParts.add(part);
+    if (selectedVideoParts.contains(part)) {
+      selectedVideoParts.remove(part);
+    } else {
+      selectedVideoParts.add(part);
+    }
     update();
   }
 
@@ -103,13 +118,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   // }
 
   Future<void> requestPermissions() async {
-    Map<Permission, PermissionStatus> statuses =
-        await [
-          Permission.storage,
-          Permission.videos,
-          Permission.manageExternalStorage,
-        ].request();
+    List<Permission> permissions = [];
 
+    if (Platform.isAndroid) {
+      permissions.add(Permission.storage);
+    } else if (Platform.isIOS) {
+      permissions.add(Permission.photos);
+    }
+
+    final statuses = await permissions.request();
     print(statuses);
   }
 
@@ -118,6 +135,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     selectedVideo.value = null;
     videoParts.clear();
     selectedVideoParts.clear();
+    progress.value = 0.0;
     // selectedFolders.clear();
     update();
   }
