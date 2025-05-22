@@ -37,8 +37,8 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
                     ),
                     Slider(
                       min: 1,
-                      max: 30,
-                      divisions: 30,
+                      max: 60,
+                      divisions: 60,
                       value: controller.sliceDuration.value,
                       onChanged: (value) {
                         controller.sliceDuration.value = value;

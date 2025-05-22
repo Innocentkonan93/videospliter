@@ -33,6 +33,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxDouble progress = 0.0.obs;
   final _interstitialRecentlyShown = false.obs;
 
+  final isBannerLoaded = false.obs;
+
   Future<void> pickVideo() async {
     try {
       await requestPermissions();
@@ -142,9 +144,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onInit() {
-    banner = adMobService.loadBannerAd();
+    loadBannerAd();
     WidgetsBinding.instance.addObserver(this);
     super.onInit();
+  }
+
+  void loadBannerAd() {
+    banner = adMobService.loadBannerAd();
+    isBannerLoaded.value = true;
+    update();
   }
 
   @override

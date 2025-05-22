@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 
 class CustomVideoPlayerWidget extends StatefulWidget {
   final File videoFile;
@@ -42,6 +45,7 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return FutureBuilder(
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
@@ -49,50 +53,64 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final ratio =
-                _controller.value.size.height / _controller.value.size.width;
-            return Center(
-              child: AspectRatio(
-                aspectRatio: ratio,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    VideoPlayer(_controller),
-                    if (!_controller.value.isPlaying)
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black38,
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.play_arrow,
-                            size: 48,
-                            color: Colors.white,
-                          ),
-                          onPressed: _togglePlayPause,
-                        ),
-                      )
-                    else
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.pause_circle_filled,
-                            size: 36,
-                            color: Colors.white70,
-                          ),
-                          onPressed: _togglePlayPause,
-                        ),
-                      ),
-                  ],
+        return Container(
+          height: Get.height * .3,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown, // <-- ajuste l’échelle sans déformer
+                child: SizedBox(
+                  width: _controller.value.size.width,
+                  height: _controller.value.size.height,
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: GestureDetector(
+                      onTap: _togglePlayPause,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
                 ),
               ),
-            );
-          },
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    controller.clearAll();
+                    controller.update();
+                  },
+                  icon: const Icon(Icons.cancel, color: AppColors.white),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: IconButton(
+                  onPressed: _togglePlayPause,
+                  icon: Visibility(
+                    visible: _controller.value.isPlaying,
+                    replacement: const Icon(
+                      Icons.play_circle_filled,
+                      color: AppColors.white,
+                      size: 45,
+                    ),
+                    child: Icon(
+                      Icons.pause_circle_filled,
+                      color: AppColors.white.withValues(alpha: .15),
+                      size: 45,
+                    ),
+                  ),
+                ),
+              ),
+              // Center(
+              //   child: IconButton(
+              //     icon: const Icon(Icons.pause_circle_filled),
+              //     onPressed: _togglePlayPause,
+              //   ),
+              // ),
+            ],
+          ),
         );
       },
     );

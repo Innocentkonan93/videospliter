@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class MyCutoutsView extends StatefulWidget {
 
 class _MyCutoutsViewState extends State<MyCutoutsView> {
   List<Directory> splitFolders = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -25,6 +27,9 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
   }
 
   Future<void> _loadCutoutFolders() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       Directory? baseDir;
 
@@ -45,16 +50,29 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
           baseDir.listSync().whereType<Directory>().toList();
 
       setState(() {
-        splitFolders = folders;
+        splitFolders =
+            folders..sort(
+              (a, b) => b.statSync().modified.compareTo(a.statSync().modified),
+            );
+        isLoading = false;
       });
     } catch (e) {
       print('❌ Erreur lors du chargement des dossiers : $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // _loadCutoutFolders();
     final theme = context.theme;
+
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return GetBuilder<HomeController>(
       init: HomeController(),
@@ -114,19 +132,19 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                                             .endsWith('.mp4'),
                                       )
                                       .toList();
-
-                              if (parts.isEmpty) {
-                                Get.snackbar(
-                                  'Aucun fichier',
-                                  'Ce dossier ne contient aucun fichier vidéo',
-                                );
-                                return;
-                              }
-
-                              Get.to(
-                                () => ResultView(parts: parts, isSaved: true),
+                              Future.delayed(
+                                const Duration(milliseconds: 300),
+                                () {
+                                  Get.to(
+                                    () =>
+                                        ResultView(parts: parts, isSaved: true),
+                                  );
+                                },
                               );
                             } catch (e) {
+                              log(
+                                '❌ Erreur lors de l’ouverture du dossier : $e',
+                              );
                               Get.snackbar(
                                 'Erreur',
                                 'Impossible d’ouvrir ce dossier : $e',

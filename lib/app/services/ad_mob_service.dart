@@ -102,11 +102,12 @@ class AdMobService {
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
-              print('Interstitial failed: $error');
+              // print('Interstitial failed: $error');
             },
           );
-          if (onAdReady != null)
+          if (onAdReady != null) {
             onAdReady(); // ✅ on déclenche l’affichage ensuite
+          }
         },
         onAdFailedToLoad: (error) {
           print('Interstitial load error: $error');

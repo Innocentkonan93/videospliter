@@ -43,8 +43,8 @@ class SaveSegmentsService {
       }
 
       Get.back();
-      final readablePath = targetDir.path.split("/Android").first;
-      showSnackBar("Vidéos enregistrées dans : $readablePath");
+      // final readablePath = targetDir.path.split("/Android").first;
+      showSnackBar("Vidéos enregistrées avec succès");
     } catch (e) {
       print('❌ Erreur lors de la sauvegarde : $e');
       showSnackBar('Erreur lors de l’enregistrement des vidéos');

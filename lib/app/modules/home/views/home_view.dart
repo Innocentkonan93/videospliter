@@ -39,24 +39,6 @@ class HomeView extends GetView<HomeController> {
                       opacity: .5,
                       child: Image.asset("assets/images/bg.png"),
                     ),
-                    // Positioned(
-                    //   right: -40,
-                    //   top: Get.height * 0.6,
-                    //   child: Image.asset(
-                    //     'assets/images/videocut.png',
-                    //     width: 200,
-                    //     height: 200,
-                    //   ),
-                    // ),
-                    // Positioned(
-                    //   left: -70,
-                    //   bottom: Get.height * 0.7,
-                    //   child: Image.asset(
-                    //     'assets/images/videocut.png',
-                    //     width: 200,
-                    //     height: 200,
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
@@ -115,7 +97,7 @@ class HomeView extends GetView<HomeController> {
                                     controller.pickVideo();
                                   },
                                   label: Text(
-                                    'Sélectionner une vidéo',
+                                    'Charger une vidéo',
                                     style: theme.textTheme.titleMedium
                                         ?.copyWith(fontWeight: FontWeight.w800),
                                   ),
@@ -136,29 +118,9 @@ class HomeView extends GetView<HomeController> {
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 0,
                                     ),
-                                    child: AspectRatio(
-                                      aspectRatio: 4 / 3,
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: IconButton(
-                                              onPressed: () {
-                                                controller.clearAll();
-                                                controller.update();
-                                              },
-                                              icon: const Icon(
-                                                Icons.cancel,
-                                                color: AppColors.red,
-                                              ),
-                                            ),
-                                          ),
-                                          CustomVideoPlayerWidget(
-                                            videoFile:
-                                                controller.selectedVideo.value!,
-                                          ),
-                                        ],
-                                      ),
+                                    child: CustomVideoPlayerWidget(
+                                      videoFile:
+                                          controller.selectedVideo.value!,
                                     ),
                                   ),
                                   const SizedBox(height: 16),

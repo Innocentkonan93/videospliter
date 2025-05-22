@@ -89,11 +89,12 @@ class _ProcessingViewState extends State<ProcessingView> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // SizedBox(
-                  //   height: 40,
-                  //   width: 40,
-                  //   child: CircularProgressIndicator(color: AppColors.primary),
-                  // ),
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  ),
+                  SizedBox(height: 10),
                   TweenAnimationBuilder<double>(
                     tween: Tween<double>(
                       begin: 0,

@@ -61,13 +61,49 @@ class _ResultViewState extends State<ResultView> {
                   : 'Résultats du découpage',
             ),
             actions: [
-              if (controller.selectedVideoParts.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.share),
-                  onPressed: () {
-                    VideoService.shareVideos(controller.selectedVideoParts);
-                  },
+              PopupMenuButton(
+                icon: const Icon(Icons.more_vert),
+                color: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                offset: Offset(0, kToolbarHeight),
+                itemBuilder:
+                    (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle_rounded),
+                            const SizedBox(width: 10),
+                            const Text('Tout sélectionner'),
+                          ],
+                        ),
+                        onTap: () {
+                          controller.canSelectVideo.value = true;
+                          controller.selectedVideoParts.addAll(widget.parts);
+                          controller.update();
+                        },
+                      ),
+                      if (!widget.isSaved)
+                        PopupMenuItem(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.save),
+                              const SizedBox(width: 10),
+                              const Text('Sauvegarder'),
+                            ],
+                          ),
+                          onTap: () => controller.saveSegments(),
+                        ),
+                    ],
+              ),
+              // if (controller.selectedVideoParts.isNotEmpty)
+              //   IconButton(
+              //     icon: const Icon(Icons.share),
+              //     onPressed: () {
+              //       VideoService.shareVideos(controller.selectedVideoParts);
+              //     },
+              //   ),
             ],
           ),
           body: GridView.builder(
@@ -147,16 +183,28 @@ class _ResultViewState extends State<ResultView> {
               );
             },
           ),
-          floatingActionButton:
-              !widget.isSaved
-                  ? FloatingActionButton.extended(
-                    onPressed: controller.saveSegments,
-                    label: const Text('Enregistrer'),
-                    icon: const Icon(Icons.save),
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
-                  )
-                  : null,
+          floatingActionButton: Visibility(
+            visible: !controller.canSelectVideo.value,
+            replacement: FloatingActionButton.extended(
+              onPressed: () {
+                VideoService.shareVideos(controller.selectedVideoParts);
+              },
+              label: const Text('Partager'),
+              icon: const Icon(Icons.share),
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.white,
+            ),
+            child:
+                !widget.isSaved
+                    ? FloatingActionButton.extended(
+                      onPressed: controller.saveSegments,
+                      label: const Text('Enregistrer'),
+                      icon: const Icon(Icons.save),
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                    )
+                    : SizedBox.shrink(),
+          ),
         );
       },
     );
