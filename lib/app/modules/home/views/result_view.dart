@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/video_player_view.dart';
 import 'package:video_spliter/app/services/video_service.dart';
+import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
 
 class ResultView extends StatefulWidget {
@@ -174,8 +175,12 @@ class _ResultViewState extends State<ResultView> {
                         alignment: Alignment.topRight,
                         child: Icon(
                           controller.selectedVideoParts.contains(file)
-                              ? Icons.check_circle
+                              ? Icons.check_circle_rounded
                               : Icons.circle_outlined,
+                          color:
+                              controller.selectedVideoParts.contains(file)
+                                  ? AppColors.primary
+                                  : AppColors.grey,
                         ),
                       ),
                   ],
@@ -187,6 +192,13 @@ class _ResultViewState extends State<ResultView> {
             visible: !controller.canSelectVideo.value,
             replacement: FloatingActionButton.extended(
               onPressed: () {
+                if (controller.selectedVideoParts.isEmpty) {
+                  showSnackBar(
+                    'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
+                    isError: true,
+                  );
+                  return;
+                }
                 VideoService.shareVideos(controller.selectedVideoParts);
               },
               label: const Text('Partager'),

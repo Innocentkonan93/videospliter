@@ -30,6 +30,7 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
     setState(() {
       isLoading = true;
     });
+
     try {
       Directory? baseDir;
 
@@ -46,15 +47,27 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
 
       if (!await baseDir.exists()) return;
 
-      final List<Directory> folders =
-          baseDir.listSync().whereType<Directory>().toList();
+      final List<Directory> validFolders = [];
+
+      await for (var entity in baseDir.list(recursive: false)) {
+        if (entity is Directory) {
+          final List<FileSystemEntity> files = await entity.list().toList();
+          final hasMp4 = files.any(
+            (e) => e is File && e.path.toLowerCase().endsWith('.mp4'),
+          );
+
+          if (hasMp4) {
+            validFolders.add(entity);
+          }
+        }
+      }
+
+      validFolders.sort(
+        (a, b) => b.statSync().modified.compareTo(a.statSync().modified),
+      );
 
       setState(() {
-        splitFolders =
-            folders..sort(
-              (a, b) => b.statSync().modified.compareTo(a.statSync().modified),
-            );
-        isLoading = false;
+        splitFolders = validFolders;
       });
     } catch (e) {
       print('❌ Erreur lors du chargement des dossiers : $e');
@@ -109,45 +122,37 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                       itemBuilder: (context, index) {
                         final folder = splitFolders[index];
                         final folderName = p.basename(folder.path);
-
-                        DateTime? createdAt;
-                        try {
-                          createdAt = folder.statSync().modified;
-                        } catch (_) {
-                          createdAt = null;
-                        }
-
+                        final createdAt = folder.statSync().modified;
                         return GestureDetector(
                           onTap: () async {
+                            final List<File> parts = [];
                             try {
-                              final List<FileSystemEntity> entities =
-                                  folder.listSync();
+                              await for (var entity in folder.list(
+                                recursive: false,
+                                followLinks: false,
+                              )) {
+                                if (entity is File &&
+                                    entity.path.endsWith('.mp4')) {
+                                  parts.add(entity);
+                                }
+                              }
 
-                              final parts =
-                                  entities
-                                      .whereType<File>()
-                                      .where(
-                                        (file) => file.path
-                                            .toLowerCase()
-                                            .endsWith('.mp4'),
-                                      )
-                                      .toList();
-                              Future.delayed(
-                                const Duration(milliseconds: 300),
-                                () {
-                                  Get.to(
-                                    () =>
-                                        ResultView(parts: parts, isSaved: true),
-                                  );
-                                },
+                              if (parts.isEmpty) {
+                                Get.snackbar(
+                                  'Aucun fichier',
+                                  'Ce dossier est vide',
+                                );
+                                return;
+                              }
+
+                              Get.to(
+                                () => ResultView(parts: parts, isSaved: true),
                               );
                             } catch (e) {
-                              log(
-                                '❌ Erreur lors de l’ouverture du dossier : $e',
-                              );
+                              log("Erreur lors de la lecture du dossier : $e");
                               Get.snackbar(
                                 'Erreur',
-                                'Impossible d’ouvrir ce dossier : $e',
+                                'Impossible de lire le dossier',
                               );
                             }
                           },
