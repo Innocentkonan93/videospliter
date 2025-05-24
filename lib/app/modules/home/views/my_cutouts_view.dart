@@ -105,93 +105,104 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
               },
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:
-                splitFolders.isEmpty
-                    ? const Center(child: Text('Aucun découpage trouvé.'))
-                    : GridView.builder(
-                      itemCount: splitFolders.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5,
-                            childAspectRatio: 1,
-                          ),
-                      itemBuilder: (context, index) {
-                        final folder = splitFolders[index];
-                        final folderName = p.basename(folder.path);
-                        final createdAt = folder.statSync().modified;
-                        return GestureDetector(
-                          onTap: () async {
-                            final List<File> parts = [];
-                            try {
-                              await for (var entity in folder.list(
-                                recursive: false,
-                                followLinks: false,
-                              )) {
-                                if (entity is File &&
-                                    entity.path.endsWith('.mp4')) {
-                                  parts.add(entity);
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/bg.png'),
+                fit: BoxFit.cover,
+                opacity: .2,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child:
+                  splitFolders.isEmpty
+                      ? const Center(child: Text('Aucun découpage trouvé.'))
+                      : GridView.builder(
+                        itemCount: splitFolders.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              childAspectRatio: 1,
+                            ),
+                        itemBuilder: (context, index) {
+                          final folder = splitFolders[index];
+                          final folderName = p.basename(folder.path);
+                          final createdAt = folder.statSync().modified;
+                          return GestureDetector(
+                            onTap: () async {
+                              final List<File> parts = [];
+                              try {
+                                await for (var entity in folder.list(
+                                  recursive: false,
+                                  followLinks: false,
+                                )) {
+                                  if (entity is File &&
+                                      entity.path.endsWith('.mp4')) {
+                                    parts.add(entity);
+                                  }
                                 }
-                              }
 
-                              if (parts.isEmpty) {
-                                Get.snackbar(
-                                  'Aucun fichier',
-                                  'Ce dossier est vide',
+                                if (parts.isEmpty) {
+                                  Get.snackbar(
+                                    'Aucun fichier',
+                                    'Ce dossier est vide',
+                                  );
+                                  return;
+                                }
+
+                                Get.to(
+                                  () => ResultView(parts: parts, isSaved: true),
                                 );
-                                return;
+                              } catch (e) {
+                                log(
+                                  "Erreur lors de la lecture du dossier : $e",
+                                );
+                                Get.snackbar(
+                                  'Erreur',
+                                  'Impossible de lire le dossier',
+                                );
                               }
-
-                              Get.to(
-                                () => ResultView(parts: parts, isSaved: true),
-                              );
-                            } catch (e) {
-                              log("Erreur lors de la lecture du dossier : $e");
-                              Get.snackbar(
-                                'Erreur',
-                                'Impossible de lire le dossier',
-                              );
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: SizedBox.expand(
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/folder.png',
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Positioned(
-                                        bottom: 30,
-                                        left: 30,
-                                        child: Text(
-                                          folderName,
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                                color: AppColors.white,
-                                              ),
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: SizedBox.expand(
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/folder.png',
+                                          fit: BoxFit.cover,
                                         ),
-                                      ),
-                                    ],
+                                        Positioned(
+                                          bottom: 30,
+                                          left: 30,
+                                          child: Text(
+                                            folderName,
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                  color: AppColors.white,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                createdAt != null
-                                    ? createdAt.toString()
-                                    : 'Date inconnue',
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                                Text(
+                                  createdAt != null
+                                      ? createdAt.toString()
+                                      : 'Date inconnue',
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+            ),
           ),
         );
       },

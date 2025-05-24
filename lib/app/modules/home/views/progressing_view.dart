@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import '../controllers/home_controller.dart';
@@ -89,12 +90,17 @@ class _ProcessingViewState extends State<ProcessingView> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(color: AppColors.primary),
+                  // SizedBox(
+                  //   height: 30,
+                  //   width: 30,
+                  //   child: CircularProgressIndicator(color: AppColors.primary),
+                  // ),
+                  // SizedBox(height: 10),
+                  Lottie.asset(
+                    'assets/animations/loading.json',
+                    width: 300,
+                    height: 300,
                   ),
-                  SizedBox(height: 10),
                   TweenAnimationBuilder<double>(
                     tween: Tween<double>(
                       begin: 0,

@@ -10,6 +10,7 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
     return GetBuilder<HomeController>(
       builder: (controller) {
         return SafeArea(
@@ -22,28 +23,44 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Choisir la durée de découpage',
+                      'Définir la durée de chaque extrait vidéo',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 24),
+
+                    Row(
+                      children: [
+                        Text('1s', style: theme.textTheme.titleMedium),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Slider(
+                            min: 1,
+                            max: 60,
+                            divisions: 60,
+                            label: '${controller.sliceDuration.value.toInt()}s',
+                            thumbColor: AppColors.primary,
+                            padding: EdgeInsets.zero,
+                            activeColor: AppColors.primary,
+                            value: controller.sliceDuration.value,
+                            onChanged: (value) {
+                              controller.sliceDuration.value = value;
+                              controller.update();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text('60s', style: theme.textTheme.titleMedium),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
                     Obx(
                       () => Text(
-                        '${controller.sliceDuration.value.toInt()} secondes',
-                        style: const TextStyle(fontSize: 16),
+                        'Durée définie : ${controller.sliceDuration.value.toInt()} s',
+                        style: theme.textTheme.titleMedium,
                       ),
-                    ),
-                    Slider(
-                      min: 1,
-                      max: 60,
-                      divisions: 60,
-                      value: controller.sliceDuration.value,
-                      onChanged: (value) {
-                        controller.sliceDuration.value = value;
-                        controller.update();
-                      },
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -62,7 +79,7 @@ class TimeSlicingSheet extends GetWidget<HomeController> {
                         Get.back();
                         Get.to(() => const ProcessingView());
                       },
-                      child: const Text('Confirmer'),
+                      child: const Text('Découper'),
                     ),
                   ],
                 ),

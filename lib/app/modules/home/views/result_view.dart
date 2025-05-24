@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/modules/home/views/video_player_view.dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -24,6 +25,8 @@ class _ResultViewState extends State<ResultView> {
   @override
   void initState() {
     super.initState();
+    controller.canSelectVideo.value = true;
+    controller.selectedVideoParts.addAll(widget.parts);
     controller.initVideoControllers(widget.parts);
   }
 
@@ -38,6 +41,7 @@ class _ResultViewState extends State<ResultView> {
     return GetBuilder<HomeController>(
       builder: (context) {
         return Scaffold(
+          // backgroundColor: AppColors.white,d
           appBar: AppBar(
             leading: Visibility(
               visible: !controller.canSelectVideo.value,
@@ -98,13 +102,6 @@ class _ResultViewState extends State<ResultView> {
                         ),
                     ],
               ),
-              // if (controller.selectedVideoParts.isNotEmpty)
-              //   IconButton(
-              //     icon: const Icon(Icons.share),
-              //     onPressed: () {
-              //       VideoService.shareVideos(controller.selectedVideoParts);
-              //     },
-              //   ),
             ],
           ),
           body: GridView.builder(
@@ -132,7 +129,8 @@ class _ResultViewState extends State<ResultView> {
                         if (controller.canSelectVideo.value) {
                           controller.selectVideoPart(file);
                         } else {
-                          Get.to(() => VideoPreviewView(videoFile: file));
+                          // Get.to(() => VideoPreviewView(videoFile: file));
+                          Get.to(() => AllVideosPreview(parts: widget.parts));
                         }
                       },
                       child: Column(
@@ -188,34 +186,40 @@ class _ResultViewState extends State<ResultView> {
               );
             },
           ),
-          floatingActionButton: Visibility(
-            visible: !controller.canSelectVideo.value,
-            replacement: FloatingActionButton.extended(
-              onPressed: () {
-                if (controller.selectedVideoParts.isEmpty) {
-                  showSnackBar(
-                    'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
-                    isError: true,
-                  );
-                  return;
-                }
-                VideoService.shareVideos(controller.selectedVideoParts);
-              },
-              label: const Text('Partager'),
-              icon: const Icon(Icons.share),
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-            ),
-            child:
-                !widget.isSaved
-                    ? FloatingActionButton.extended(
-                      onPressed: controller.saveSegments,
-                      label: const Text('Enregistrer'),
-                      icon: const Icon(Icons.save),
+          bottomNavigationBar: BottomAppBar(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton.icon(
+                  onPressed: () {
+                    if (controller.selectedVideoParts.isEmpty) {
+                      showSnackBar(
+                        'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
+                        isError: true,
+                      );
+                      return;
+                    }
+                    VideoService.shareVideos(controller.selectedVideoParts);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.white,
+                  ),
+                  icon: const Icon(Icons.share),
+                  label: const Text('Partager'),
+                ),
+                if (!widget.isSaved)
+                  TextButton.icon(
+                    onPressed: controller.saveSegments,
+                    style: TextButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white,
-                    )
-                    : SizedBox.shrink(),
+                    ),
+                    icon: const Icon(Icons.save),
+                    label: const Text('Enregistrer'),
+                  ),
+              ],
+            ),
           ),
         );
       },

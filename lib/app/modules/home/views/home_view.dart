@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -70,20 +71,11 @@ class HomeView extends GetView<HomeController> {
                           const Spacer(),
 
                           const Text(
-                            'Transformez vos vidéos en moments magiques !',
+                            'Découpez, partagez et enregistrez vos vidéos en quelques clics',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 25,
                               fontWeight: FontWeight.w900,
-                              color: AppColors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Découpez, partagez et profitez de vos vidéos en quelques clics',
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w500,
                               color: AppColors.white,
                             ),
                           ),
@@ -93,20 +85,45 @@ class HomeView extends GetView<HomeController> {
                           controller.selectedVideo.value == null
                               ? Center(
                                 child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    controller.pickVideo();
-                                  },
-                                  label: Text(
-                                    'Charger une vidéo',
-                                    style: theme.textTheme.titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.w800),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.video_call_rounded,
-                                    color: AppColors.primary,
-                                    size: 30,
-                                  ),
-                                ),
+                                      onPressed: () {
+                                        controller.pickVideo();
+                                      },
+                                      label: Text(
+                                        'Charger une vidéo',
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                      ),
+                                      icon: const Icon(
+                                        Icons.video_call_rounded,
+                                        color: AppColors.primary,
+                                        size: 30,
+                                      ),
+                                    )
+                                    .animate(
+                                      autoPlay: true,
+                                      onPlay: (controller) {
+                                        controller.repeat();
+                                      },
+                                    )
+                                    .scale(
+                                      duration: const Duration(
+                                        milliseconds: 500,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                      begin: const Offset(1.0, 1.0),
+                                      end: const Offset(1.1, 1.1),
+                                    )
+                                    .then()
+                                    .scale(
+                                      duration: const Duration(
+                                        milliseconds: 500,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                      begin: const Offset(1.1, 1.1),
+                                      end: const Offset(1.0, 1.0),
+                                    ),
                               )
                               : Column(
                                 children: [
@@ -123,11 +140,7 @@ class HomeView extends GetView<HomeController> {
                                           controller.selectedVideo.value!,
                                     ),
                                   ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Fichier : ${controller.selectedVideo.value!.path.split('/').last}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
+
                                   const SizedBox(height: 16),
                                   ElevatedButton.icon(
                                     icon: const Icon(
@@ -145,6 +158,8 @@ class HomeView extends GetView<HomeController> {
                                     onPressed: () async {
                                       showModalBottomSheet(
                                         context: context,
+                                        showDragHandle: true,
+                                        enableDrag: false,
                                         builder: (context) {
                                           return const TimeSlicingSheet();
                                         },
@@ -153,7 +168,7 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                 ],
                               ),
-                          const Spacer(),
+                          const Spacer(flex: 2),
                           GestureDetector(
                             onTap: () {
                               controller.pageController.nextPage(

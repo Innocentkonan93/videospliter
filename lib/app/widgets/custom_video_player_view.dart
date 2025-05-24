@@ -50,7 +50,11 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+            height: Get.height * .3,
+            width: double.infinity,
+            child: const Center(child: CircularProgressIndicator()),
+          );
         }
 
         return Container(
