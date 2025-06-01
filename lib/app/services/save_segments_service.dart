@@ -47,7 +47,7 @@ class SaveSegmentsService {
       showSnackBar("Vidéos enregistrées avec succès");
     } catch (e) {
       print('❌ Erreur lors de la sauvegarde : $e');
-      showSnackBar('Erreur lors de l’enregistrement des vidéos');
+      showSnackBar('Erreur lors de l’enregistrement des vidéos', isError: true);
     }
   }
 }

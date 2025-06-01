@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
+import 'package:flutter_sharing_intent/model/sharing_file.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -13,6 +17,7 @@ import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
+  late StreamSubscription _intentDataStreamSubscription;
   Rx<File?> selectedVideo = Rx<File?>(null);
   RxList<File> videoParts = <File>[].obs;
   RxList<File> selectedVideoParts = <File>[].obs;
@@ -112,6 +117,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
+    log(successfulCuts.value.toString());
+    update();
   }
 
   // void selectFolder(String folder) {
@@ -145,6 +152,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     loadBannerAd();
+    initSharingListener();
     WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
@@ -153,6 +161,45 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     banner = adMobService.loadBannerAd();
     isBannerLoaded.value = true;
     update();
+  }
+
+  void initSharingListener() {
+    log("listening");
+    // Cas 1 : App déjà en mémoire
+    _intentDataStreamSubscription = FlutterSharingIntent.instance
+        .getMediaStream()
+        .listen(
+          (List<SharedFile> files) {
+            if (files.isNotEmpty) {
+              handleSharedVideo(files.first);
+            }
+          },
+          onError: (err) {
+            print("Erreur de partage (stream) : $err");
+          },
+        );
+
+    // Cas 2 : App lancée via partage
+    FlutterSharingIntent.instance.getInitialSharing().then((
+      List<SharedFile> files,
+    ) {
+      if (files.isNotEmpty) {
+        handleSharedVideo(files.first);
+      }
+    });
+  }
+
+  void handleSharedVideo(SharedFile file) {
+    try {
+      print("📥 Vidéo reçue : ${file.value}");
+      if (file.value != null) {
+        selectedVideo.value = File(file.value!);
+      }
+      update();
+      // Tu peux maintenant rediriger vers une page ou lancer le découpage automatiquement
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

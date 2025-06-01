@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
+import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
 
 class ProcessingView extends StatefulWidget {
@@ -56,7 +57,11 @@ class _ProcessingViewState extends State<ProcessingView> {
     if (parts != null) {
       await controller.initVideoControllers(parts);
       await Future.delayed(const Duration(seconds: 1));
+      controller.onSplitDone();
       Get.off(() => ResultView(parts: controller.videoParts));
+      showSnackBar(
+        "Découpage terminée, vous pouvez le partager ou l'enregistrer",
+      );
     }
   }
 
@@ -90,16 +95,10 @@ class _ProcessingViewState extends State<ProcessingView> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // SizedBox(
-                  //   height: 30,
-                  //   width: 30,
-                  //   child: CircularProgressIndicator(color: AppColors.primary),
-                  // ),
-                  // SizedBox(height: 10),
                   Lottie.asset(
                     'assets/animations/loading.json',
-                    width: 300,
-                    height: 300,
+                    width: 200,
+                    height: 200,
                   ),
                   TweenAnimationBuilder<double>(
                     tween: Tween<double>(
@@ -124,6 +123,22 @@ class _ProcessingViewState extends State<ProcessingView> {
                   const SizedBox(height: 10),
                   Text(
                     "${(controller.progress.value * 100).toStringAsFixed(1)} %",
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.warning_rounded,
+                        color: const Color.fromARGB(255, 198, 136, 20),
+                        size: 60,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "Ne verouillez pas l'écran et ne quittez pas l'application pendant le traitement",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

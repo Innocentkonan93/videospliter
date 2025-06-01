@@ -39,7 +39,7 @@ class _ResultViewState extends State<ResultView> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      builder: (context) {
+      builder: (controller) {
         return Scaffold(
           // backgroundColor: AppColors.white,d
           appBar: AppBar(
@@ -75,25 +75,41 @@ class _ResultViewState extends State<ResultView> {
                 offset: Offset(0, kToolbarHeight),
                 itemBuilder:
                     (context) => [
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            const Icon(Icons.check_circle_rounded),
-                            const SizedBox(width: 10),
-                            const Text('Tout sélectionner'),
-                          ],
+                      if (controller.selectedVideoParts.isEmpty)
+                        PopupMenuItem(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.check_circle_rounded, size: 20),
+                              const SizedBox(width: 10),
+                              const Text('Tout sélectionner'),
+                            ],
+                          ),
+                          onTap: () {
+                            controller.canSelectVideo.value = true;
+                            controller.selectedVideoParts.addAll(widget.parts);
+                            controller.update();
+                          },
                         ),
-                        onTap: () {
-                          controller.canSelectVideo.value = true;
-                          controller.selectedVideoParts.addAll(widget.parts);
-                          controller.update();
-                        },
-                      ),
+                      if (controller.selectedVideoParts.isNotEmpty)
+                        PopupMenuItem(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.circle_outlined, size: 20),
+                              const SizedBox(width: 10),
+                              const Text('Délectionner'),
+                            ],
+                          ),
+                          onTap: () {
+                            controller.canSelectVideo.value = true;
+                            controller.selectedVideoParts.clear();
+                            controller.update();
+                          },
+                        ),
                       if (!widget.isSaved)
                         PopupMenuItem(
                           child: Row(
                             children: [
-                              const Icon(Icons.save),
+                              const Icon(Icons.save, size: 20),
                               const SizedBox(width: 10),
                               const Text('Sauvegarder'),
                             ],
