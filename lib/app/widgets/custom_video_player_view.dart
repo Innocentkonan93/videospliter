@@ -70,7 +70,7 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
                   width: _controller.value.size.width,
                   height: _controller.value.size.height,
                   child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
+                    aspectRatio: 1920 / 1080,
                     child: GestureDetector(
                       onTap: _togglePlayPause,
                       child: VideoPlayer(_controller),

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
-import 'package:video_spliter/app/modules/home/views/video_player_view.dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
@@ -96,7 +95,7 @@ class _ResultViewState extends State<ResultView> {
                             children: [
                               const Icon(Icons.circle_outlined, size: 20),
                               const SizedBox(width: 10),
-                              const Text('Délectionner'),
+                              const Text('Désélectionner'),
                             ],
                           ),
                           onTap: () {
@@ -105,17 +104,17 @@ class _ResultViewState extends State<ResultView> {
                             controller.update();
                           },
                         ),
-                      if (!widget.isSaved)
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.save, size: 20),
-                              const SizedBox(width: 10),
-                              const Text('Sauvegarder'),
-                            ],
-                          ),
-                          onTap: () => controller.saveSegments(),
-                        ),
+                      // if (!widget.isSaved)
+                      //   PopupMenuItem(
+                      //     child: Row(
+                      //       children: [
+                      //         const Icon(Icons.save, size: 20),
+                      //         const SizedBox(width: 10),
+                      //         const Text('Sauvegarder'),
+                      //       ],
+                      //     ),
+                      //     onTap: () => controller.saveSegments(),
+                      //   ),
                     ],
               ),
             ],
@@ -185,16 +184,21 @@ class _ResultViewState extends State<ResultView> {
                       ),
                     ),
                     if (controller.canSelectVideo.value)
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Icon(
-                          controller.selectedVideoParts.contains(file)
-                              ? Icons.check_circle_rounded
-                              : Icons.circle_outlined,
-                          color:
-                              controller.selectedVideoParts.contains(file)
-                                  ? AppColors.primary
-                                  : AppColors.grey,
+                      GestureDetector(
+                        onTap: () {
+                          controller.selectVideoPart(file);
+                        },
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Icon(
+                            controller.selectedVideoParts.contains(file)
+                                ? Icons.check_circle_rounded
+                                : Icons.circle_outlined,
+                            color:
+                                controller.selectedVideoParts.contains(file)
+                                    ? AppColors.primary
+                                    : AppColors.grey,
+                          ),
                         ),
                       ),
                   ],
@@ -226,7 +230,9 @@ class _ResultViewState extends State<ResultView> {
                 ),
                 if (!widget.isSaved)
                   TextButton.icon(
-                    onPressed: controller.saveSegments,
+                    onPressed: () {
+                      controller.saveSegments();
+                    },
                     style: TextButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white,

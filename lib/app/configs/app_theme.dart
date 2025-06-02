@@ -12,11 +12,10 @@ ThemeData appTheme = ThemeData(
   ),
   scaffoldBackgroundColor: AppColors.background,
   dataTableTheme: const DataTableThemeData(
-      decoration: BoxDecoration(
-    color: AppColors.white,
-  )),
-  cardTheme: const CardTheme(
-    color: AppColors.white, // reset margin
+    decoration: BoxDecoration(color: AppColors.white),
+  ),
+  cardTheme: const CardThemeData(
+    color: Color.fromARGB(255, 48, 41, 41), // reset margin
   ),
   appBarTheme: AppBarTheme(
     centerTitle: true,
@@ -59,10 +58,7 @@ ThemeData appTheme = ThemeData(
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(
-        color: AppColors.primary,
-        width: .8,
-      ),
+      borderSide: const BorderSide(color: AppColors.primary, width: .8),
     ),
   ),
   radioTheme: const RadioThemeData(),

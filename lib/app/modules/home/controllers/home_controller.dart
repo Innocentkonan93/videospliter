@@ -67,9 +67,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return parts;
   }
 
-  Future<void> saveSegments() async {
+  Future<bool> saveSegments() async {
     await SaveSegmentsService.saveSegments(videoParts);
     selectedVideo.value = null;
+    pageController.jumpToPage(1);
     clearAll();
     adMobService.loadInterstitialAd(
       onAdDismissed: () {
@@ -79,6 +80,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         adMobService.showInterstitialAd();
       },
     );
+    return true;
   }
 
   Future<void> initVideoControllers(List<File> parts) async {
