@@ -18,13 +18,17 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.clearAll();
     final theme = context.theme;
-    return Scaffold(
-      body: GetBuilder<HomeController>(
-        init: controller,
-        builder: (controller) {
-          return PageView(
+    return GetBuilder<HomeController>(
+      init: controller,
+      builder: (controller) {
+        return Scaffold(
+          body: PageView(
             scrollDirection: Axis.vertical,
             controller: controller.pageController,
+            onPageChanged: (index) {
+              controller.currentPage.value = index;
+              controller.update();
+            },
             children: [
               Container(
                 // padding: EdgeInsets.all(16),
@@ -223,9 +227,24 @@ class HomeView extends GetView<HomeController> {
               // listes des découpages
               MyCutoutsView(),
             ],
-          );
-        },
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Get.to(() => const AboutView());
+            },
+            // backgroundColor: Colors.transparent,
+            elevation: 0,
+            mini: true,
+            child: Icon(
+              Icons.settings_rounded,
+              color:
+                  controller.currentPage.value == 0
+                      ? AppColors.primary
+                      : AppColors.grey,
+            ),
+          ),
+        );
+      },
     );
   }
 }

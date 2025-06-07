@@ -56,8 +56,8 @@ class _ProcessingViewState extends State<ProcessingView> {
     if (parts != null) {
       await controller.initVideoControllers(parts);
       await Future.delayed(const Duration(seconds: 1));
-      controller.onSplitDone();
       Get.off(() => ResultView(parts: controller.videoParts));
+      controller.onSplitDone();
       showSnackBar(
         "Découpage terminée, vous pouvez le partager ou l'enregistrer",
       );

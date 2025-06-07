@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
 void showSnackBar(String message, {bool? isError = false}) {
+  ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
   ScaffoldMessenger.of(Get.context!).showSnackBar(
     SnackBar(
       content: Row(

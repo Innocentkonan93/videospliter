@@ -35,7 +35,7 @@ class AdMobService {
       }
     } else if (Platform.isIOS) {
       if (kDebugMode) {
-        return 'ca-app-pub-3940256099942544/2934735716';
+        return 'ca-app-pub-3940256099942544/4411468910';
       } else {
         return 'ca-app-pub-5234606722270286/5094816487';
       }
@@ -53,7 +53,7 @@ class AdMobService {
       }
     } else if (Platform.isIOS) {
       if (kDebugMode) {
-        return 'ca-app-pub-3940256099942544/2934735716';
+        return 'ca-app-pub-3940256099942544/1712485313';
       } else {
         return 'ca-app-pub-5234606722270286/7932732814';
       }

@@ -6,6 +6,7 @@ import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
+import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
 import '../controllers/home_controller.dart';
 
 class ResultView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _ResultViewState extends State<ResultView> {
     super.initState();
     controller.canSelectVideo.value = true;
     controller.selectedVideoParts.addAll(widget.parts);
-    controller.initVideoControllers(widget.parts);
+    controller.initVideoControllers(widget.parts, isSaved: widget.isSaved);
   }
 
   @override
@@ -61,61 +62,26 @@ class _ResultViewState extends State<ResultView> {
             ),
             title: Text(
               controller.canSelectVideo.value
-                  ? 'Sélectionner'
-                  : 'Résultats du découpage',
+                  ? controller.selectedVideoParts.isNotEmpty
+                      ? '${controller.selectedVideoParts.length} clip${controller.selectedVideoParts.length > 1 ? 's' : ''} sélectionné${controller.selectedVideoParts.length > 1 ? 's' : ''}'
+                      : 'Sélectionner'
+                  : 'Résultats du découpage ',
             ),
             actions: [
-              PopupMenuButton(
-                icon: const Icon(Icons.more_vert),
-                color: AppColors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              IconButton(
+                onPressed: () {
+                  controller.canSelectVideo.value = true;
+                  controller.selectAllVideoParts(widget.parts);
+                  controller.update();
+                },
+                icon: Icon(
+                  Icons.checklist_rtl_rounded,
+                  color:
+                      controller.selectedVideoParts.length !=
+                              widget.parts.length
+                          ? AppColors.grey
+                          : AppColors.primary,
                 ),
-                offset: Offset(0, kToolbarHeight),
-                itemBuilder:
-                    (context) => [
-                      if (controller.selectedVideoParts.isEmpty)
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.check_circle_rounded, size: 20),
-                              const SizedBox(width: 10),
-                              const Text('Tout sélectionner'),
-                            ],
-                          ),
-                          onTap: () {
-                            controller.canSelectVideo.value = true;
-                            controller.selectedVideoParts.addAll(widget.parts);
-                            controller.update();
-                          },
-                        ),
-                      if (controller.selectedVideoParts.isNotEmpty)
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.circle_outlined, size: 20),
-                              const SizedBox(width: 10),
-                              const Text('Désélectionner'),
-                            ],
-                          ),
-                          onTap: () {
-                            controller.canSelectVideo.value = true;
-                            controller.selectedVideoParts.clear();
-                            controller.update();
-                          },
-                        ),
-                      // if (!widget.isSaved)
-                      //   PopupMenuItem(
-                      //     child: Row(
-                      //       children: [
-                      //         const Icon(Icons.save, size: 20),
-                      //         const SizedBox(width: 10),
-                      //         const Text('Sauvegarder'),
-                      //       ],
-                      //     ),
-                      //     onTap: () => controller.saveSegments(),
-                      //   ),
-                    ],
               ),
             ],
           ),
@@ -135,6 +101,7 @@ class _ResultViewState extends State<ResultView> {
               return GestureDetector(
                 onLongPress: () {
                   controller.canSelectVideo.value = true;
+                  controller.selectVideoPart(file);
                   controller.update();
                 },
                 child: Stack(
@@ -145,7 +112,12 @@ class _ResultViewState extends State<ResultView> {
                           controller.selectVideoPart(file);
                         } else {
                           // Get.to(() => VideoPreviewView(videoFile: file));
-                          Get.to(() => AllVideosPreview(parts: widget.parts));
+                          Get.to(
+                            () => AllVideosPreview(
+                              parts: widget.parts,
+                              currentIndex: index,
+                            ),
+                          );
                         }
                       },
                       child: Column(
@@ -184,10 +156,8 @@ class _ResultViewState extends State<ResultView> {
                       ),
                     ),
                     if (controller.canSelectVideo.value)
-                      GestureDetector(
-                        onTap: () {
-                          controller.selectVideoPart(file);
-                        },
+                      IgnorePointer(
+                        ignoring: true,
                         child: Align(
                           alignment: Alignment.topRight,
                           child: Icon(
@@ -230,11 +200,22 @@ class _ResultViewState extends State<ResultView> {
                 ),
                 if (!widget.isSaved)
                   TextButton.icon(
-                    onPressed: () {
-                      controller.saveSegments();
+                    onPressed: () async {
+                      final result = await showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return FolderNameDialog(
+                            folderName: controller.selectedFolder.value,
+                          );
+                        },
+                      );
+                      if (result != null) {
+                        controller.saveSegments(result);
+                      }
                     },
                     style: TextButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.green,
                       foregroundColor: AppColors.white,
                     ),
                     icon: const Icon(Icons.save),

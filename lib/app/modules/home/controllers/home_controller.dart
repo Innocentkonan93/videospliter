@@ -11,10 +11,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_spliter/app/modules/home/views/result_view.dart';
+import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
+import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
   late StreamSubscription _intentDataStreamSubscription;
@@ -39,6 +42,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final _interstitialRecentlyShown = false.obs;
 
   final isBannerLoaded = false.obs;
+
+  // final canShowFolderOptions = false.obs;
+  final selectedFolder = "".obs;
 
   Future<void> pickVideo() async {
     try {
@@ -67,8 +73,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return parts;
   }
 
-  Future<bool> saveSegments() async {
-    await SaveSegmentsService.saveSegments(videoParts);
+  Future<bool> saveSegments(String? baseFolderName) async {
+    await SaveSegmentsService.saveSegments(videoParts, baseFolderName);
     selectedVideo.value = null;
     pageController.jumpToPage(1);
     clearAll();
@@ -83,7 +89,23 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return true;
   }
 
-  Future<void> initVideoControllers(List<File> parts) async {
+  Future<void> renameFolder(String folderName) async {
+    final result = await showDialog(
+      context: Get.context!,
+      barrierDismissible: false,
+      builder: (context) {
+        return FolderNameDialog(folderName: folderName);
+      },
+    );
+    if (result != null) {
+      await FileService.renameFolder(folderName, result);
+    }
+  }
+
+  Future<void> initVideoControllers(
+    List<File> parts, {
+    bool isSaved = false,
+  }) async {
     for (final file in parts) {
       if (!videoControllers.containsKey(file)) {
         final controller = VideoPlayerController.file(file);
@@ -91,7 +113,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         videoControllers[file] = controller;
       }
     }
-    update();
+    if (isSaved) {
+      update();
+    }
   }
 
   Future<void> disposeVideoControllers() async {
@@ -110,6 +134,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  void selectAllVideoParts(List<File> parts) {
+    if (selectedVideoParts.isEmpty) {
+      selectedVideoParts.addAll(parts);
+    } else {
+      selectedVideoParts.clear();
+    }
+    update();
+  }
+
   void onSplitDone() {
     successfulCuts.value++;
     if (successfulCuts.value % 3 == 0) {
@@ -119,7 +152,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
-    log(successfulCuts.value.toString());
     update();
   }
 
@@ -147,6 +179,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     videoParts.clear();
     selectedVideoParts.clear();
     progress.value = 0.0;
+
+    selectedFolder.value = "";
     // selectedFolders.clear();
     update();
   }
@@ -232,5 +266,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         );
       }
     }
+  }
+
+  void showFolderOptions(String folderName) {
+    if (selectedFolder.value == folderName) {
+      selectedFolder.value = "";
+    } else {
+      selectedFolder.value = folderName;
+    }
+    update();
   }
 }

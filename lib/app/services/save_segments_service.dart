@@ -8,13 +8,16 @@ import 'package:video_spliter/app/utils/methods_utils.dart';
 class SaveSegmentsService {
   static int _splitCounter = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-  static Future<void> saveSegments(List<File> segments) async {
+  static Future<void> saveSegments(
+    List<File> segments,
+    String? baseFolderName,
+  ) async {
     try {
       if (segments.isEmpty) {
         throw Exception("Aucun segment à enregistrer.");
       }
 
-      final String folderName = 'Cutout$_splitCounter';
+      final String folderName = '$baseFolderName-$_splitCounter';
       _splitCounter++;
 
       Directory? targetDir;
