@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCru-24eNmWpTGhY4PjJxC4IeE6gFD4fJQ</string>
+	<string>AIzaSyABMa8K-ARohfi92mX0nVrNRLevcWsIdII</string>
 	<key>GCM_SENDER_ID</key>
-	<string>22471090647</string>
+	<string>216035312780</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.meetsum.cutIt</string>
+	<string>com.meetsum.cutit</string>
 	<key>PROJECT_ID</key>
-	<string>cutit-d3c3a</string>
+	<string>cutitapp</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cutit-d3c3a.firebasestorage.app</string>
+	<string>cutitapp.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:22471090647:ios:a11465e7b5647461c6ab92</string>
+	<string>1:216035312780:ios:3d85700466cfe5be48e7a9</string>
 </dict>
 </plist>

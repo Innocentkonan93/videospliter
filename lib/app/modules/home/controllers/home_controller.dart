@@ -11,6 +11,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -21,6 +22,7 @@ import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
   late StreamSubscription _intentDataStreamSubscription;
+  final CacheHelper cacheHelper = CacheHelper();
   Rx<File?> selectedVideo = Rx<File?>(null);
   RxList<File> videoParts = <File>[].obs;
   RxList<File> selectedVideoParts = <File>[].obs;
@@ -74,7 +76,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<bool> saveSegments(String? baseFolderName) async {
-    await SaveSegmentsService.saveSegments(videoParts, baseFolderName);
+    await SaveSegmentsService.saveSegments(
+      selectedVideoParts.isEmpty ? videoParts : selectedVideoParts,
+      baseFolderName,
+    );
     selectedVideo.value = null;
     pageController.jumpToPage(1);
     clearAll();
@@ -153,6 +158,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       );
     }
     update();
+    CacheHelper.saveData(key: "successfulCuts", value: successfulCuts.value);
   }
 
   // void selectFolder(String folder) {
@@ -190,6 +196,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     loadBannerAd();
     initSharingListener();
     WidgetsBinding.instance.addObserver(this);
+    successfulCuts.value = CacheHelper.getInteger(key: "successfulCuts");
     super.onInit();
   }
 

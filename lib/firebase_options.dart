@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAmvqi52-7DE8tqhqE2GHk-PQdldwE5e5I',
-    appId: '1:22471090647:android:022bac9d0f277ccac6ab92',
-    messagingSenderId: '22471090647',
-    projectId: 'cutit-d3c3a',
-    storageBucket: 'cutit-d3c3a.firebasestorage.app',
+    apiKey: 'AIzaSyCRJXf3IOPWRpELT4jzu8936Bx-Nv9Byno',
+    appId: '1:216035312780:android:16f8fb9cbf4505a448e7a9',
+    messagingSenderId: '216035312780',
+    projectId: 'cutitapp',
+    storageBucket: 'cutitapp.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCru-24eNmWpTGhY4PjJxC4IeE6gFD4fJQ',
-    appId: '1:22471090647:ios:a11465e7b5647461c6ab92',
-    messagingSenderId: '22471090647',
-    projectId: 'cutit-d3c3a',
-    storageBucket: 'cutit-d3c3a.firebasestorage.app',
-    iosBundleId: 'com.meetsum.cutIt',
+    apiKey: 'AIzaSyABMa8K-ARohfi92mX0nVrNRLevcWsIdII',
+    appId: '1:216035312780:ios:3d85700466cfe5be48e7a9',
+    messagingSenderId: '216035312780',
+    projectId: 'cutitapp',
+    storageBucket: 'cutitapp.firebasestorage.app',
+    iosBundleId: 'com.meetsum.cutit',
   );
 }

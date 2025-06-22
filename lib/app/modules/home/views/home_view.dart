@@ -6,6 +6,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
 import 'package:video_spliter/app/modules/home/views/progressing_view.dart';
+import 'package:video_spliter/app/modules/settings/views/about_app_view.dart';
+import 'package:video_spliter/app/modules/settings/views/settings_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
 import 'package:video_spliter/app/widgets/time_slicing_sheet.dart';
 
@@ -230,7 +232,12 @@ class HomeView extends GetView<HomeController> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Get.to(() => const AboutView());
+              print("settings");
+              // Get.to(() => const AboutAppView());
+              Get.to(
+                () => const SettingsView(),
+                transition: Transition.rightToLeft,
+              );
             },
             // backgroundColor: Colors.transparent,
             elevation: 0,

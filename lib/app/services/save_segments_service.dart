@@ -44,7 +44,7 @@ class SaveSegmentsService {
         final newFile = File(p.join(targetDir.path, fileName));
         await file.copy(newFile.path);
       }
-
+      vibrate();
       Get.back();
       // final readablePath = targetDir.path.split("/Android").first;
       showSnackBar("Vidéos enregistrées avec succès");

@@ -7,6 +7,7 @@ class IntroductionBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<IntroductionController>(
       () => IntroductionController(),
+      fenix: true
     );
   }
 }

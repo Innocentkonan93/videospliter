@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "22471090647",
-    "project_id": "cutit-d3c3a",
-    "storage_bucket": "cutit-d3c3a.firebasestorage.app"
+    "project_number": "216035312780",
+    "project_id": "cutitapp",
+    "storage_bucket": "cutitapp.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:22471090647:android:022bac9d0f277ccac6ab92",
+        "mobilesdk_app_id": "1:216035312780:android:16f8fb9cbf4505a448e7a9",
         "android_client_info": {
           "package_name": "com.meetsum.cutIt"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAmvqi52-7DE8tqhqE2GHk-PQdldwE5e5I"
+          "current_key": "AIzaSyCRJXf3IOPWRpELT4jzu8936Bx-Nv9Byno"
         }
       ],
       "services": {
@@ -23,26 +23,6 @@
           "other_platform_oauth_client": []
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:22471090647:android:0797dcb82bf9864bc6ab92",
-        "android_client_info": {
-          "package_name": "com.meetsum.cutit"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAmvqi52-7DE8tqhqE2GHk-PQdldwE5e5I"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      },
-      "admob_app_id": "ca-app-pub-5234606722270286~8015659146"
     }
   ],
   "configuration_version": "1"

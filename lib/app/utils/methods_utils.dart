@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
@@ -31,4 +32,11 @@ void showSnackBar(String message, {bool? isError = false}) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     ),
   );
+}
+
+void vibrate() async {
+  // HapticFeedback.lightImpact(); // ou Vibration.vibrate(duration: 50);
+  HapticFeedback.mediumImpact(); // moyen
+  // HapticFeedback.heavyImpact(); // fort
+  // HapticFeedback.selectionClick(); // clic type sélection
 }

@@ -1,6 +1,8 @@
+import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -23,7 +25,7 @@ class _ProcessingViewState extends State<ProcessingView> {
     "📸 Idéal pour les stories, les statuts WhatsApp et tes shorts YouTube.",
     "🚀 Tes longues vidéos deviennent simples à publier.",
     "⏱️ Crée automatiquement des extraits de 10, 30, 60 secondes.",
-    "🎬 Utilise cuTit pour découper tes vidéos comme un pro",
+    "🎬 Utilise cutit pour découper tes vidéos comme un pro",
   ];
   final RxInt _messageIndex = 0.obs;
 
@@ -56,6 +58,7 @@ class _ProcessingViewState extends State<ProcessingView> {
     if (parts != null) {
       await controller.initVideoControllers(parts);
       await Future.delayed(const Duration(seconds: 1));
+      vibrate();
       Get.off(() => ResultView(parts: controller.videoParts));
       controller.onSplitDone();
       showSnackBar(
@@ -84,56 +87,99 @@ class _ProcessingViewState extends State<ProcessingView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx(
-                      () => AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        transitionBuilder:
-                            (child, animation) => FadeTransition(
-                              opacity: animation,
-                              child: child,
+                    Container(
+                      width: double.infinity,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        // color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Obx(
+                        () => AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          transitionBuilder:
+                              (child, animation) => FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              ),
+                          child: Text(
+                            messages[_messageIndex.value],
+                            key: ValueKey(messages[_messageIndex.value]),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                        child: Text(
-                          messages[_messageIndex.value],
-                          key: ValueKey(messages[_messageIndex.value]),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Lottie.asset(
-                      'assets/animations/loading.json',
-                      width: 200,
-                      height: 200,
+                    // Lottie.asset(
+                    //   'assets/animations/loading.json',
+                    //   width: 200,
+                    //   height: 200,
+                    // ),
+                    // TweenAnimationBuilder<double>(
+                    //   tween: Tween<double>(
+                    //     begin: 0,
+                    //     end: controller.progress.value,
+                    //   ),
+                    //   duration: const Duration(milliseconds: 300),
+                    //   builder: (context, value, _) {
+                    //     return ClipRRect(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //       child: LinearProgressIndicator(
+                    //         value: value,
+                    //         minHeight: 12,
+                    //         backgroundColor: Colors.grey[300],
+                    //         valueColor: AlwaysStoppedAnimation<Color>(
+                    //           AppColors.primary,
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                    CircularPercentIndicator(
+                      radius: 100.0,
+                      lineWidth: 10.0,
+                      percent: controller.progress.value,
+                      animateFromLastPercent: true,
+                      animation: true,
+                      circularStrokeCap: CircularStrokeCap.round,
+                      center:
+                          controller.progress.value == 1.0
+                              ? Icon(
+                                Icons.check_rounded,
+                                color: AppColors.green,
+                                size: 80,
+                              )
+                              : Text(
+                                "${(controller.progress.value * 100).toStringAsFixed(1)} %",
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      // AnimatedDigitWidget(
+                      //   value: controller.progress.value * 100,
+                      //   duration: const Duration(milliseconds: 1000),
+                      //   textStyle: const TextStyle(
+                      //     fontSize: 24,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
+                      progressColor:
+                          controller.progress.value == 1.0
+                              ? AppColors.green
+                              : AppColors.primary,
                     ),
-                    TweenAnimationBuilder<double>(
-                      tween: Tween<double>(
-                        begin: 0,
-                        end: controller.progress.value,
-                      ),
-                      duration: const Duration(milliseconds: 300),
-                      builder: (context, value, _) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: LinearProgressIndicator(
-                            value: value,
-                            minHeight: 12,
-                            backgroundColor: Colors.grey[300],
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.primary,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "${(controller.progress.value * 100).toStringAsFixed(1)} %",
-                    ),
-                    SizedBox(height: 10),
+                    // const SizedBox(height: 10),
+                    // Text(
+                    //   "${(controller.progress.value * 100).toStringAsFixed(1)} %",
+                    // ),
+                    SizedBox(height: 80),
+                    Divider(color: Colors.grey[300], height: 1),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -145,7 +191,7 @@ class _ProcessingViewState extends State<ProcessingView> {
                       ],
                     ),
                     Text(
-                      "Ne verouillez pas l'écran et ne quittez pas l'application pendant le traitement",
+                      "Ne vérrouillez pas l'écran et ne quittez pas l'application pendant le traitement",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
