@@ -15,10 +15,9 @@ class TimeSlicingSheet extends StatefulWidget {
 class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
   final controller = Get.find<HomeController>();
 
-  double initValue = 1;
-
   @override
   Widget build(BuildContext context) {
+    double initValue = controller.sliceDuration.value;
     final theme = context.theme;
     return SafeArea(
       child: Column(
@@ -34,7 +33,6 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 24),
-
                 Row(
                   children: [
                     Text('1s', style: theme.textTheme.titleMedium),

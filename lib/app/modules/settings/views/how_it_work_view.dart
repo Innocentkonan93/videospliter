@@ -61,7 +61,7 @@ class HowItWorkView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Astuce !",
+                    "💡Astuce !",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class HowItWorkView extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Vous pouvez également partager directement une vidéo depuis une autre application vers Cutit pour la découper instantanément !",
+                    "Vous pouvez également partager directement une vidéo depuis votre gallérie vers Cutit pour la découper instantanément !",
                     style: TextStyle(fontSize: 16),
                   ),
                 ],

@@ -1,7 +1,5 @@
-import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
@@ -64,6 +62,7 @@ class _ProcessingViewState extends State<ProcessingView> {
       showSnackBar(
         "Découpage terminée, vous pouvez le partager ou l'enregistrer",
       );
+      controller.videoParts.sort((a, b) => a.path.compareTo(b.path));
     }
   }
 

@@ -116,7 +116,7 @@ class HomeView extends GetView<HomeController> {
                                     )
                                     .scale(
                                       duration: const Duration(
-                                        milliseconds: 500,
+                                        milliseconds: 1800,
                                       ),
                                       curve: Curves.easeInOut,
                                       begin: const Offset(1.0, 1.0),
@@ -125,7 +125,7 @@ class HomeView extends GetView<HomeController> {
                                     .then()
                                     .scale(
                                       duration: const Duration(
-                                        milliseconds: 500,
+                                        milliseconds: 1500,
                                       ),
                                       curve: Curves.easeInOut,
                                       begin: const Offset(1.1, 1.1),
@@ -242,13 +242,7 @@ class HomeView extends GetView<HomeController> {
             // backgroundColor: Colors.transparent,
             elevation: 0,
             mini: true,
-            child: Icon(
-              Icons.settings_rounded,
-              color:
-                  controller.currentPage.value == 0
-                      ? AppColors.primary
-                      : AppColors.grey,
-            ),
+            child: Icon(Icons.settings_rounded, color: AppColors.primary),
           ),
         );
       },

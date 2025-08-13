@@ -95,6 +95,7 @@ class _ResultViewState extends State<ResultView> {
             ),
             itemCount: widget.parts.length,
             itemBuilder: (context, index) {
+              // widget.parts.sort((a, b) => a.path.compareTo(b.path));
               final file = widget.parts[index];
               final playerController = controller.videoControllers[file];
 

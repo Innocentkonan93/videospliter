@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
+import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
@@ -150,12 +151,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void onSplitDone() {
     successfulCuts.value++;
-    if (successfulCuts.value % 3 == 0) {
+    if (successfulCuts.value % 5 == 0) {
       adMobService.loadRewardedAd(
         onEarnedReward: () {
           successfulCuts.value = 0;
         },
       );
+    }
+
+    if (successfulCuts.value % 3 == 0) {
+      AppService.askForRating();
     }
     update();
     CacheHelper.saveData(key: "successfulCuts", value: successfulCuts.value);

@@ -82,28 +82,7 @@ class VideoService {
 
     while (start < totalDuration) {
       final output =
-          '${tempDir.path}/cut_it_${DateTime.now().millisecondsSinceEpoch}_$index.mp4';
-
-      // final command = [
-      //   '-ss',
-      //   '$start',
-      //   '-t',
-      //   '$sliceDuration',
-      //   '-i',
-      //   '"${videoFile.path}"',
-      //   '-vf',
-      //   "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
-      //   '-c:v',
-      //   'mpeg4',
-      //   '-b:v',
-      //   '1M',
-      //   '-c:a',
-      //   'aac',
-      //   '-strict',
-      //   'experimental',
-      //   '-y',
-      //   '"$output"',
-      // ].join(' ');
+          '${tempDir.path}/cut_it_${index.toString().padLeft(3, '0')}.mp4';
 
       final command = [
         '-ss',
@@ -146,6 +125,7 @@ class VideoService {
       homeController.update();
     }
 
+    // videoParts.sort((a, b) => a.path.compareTo(b.path));
     return videoParts;
   }
 
