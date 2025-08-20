@@ -14,7 +14,7 @@ class SaveSegmentsService {
   ) async {
     try {
       if (segments.isEmpty) {
-        throw Exception("Aucun segment à enregistrer.");
+        throw Exception("no_segment_to_save".tr);
       }
 
       final String folderName = '$baseFolderName-$_splitCounter';
@@ -25,14 +25,14 @@ class SaveSegmentsService {
       if (Platform.isAndroid) {
         final dir = await getExternalStorageDirectory();
         if (dir == null) {
-          throw Exception("Impossible d'accéder au répertoire externe.");
+          throw Exception("error_accessing_external_directory".tr);
         }
         targetDir = Directory(p.join(dir.path, appName, folderName));
       } else if (Platform.isIOS) {
         final appDocDir = await getApplicationDocumentsDirectory();
         targetDir = Directory(p.join(appDocDir.path, appName, folderName));
       } else {
-        throw UnsupportedError('Plateforme non supportée');
+        throw UnsupportedError('platform_not_supported'.tr);
       }
 
       if (!await targetDir.exists()) {
@@ -47,10 +47,10 @@ class SaveSegmentsService {
       vibrate();
       Get.back();
       // final readablePath = targetDir.path.split("/Android").first;
-      showSnackBar("Vidéos enregistrées avec succès");
+      showSnackBar("saving_videos".tr);
     } catch (e) {
       print('❌ Erreur lors de la sauvegarde : $e');
-      showSnackBar('Erreur lors de l’enregistrement des vidéos', isError: true);
+      showSnackBar('error_saving_videos'.tr, isError: true);
     }
   }
 }

@@ -54,7 +54,7 @@ class VideoService {
 
       return videoParts;
     } catch (e) {
-      print('Erreur pendant la découpe vidéo: $e');
+      print('${'error_cutting'.tr}: $e');
       rethrow;
     }
   }
@@ -261,7 +261,7 @@ class VideoService {
             .toList();
 
     if (filesToShare.isEmpty) {
-      Get.snackbar('Erreur', 'Aucune vidéo à partager.');
+      Get.snackbar('error_sharing_videos'.tr, 'no_video_to_share'.tr);
       return;
     }
     await SharePlus.instance.share(ShareParams(files: filesToShare));

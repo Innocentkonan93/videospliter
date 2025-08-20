@@ -65,22 +65,17 @@ class _ProcessingViewState extends State<ProcessingView> {
         if (controller.isAppInBackground.value) {
           LocalNotificationService().showNotification(
             id: 1,
-            title: "Découpage terminée 💯",
-            body: "Vous pouvez le partager ou l'enregistrer",
+            title: "cut_done_title".tr,
+            body: "cut_done_body".tr,
           );
         }
-        showSnackBar(
-          "Découpage terminée, vous pouvez le partager ou l'enregistrer",
-        );
+        showSnackBar("cut_done_notification".tr);
         controller.videoParts.sort((a, b) => a.path.compareTo(b.path));
       }
     } catch (e) {
       print(e);
       Get.back();
-      showSnackBar(
-        "Erreur lors du découpage, veuillez réessayer",
-        isError: true,
-      );
+      showSnackBar("error_cutting".tr, isError: true);
     }
   }
 

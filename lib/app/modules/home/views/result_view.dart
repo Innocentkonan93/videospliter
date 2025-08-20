@@ -63,9 +63,9 @@ class _ResultViewState extends State<ResultView> {
             title: Text(
               controller.canSelectVideo.value
                   ? controller.selectedVideoParts.isNotEmpty
-                      ? '${controller.selectedVideoParts.length} clip${controller.selectedVideoParts.length > 1 ? 's' : ''} sélectionné${controller.selectedVideoParts.length > 1 ? 's' : ''}'
-                      : 'Sélectionner'
-                  : 'Résultats du découpage ',
+                      ? '${controller.selectedVideoParts.length} ${'clip'.tr}${controller.selectedVideoParts.length > 1 ? 's' : ''} ${'selected'.tr}${controller.selectedVideoParts.length > 1 ? 's' : ''}'
+                      : 'select'.tr
+                  : 'cutting_results'.tr,
             ),
             actions: [
               IconButton(
@@ -185,10 +185,7 @@ class _ResultViewState extends State<ResultView> {
                 TextButton.icon(
                   onPressed: () {
                     if (controller.selectedVideoParts.isEmpty) {
-                      showSnackBar(
-                        'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
-                        isError: true,
-                      );
+                      showSnackBar('no_video_selected'.tr, isError: true);
                       return;
                     }
                     VideoService.shareVideos(controller.selectedVideoParts);
@@ -208,7 +205,7 @@ class _ResultViewState extends State<ResultView> {
                             foregroundColor: AppColors.white,
                           ),
                   icon: const Icon(Icons.share),
-                  label: const Text('Partager'),
+                  label: Text('share'.tr),
                 ),
                 if (!widget.isSaved)
                   TextButton.icon(
@@ -223,7 +220,7 @@ class _ResultViewState extends State<ResultView> {
                       foregroundColor: AppColors.white,
                     ),
                     icon: const Icon(Icons.save),
-                    label: const Text('Enregistrer'),
+                    label: Text('save'.tr),
                   ),
               ],
             ),

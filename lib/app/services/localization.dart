@@ -41,6 +41,10 @@ class Localization extends Translations {
       'create_automatically':
           '⏱️ Automatically create 10, 30, 60 second excerpts.',
       'use_cutit_like_pro': '🎬 Use cutit to cut your videos like a pro',
+      'cut_done_title': 'Cutting done 💯',
+      'cut_done_body': 'You can share or save it',
+      'cut_done_notification': 'Cutting done, you can share or save it',
+      'error_cutting': 'Error while cutting, please try again',
 
       // Result screen
       'clips_selected': 'clips selected',
@@ -51,6 +55,8 @@ class Localization extends Translations {
       'save': 'Save',
       'no_video_selected':
           'No video selected. Please select at least one video',
+      'duration': 'Duration',
+      'size': 'Size',
 
       // Settings
       'settings': 'Settings',
@@ -126,6 +132,7 @@ class Localization extends Translations {
       'cancel': 'Cancel',
       'delete': 'Delete',
       'ok': 'Ok',
+      'error_loading_video': '❌ Error loading video, please try again',
 
       // Time slicing
       'define_duration_excerpts': 'Define the duration of each video excerpt',
@@ -138,6 +145,18 @@ class Localization extends Translations {
 
       // General
       'hello': 'Hello',
+
+      // Saving
+      'saving_videos': 'Videos saved successfully',
+      'error_saving_videos': 'Error while saving videos',
+      'no_segment_to_save': 'No segment to save',
+      'error_accessing_external_directory':
+          'Impossible d\'accéder au répertoire externe',
+      'platform_not_supported': 'Platform not supported',
+
+      // Sharing
+      'error_sharing_videos': 'Error while sharing videos',
+      'no_video_to_share': 'No video to share',
     },
     'fr': {
       // App name and general
@@ -191,9 +210,15 @@ class Localization extends Translations {
       'cutting_results': 'Résultats du découpage',
       'share': 'Partager',
       'save': 'Enregistrer',
+      'cut_done_title': 'Découpage terminée 💯',
+      'cut_done_body': 'Vous pouvez le partager ou l\'enregistrer',
+      'cut_done_notification':
+          'Découpage terminé, vous pouvez le partager ou l\'enregistrer',
       'no_video_selected':
           'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
-
+      'error_cutting': 'Erreur lors du découpage, veuillez réessayer',
+      'duration': 'Durée',
+      'size': 'Taille',
       // Settings
       'settings': 'Paramètres',
       'how_it_works': 'Comment ça marche ?',
@@ -269,6 +294,7 @@ class Localization extends Translations {
       'cancel': 'Annuler',
       'delete': 'Supprimer',
       'ok': 'Ok',
+      'error_loading_video': '❌ Erreur lors du chargement des dossiers',
 
       // Time slicing
       'define_duration_excerpts': 'Définir la durée de chaque extrait vidéo',
@@ -281,6 +307,18 @@ class Localization extends Translations {
 
       // General
       'hello': 'Bonjour',
+
+      // Saving
+      'saving_videos': 'Vidéos enregistrées avec succè',
+      'error_saving_videos': 'Erreur lors de l\'enregistrement des vidéos',
+      'no_segment_to_save': 'Aucun segment à enregistrer',
+      'error_accessing_external_directory':
+          'Impossible d\'accéder au répertoire externe',
+      'platform_not_supported': 'Plateforme non supportée',
+
+      // Sharing
+      'error_sharing_videos': 'Erreur lors du partage des vidéos',
+      'no_video_to_share': 'Aucune vidéo à partager',
     },
   };
 }

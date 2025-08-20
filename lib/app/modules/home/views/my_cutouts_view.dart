@@ -65,7 +65,7 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
         splitFolders = validFolders;
       });
     } catch (e) {
-      print('❌ Erreur lors du chargement des dossiers : $e');
+      print('${'error_loading_video'.tr}: $e');
     } finally {
       setState(() {
         isLoading = false;

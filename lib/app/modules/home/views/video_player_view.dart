@@ -133,11 +133,11 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Durée: ${_formatDuration(_controller.value.duration)}',
+                                    '${'Durée:'.tr} ${_formatDuration(_controller.value.duration)}',
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   Text(
-                                    'Taille: $fileSize',
+                                    '${'Taille'.tr}: $fileSize',
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                 ],

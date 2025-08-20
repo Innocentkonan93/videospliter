@@ -251,8 +251,6 @@ class HomeView extends GetView<HomeController> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              print("settings");
-              // Get.to(() => const AboutAppView());
               Get.to(
                 () => const SettingsView(),
                 transition: Transition.rightToLeft,
