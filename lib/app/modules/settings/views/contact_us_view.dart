@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
@@ -10,8 +11,8 @@ class ContactUsView extends StatelessWidget {
       scheme: 'mailto',
       path: 'support@cutitapp.net',
       queryParameters: {
-        'subject': 'Support Cutit',
-        'body': 'Bonjour, je souhaite contacter le support de Cutit.',
+        'subject': 'support_cutit'.tr,
+        'body': 'hello_support'.tr,
       },
     );
 
@@ -25,7 +26,7 @@ class ContactUsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text('Nous contacter'),
+        title: Text('contact_us'.tr),
         backgroundColor: AppColors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.black),
@@ -35,13 +36,13 @@ class ContactUsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Une question ? Un problème ?',
+            Text(
+              'question_problem'.tr,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'N\'hésitez pas à nous contacter, nous vous répondrons dans les plus brefs délais.',
+            Text(
+              'contact_description'.tr,
               style: TextStyle(fontSize: 16, color: Colors.black87),
             ),
             const SizedBox(height: 32),
@@ -49,7 +50,7 @@ class ContactUsView extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: _launchEmail,
                 icon: const Icon(Icons.email_outlined),
-                label: const Text('Envoyer un email'),
+                label: Text('send_email'.tr),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,

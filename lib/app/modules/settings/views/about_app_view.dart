@@ -12,10 +12,10 @@ class AboutAppView extends GetWidget<SettingsController> {
     var theme = context.theme;
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(title: Text("À propos")),
+      appBar: AppBar(title: Text("about".tr)),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Text(aboutApp, style: theme.textTheme.titleMedium),
+        child: Text(aboutApp.tr, style: theme.textTheme.titleMedium),
       ),
       bottomNavigationBar: SizedBox(
         height: 50,
@@ -23,7 +23,7 @@ class AboutAppView extends GetWidget<SettingsController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Version ${controller.version.value}",
+              "${'version'.tr} ${controller.version.value}",
               style: theme.textTheme.labelMedium,
             ),
           ],

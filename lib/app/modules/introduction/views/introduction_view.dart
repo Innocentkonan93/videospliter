@@ -40,18 +40,12 @@ class IntroductionView extends GetWidget<IntroductionController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Text(
-                        //   "${controller.currentPage.value + 1}/${introductions.length}",
-                        //   style: theme.textTheme.bodyMedium?.copyWith(
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
                         TextButton(
                           onPressed: () {
-                            controller.completedIntro();
+                            // controller.completedIntro();
                           },
                           child: Text(
-                            "Passer",
+                            "",
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: Colors.white,
                             ),
@@ -94,7 +88,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                         onPageChanged: (index) {
                           controller.currentPage.value = index;
                           controller.update();
-                          print(index);
+                          // print(index);
                         },
                         itemBuilder: (context, index) {
                           final introduction = introductions[index];
@@ -144,7 +138,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                       ),
                                     ),
                                     child: Text(
-                                      "Autoriser",
+                                      "allow".tr,
                                       style: theme.textTheme.titleMedium
                                           ?.copyWith(
                                             color: AppColors.primary,

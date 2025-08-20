@@ -12,21 +12,30 @@ class SettingsView extends GetWidget<SettingsController> {
     final theme = context.theme;
     Get.put(SettingsController());
     return Scaffold(
-      appBar: AppBar(title: const Text('Paramètres'), centerTitle: true),
+      appBar: AppBar(title: Text('settings'.tr), centerTitle: true),
       backgroundColor: AppColors.white,
       body: ListView.builder(
+        padding: const EdgeInsets.all(16),
         itemCount: settings.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              settings[index]['title'] as String,
-              style: theme.textTheme.titleMedium,
+          return Padding(
+            key: ValueKey(settings[index]['title']),
+            padding: const EdgeInsets.only(bottom: 16),
+            child: ListTile(
+              title: Text(
+                settings[index]['title'] as String,
+                style: theme.textTheme.titleMedium,
+              ),
+              tileColor: AppColors.background,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              leading: Icon(
+                settings[index]['icon'] as IconData,
+                color: AppColors.primary,
+              ),
+              onTap: settings[index]['onTap'] as VoidCallback,
             ),
-            leading: Icon(
-              settings[index]['icon'] as IconData,
-              color: AppColors.primary,
-            ),
-            onTap: settings[index]['onTap'] as VoidCallback,
           );
         },
       ),

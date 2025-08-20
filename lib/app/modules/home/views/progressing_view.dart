@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
+import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
 
@@ -16,14 +17,14 @@ class ProcessingView extends StatefulWidget {
 class _ProcessingViewState extends State<ProcessingView> {
   final controller = Get.find<HomeController>();
   final List<String> messages = [
-    "✂️ Découpage en cours… ne quitte pas l'application.",
-    "🔪 Plus besoin de couper manuellement tes vidéos.",
-    "📱 Partage plus facilement des longues vidéos en plusieurs parties.",
-    "🎯 Transforme une vidéo en plusieurs statuts en un clic.",
-    "📸 Idéal pour les stories, les statuts WhatsApp et tes shorts YouTube.",
-    "🚀 Tes longues vidéos deviennent simples à publier.",
-    "⏱️ Crée automatiquement des extraits de 10, 30, 60 secondes.",
-    "🎬 Utilise cutit pour découper tes vidéos comme un pro",
+    "cutting_in_progress".tr,
+    "no_manual_cutting".tr,
+    "share_easily".tr,
+    "transform_video".tr,
+    "ideal_for_stories".tr,
+    "videos_become_simple".tr,
+    "create_automatically".tr,
+    "use_cutit_like_pro".tr,
   ];
   final RxInt _messageIndex = 0.obs;
 
@@ -52,17 +53,34 @@ class _ProcessingViewState extends State<ProcessingView> {
   }
 
   Future<void> _processVideo() async {
-    final parts = await controller.splitVideo();
-    if (parts != null) {
-      await controller.initVideoControllers(parts);
-      await Future.delayed(const Duration(seconds: 1));
-      vibrate();
-      Get.off(() => ResultView(parts: controller.videoParts));
-      controller.onSplitDone();
+    // final parts = await controller.splitVideo();
+    try {
+      final parts = await controller.splitVideoIsolate();
+      if (parts != null) {
+        await controller.initVideoControllers(parts);
+        await Future.delayed(const Duration(seconds: 1));
+        vibrate();
+        Get.off(() => ResultView(parts: controller.videoParts));
+        controller.onSplitDone();
+        if (controller.isAppInBackground.value) {
+          LocalNotificationService().showNotification(
+            id: 1,
+            title: "Découpage terminée 💯",
+            body: "Vous pouvez le partager ou l'enregistrer",
+          );
+        }
+        showSnackBar(
+          "Découpage terminée, vous pouvez le partager ou l'enregistrer",
+        );
+        controller.videoParts.sort((a, b) => a.path.compareTo(b.path));
+      }
+    } catch (e) {
+      print(e);
+      Get.back();
       showSnackBar(
-        "Découpage terminée, vous pouvez le partager ou l'enregistrer",
+        "Erreur lors du découpage, veuillez réessayer",
+        isError: true,
       );
-      controller.videoParts.sort((a, b) => a.path.compareTo(b.path));
     }
   }
 
@@ -173,30 +191,37 @@ class _ProcessingViewState extends State<ProcessingView> {
                               ? AppColors.green
                               : AppColors.primary,
                     ),
+                    SizedBox(height: 30),
+                    if (controller.progress.value == 1)
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
                     // const SizedBox(height: 10),
                     // Text(
                     //   "${(controller.progress.value * 100).toStringAsFixed(1)} %",
                     // ),
-                    SizedBox(height: 80),
-                    Divider(color: Colors.grey[300], height: 1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.warning_rounded,
-                          color: const Color.fromARGB(255, 198, 136, 20),
-                          size: 60,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "Ne vérrouillez pas l'écran et ne quittez pas l'application pendant le traitement",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    // SizedBox(height: 80),
+                    // Divider(color: Colors.grey[300], height: 1),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Icon(
+                    //       Icons.warning_rounded,
+                    //       color: const Color.fromARGB(255, 198, 136, 20),
+                    //       size: 60,
+                    //     ),
+                    //   ],
+                    // ),
+                    // Text(
+                    //   "Ne vérrouillez pas l'écran et ne quittez pas l'application pendant le traitement",
+                    //   style: TextStyle(
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    //   textAlign: TextAlign.center,
+                    // ),
                   ],
                 ),
               ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
 import 'package:flutter_sharing_intent/model/sharing_file.dart';
@@ -11,46 +12,92 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
-import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
+import 'package:video_spliter/app/services/sharing_service.dart';
+import 'package:video_spliter/app/widgets/deletion_dialog.dart';
 import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
 
+/// Contrôleur principal pour la gestion des vidéos et de l'interface utilisateur
+/// Gère le découpage de vidéos, la sélection de fichiers, les publicités et le cycle de vie de l'application
 class HomeController extends GetxController with WidgetsBindingObserver {
-  late StreamSubscription _intentDataStreamSubscription;
+  // ==================== PROPRIÉTÉS PRIVÉES ====================
+
+  /// Subscription pour écouter les intentions de partage
+  late StreamSubscription intentDataStreamSubscription;
+
+  /// Helper pour la gestion du cache
   final CacheHelper cacheHelper = CacheHelper();
-  Rx<File?> selectedVideo = Rx<File?>(null);
-  RxList<File> videoParts = <File>[].obs;
-  RxList<File> selectedVideoParts = <File>[].obs;
-  // RxList<String> selectedFolders = <String>[].obs;
-  PageController pageController = PageController();
-  final Map<File, VideoPlayerController> videoControllers = {};
-  RxInt currentPage = 0.obs;
 
-  RxDouble sliceDuration = 30.0.obs;
-
-  final canSelectVideo = false.obs;
-  // final canSelectFolder = false.obs;
-
+  /// Service de gestion des publicités
   final AdMobService adMobService = AdMobService();
-  BannerAd? banner;
-  final successfulCuts = 0.obs;
+
+  /// Service de gestion des vidéos partagées
+  // final SharingService sharingService = Get.find<SharingService>();
+
+  /// Temps de mise en pause de l'application
   DateTime? _pausedTime;
-  RxDouble progress = 0.0.obs;
+
+  /// Indicateur si une publicité interstitielle a été récemment affichée
   final _interstitialRecentlyShown = false.obs;
 
+  // ==================== PROPRIÉTÉS PUBLIQUES OBSERVABLES ====================
+
+  /// Vidéo actuellement sélectionnée
+  Rx<File?> selectedVideo = Rx<File?>(null);
+
+  /// Liste des parties de vidéo générées après découpage
+  RxList<File> videoParts = <File>[].obs;
+
+  /// Liste des parties de vidéo sélectionnées par l'utilisateur
+  RxList<File> selectedVideoParts = <File>[].obs;
+
+  /// Contrôleur de pagination pour les vues
+  PageController pageController = PageController();
+
+  /// Map des contrôleurs vidéo pour chaque fichier
+  final Map<File, VideoPlayerController> videoControllers = {};
+
+  /// Page actuellement affichée
+  RxInt currentPage = 0.obs;
+
+  /// Durée de découpage en secondes
+  RxDouble sliceDuration = 30.0.obs;
+
+  /// Indicateur si l'utilisateur peut sélectionner une vidéo
+  final canSelectVideo = false.obs;
+
+  /// Indicateur si l'application est en arrière-plan
+  final isAppInBackground = false.obs;
+
+  /// Bannière publicitaire
+  BannerAd? banner;
+
+  /// Nombre de découpages réussis
+  final successfulCuts = 0.obs;
+
+  /// Progression du traitement
+  RxDouble progress = 0.0.obs;
+
+  /// Indicateur si la bannière publicitaire est chargée
   final isBannerLoaded = false.obs;
 
-  // final canShowFolderOptions = false.obs;
+  /// Dossier actuellement sélectionné pour les options
   final selectedFolder = "".obs;
 
+  // ==================== MÉTHODES DE SÉLECTION DE FICHIERS ====================
+
+  /// Permet à l'utilisateur de sélectionner une vidéo depuis le système de fichiers
+  /// Demande les permissions nécessaires avant la sélection
   Future<void> pickVideo() async {
     try {
+      selectedFolder.value = "";
       await requestPermissions();
       final result = await FilePicker.platform.pickFiles(type: FileType.video);
 
@@ -64,6 +111,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  // ==================== MÉTHODES DE TRAITEMENT VIDÉO ====================
+
+  /// Découpe la vidéo sélectionnée en segments de durée définie (méthode synchrone)
+  /// Retourne la liste des fichiers générés ou null si aucune vidéo n'est sélectionnée
   Future<List<File>?> splitVideo() async {
     if (selectedVideo.value == null) return null;
 
@@ -76,6 +127,24 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return parts;
   }
 
+  /// Découpe la vidéo sélectionnée en segments de durée définie (méthode asynchrone avec isolate)
+  /// Améliore les performances en utilisant un thread séparé
+  Future<List<File>?> splitVideoIsolate() async {
+    if (selectedVideo.value == null) return null;
+    videoParts.clear();
+    final parts = await VideoService.splitBySSAsync(
+      videoFile: selectedVideo.value!,
+      sliceDuration: sliceDuration.value,
+    );
+    videoParts.addAll(parts);
+    return parts;
+  }
+
+  // ==================== MÉTHODES DE SAUVEGARDE ====================
+
+  /// Sauvegarde les segments vidéo sélectionnés dans un dossier
+  /// Affiche une publicité interstitielle après la sauvegarde
+  /// Retourne true si la sauvegarde est réussie
   Future<bool> saveSegments(String? baseFolderName) async {
     await SaveSegmentsService.saveSegments(
       selectedVideoParts.isEmpty ? videoParts : selectedVideoParts,
@@ -95,19 +164,32 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return true;
   }
 
+  /// Affiche un dialogue pour renommer un dossier
+  /// Met à jour le système de fichiers si un nouveau nom est fourni
   Future<void> renameFolder(String folderName) async {
-    final result = await showDialog(
-      context: Get.context!,
-      barrierDismissible: false,
-      builder: (context) {
-        return FolderNameDialog(folderName: folderName);
-      },
-    );
+    final result = await showFolderDialog(name: folderName);
     if (result != null) {
       await FileService.renameFolder(folderName, result);
     }
   }
 
+  Future<void> deleteFolder(String folderName) async {
+    final result = await showDialog(
+      context: Get.context!,
+      builder: (context) {
+        return DeletionDialog(folderName: folderName);
+      },
+    );
+
+    if (result == true) {
+      await FileService.deleteFolders([folderName]);
+    }
+  }
+
+  // ==================== MÉTHODES DE GESTION DES CONTRÔLEURS VIDÉO ====================
+
+  /// Initialise les contrôleurs vidéo pour une liste de fichiers
+  /// Évite la duplication en vérifiant l'existence avant création
   Future<void> initVideoControllers(
     List<File> parts, {
     bool isSaved = false,
@@ -124,6 +206,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  /// Libère la mémoire en disposant tous les contrôleurs vidéo
+  /// Nettoie la map des contrôleurs
   Future<void> disposeVideoControllers() async {
     for (final controller in videoControllers.values) {
       await controller.dispose();
@@ -131,6 +215,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     videoControllers.clear();
   }
 
+  // ==================== MÉTHODES DE SÉLECTION ====================
+
+  /// Gère la sélection/désélection d'une partie de vidéo
+  /// Toggle la sélection si le fichier est déjà sélectionné
   void selectVideoPart(File part) {
     if (selectedVideoParts.contains(part)) {
       selectedVideoParts.remove(part);
@@ -140,6 +228,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  /// Sélectionne ou désélectionne toutes les parties de vidéo
+  /// Toggle entre sélection complète et aucune sélection
   void selectAllVideoParts(List<File> parts) {
     if (selectedVideoParts.isEmpty) {
       selectedVideoParts.addAll(parts);
@@ -149,8 +239,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  // ==================== MÉTHODES DE GESTION DES ÉVÉNEMENTS ====================
+
+  /// Appelée après un découpage réussi
+  /// Gère l'affichage des publicités et les demandes d'évaluation
   void onSplitDone() {
     successfulCuts.value++;
+
+    // Affiche une publicité récompensée tous les 5 découpages
     if (successfulCuts.value % 5 == 0) {
       adMobService.loadRewardedAd(
         onEarnedReward: () {
@@ -159,18 +255,55 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       );
     }
 
+    // Demande une évaluation tous les 3 découpages
     if (successfulCuts.value % 3 == 0) {
       AppService.askForRating();
+      successfulCuts.value = 0;
     }
+
     update();
     CacheHelper.saveData(key: "successfulCuts", value: successfulCuts.value);
   }
 
-  // void selectFolder(String folder) {
-  //   selectedFolders.add(folder);
-  //   update();
-  // }
+  /// Gère l'affichage/masquage des options pour un dossier
+  /// Toggle la sélection du dossier
+  void showFolderOptions(String folderName) {
+    if (selectedFolder.value == folderName) {
+      selectedFolder.value = "";
+    } else {
+      selectedFolder.value = folderName;
+    }
+    update();
+  }
 
+  Future showFolderDialog({String? name}) async {
+    return await showGeneralDialog(
+      context: Get.context!,
+      transitionDuration: const Duration(milliseconds: 100),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.decelerate),
+            ),
+            child: FolderNameDialog(folderName: name),
+          ),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Container();
+      },
+    );
+  }
+
+  // ==================== MÉTHODES DE PERMISSIONS ====================
+
+  /// Demande les permissions nécessaires selon la plateforme
+  /// Android: Permission de stockage, iOS: Permission photos
   Future<void> requestPermissions() async {
     List<Permission> permissions = [];
 
@@ -184,37 +317,38 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     print(statuses);
   }
 
+  // ==================== MÉTHODES UTILITAIRES ====================
+
+  /// Remet à zéro tous les états et sélections
+  /// Nettoie l'interface utilisateur
   void clearAll() {
     canSelectVideo.value = false;
     selectedVideo.value = null;
     videoParts.clear();
     selectedVideoParts.clear();
     progress.value = 0.0;
-
     selectedFolder.value = "";
-    // selectedFolders.clear();
     update();
   }
 
-  @override
-  void onInit() {
-    loadBannerAd();
-    initSharingListener();
-    WidgetsBinding.instance.addObserver(this);
-    successfulCuts.value = CacheHelper.getInteger(key: "successfulCuts");
-    super.onInit();
-  }
+  // ==================== MÉTHODES DE GESTION DES PUBLICITÉS ====================
 
+  /// Charge et affiche la bannière publicitaire
   void loadBannerAd() {
     banner = adMobService.loadBannerAd();
     isBannerLoaded.value = true;
     update();
   }
 
+  // ==================== MÉTHODES DE PARTAGE ====================
+
+  /// Initialise l'écoute des intentions de partage
+  /// Gère deux cas: app en mémoire et app lancée via partage
   void initSharingListener() {
     log("listening");
-    // Cas 1 : App déjà en mémoire
-    _intentDataStreamSubscription = FlutterSharingIntent.instance
+
+    // Cas 1 : Application déjà en mémoire
+    intentDataStreamSubscription = FlutterSharingIntent.instance
         .getMediaStream()
         .listen(
           (List<SharedFile> files) {
@@ -227,7 +361,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           },
         );
 
-    // Cas 2 : App lancée via partage
+    // Cas 2 : Application lancée via partage
     FlutterSharingIntent.instance.getInitialSharing().then((
       List<SharedFile> files,
     ) {
@@ -237,6 +371,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     });
   }
 
+  /// Traite une vidéo reçue via partage
+  /// Met à jour la vidéo sélectionnée avec le fichier partagé
   void handleSharedVideo(SharedFile file) {
     try {
       print("📥 Vidéo reçue : ${file.value}");
@@ -244,10 +380,67 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         selectedVideo.value = File(file.value!);
       }
       update();
-      // Tu peux maintenant rediriger vers une page ou lancer le découpage automatiquement
     } catch (e) {
       print(e);
     }
+  }
+
+  /// Initialise l'écoute des vidéos partagées via l'extension iOS
+  void initSharedVideoListener() {
+    final sharingService = Get.find<SharingService>();
+    // Écouter les changements de vidéo partagée
+    ever(sharingService.hasSharedVideo, (hasVideo) {
+      if (hasVideo == true) {
+        _handleSharedVideoFromExtension();
+      }
+    });
+
+    // Vérifier immédiatement s'il y a une vidéo partagée
+    if (sharingService.hasPendingSharedVideo) {
+      _handleSharedVideoFromExtension();
+    }
+  }
+
+  /// Gère une vidéo partagée reçue via l'extension iOS
+  void _handleSharedVideoFromExtension() {
+    try {
+      final sharingService = Get.find<SharingService>();
+      final sharedVideo = sharingService.getAndClearSharedVideo();
+      if (sharedVideo != null) {
+        print(
+          "📱 HomeController: Vidéo partagée reçue via extension: ${sharedVideo.path}",
+        );
+        selectedVideo.value = sharedVideo;
+
+        // Afficher une notification à l'utilisateur
+        Get.snackbar(
+          'Vidéo reçue',
+          'Une vidéo a été partagée depuis l\'extension',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: AppColors.primary,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+
+        update();
+      }
+    } catch (e) {
+      print(
+        "❌ HomeController: Erreur lors du traitement de la vidéo partagée: $e",
+      );
+    }
+  }
+
+  // ==================== MÉTHODES DU CYCLE DE VIE ====================
+
+  @override
+  void onInit() {
+    loadBannerAd();
+    initSharingListener();
+    initSharedVideoListener();
+    WidgetsBinding.instance.addObserver(this);
+    successfulCuts.value = CacheHelper.getInteger(key: "successfulCuts");
+    super.onInit();
   }
 
   @override
@@ -257,35 +450,45 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onClose();
   }
 
+  /// Gère les changements d'état du cycle de vie de l'application
+  /// Affiche des publicités interstitielles après une absence prolongée
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _pausedTime = DateTime.now();
-    } else if (state == AppLifecycleState.resumed) {
-      final now = DateTime.now();
-      final timeAway =
-          _pausedTime != null ? now.difference(_pausedTime!).inSeconds : 0;
+    switch (state) {
+      case AppLifecycleState.paused:
+        _pausedTime = DateTime.now();
+        break;
 
-      if (timeAway > 30 && !_interstitialRecentlyShown.value) {
-        _interstitialRecentlyShown.value = true;
+      case AppLifecycleState.resumed:
+        final now = DateTime.now();
+        final timeAway =
+            _pausedTime != null ? now.difference(_pausedTime!).inSeconds : 0;
 
-        adMobService.loadInterstitialAd(
-          onAdDismissed: () {
-            Future.delayed(const Duration(minutes: 3), () {
-              _interstitialRecentlyShown.value = false;
-            });
-          },
-        );
-      }
+        // Affiche une publicité si l'utilisateur revient après 30 secondes
+        if (timeAway > 30 && !_interstitialRecentlyShown.value) {
+          _interstitialRecentlyShown.value = true;
+
+          adMobService.loadInterstitialAd(
+            onAdDismissed: () {
+              // Empêche l'affichage répétitif pendant 3 minutes
+              Future.delayed(const Duration(minutes: 3), () {
+                _interstitialRecentlyShown.value = false;
+              });
+            },
+          );
+        }
+        isAppInBackground.value = false;
+        update();
+        break;
+
+      case AppLifecycleState.hidden:
+        intentDataStreamSubscription.cancel();
+        isAppInBackground.value = true;
+        update();
+        break;
+
+      default:
+        break;
     }
-  }
-
-  void showFolderOptions(String folderName) {
-    if (selectedFolder.value == folderName) {
-      selectedFolder.value = "";
-    } else {
-      selectedFolder.value = folderName;
-    }
-    update();
   }
 }

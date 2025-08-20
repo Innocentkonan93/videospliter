@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
 class HowItWorkView extends StatelessWidget {
@@ -9,7 +10,7 @@ class HowItWorkView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text("Comment ça marche ?"),
+        title: Text("how_it_works".tr),
         backgroundColor: AppColors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.black),
@@ -19,37 +20,17 @@ class HowItWorkView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Bienvenue sur Cutit !",
+            Text(
+              "welcome_cutit_title".tr,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildStep(
-              "1. Sélectionnez une vidéo",
-              "Choisissez une vidéo depuis votre galerie ou partagez-la directement depuis une autre application.",
-              Icons.video_library,
-            ),
-            _buildStep(
-              "2. Ajustez la durée",
-              "Définissez la durée souhaitée pour chaque segment (par défaut 30 secondes).",
-              Icons.timer,
-            ),
-            _buildStep(
-              "3. Découpez automatiquement",
-              "L'application découpe automatiquement votre vidéo en segments de la durée choisie.",
-              Icons.cut,
-            ),
-            _buildStep(
-              "4. Sélectionnez et sauvegardez",
-              "Choisissez les segments à conserver et enregistrez-les dans votre galerie.",
-              Icons.save,
-            ),
+            _buildStep("step1_title".tr, "step1_desc".tr, Icons.video_library),
+            _buildStep("step2_title".tr, "step2_desc".tr, Icons.timer),
+            _buildStep("step3_title".tr, "step3_desc".tr, Icons.cut),
+            _buildStep("step4_title".tr, "step4_desc".tr, Icons.save),
             // social sharing
-            _buildStep(
-              "5. Partagez sur les réseaux sociaux",
-              "Publiez facilement vos segments en stories, statuts ou posts sur vos réseaux sociaux préférés.",
-              Icons.share,
-            ),
+            _buildStep("step5_title".tr, "step5_desc".tr, Icons.share),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(16),
@@ -57,11 +38,11 @@ class HowItWorkView extends StatelessWidget {
                 color: AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "💡Astuce !",
+                    "tip".tr,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -69,10 +50,7 @@ class HowItWorkView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    "Vous pouvez également partager directement une vidéo depuis votre gallérie vers Cutit pour la découper instantanément !",
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  Text("step_tip".tr, style: TextStyle(fontSize: 16)),
                 ],
               ),
             ),

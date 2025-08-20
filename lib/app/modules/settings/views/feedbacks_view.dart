@@ -13,7 +13,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: Text("Signaler un problème".tr),
+        title: Text("report_issue".tr),
         elevation: 0,
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.black,
@@ -28,8 +28,8 @@ class FeedbacksView extends GetWidget<SettingsController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Description text
-                  const Text(
-                    "Nous sommes désolés que vous rencontriez un problème. Décrivez-nous ce qui s'est passé et nous ferons de notre mieux pour vous aider.",
+                  Text(
+                    "sorry_problem".tr,
                     style: TextStyle(fontSize: 16, color: Colors.black87),
                   ),
                   const SizedBox(height: 24),
@@ -38,7 +38,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
                   TextFormField(
                     controller: controller.bugDescriptionController,
                     decoration: InputDecoration(
-                      hintText: "Décrivez le problème en détail...".tr,
+                      hintText: "describe_problem".tr,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -49,7 +49,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
                     maxLines: 8,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Veuillez décrire le problème rencontré".tr;
+                        return "describe_problem_validation".tr;
                       }
                       return null;
                     },
@@ -58,7 +58,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
 
                   // Screenshots section
                   Text(
-                    "Captures d'écran".tr,
+                    "screenshots".tr,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -66,8 +66,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Ajoutez des captures d'écran pour nous aider à mieux comprendre le problème"
-                        .tr,
+                    "screenshots_description".tr,
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(height: 16),
@@ -152,11 +151,12 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                       ImageSource.camera,
                                     ),
                                 icon: const Icon(Icons.camera_alt),
-                                label: Text("Appareil photo".tr),
+                                label: Text("camera".tr),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary.withValues(
                                     alpha: 0.1,
                                   ),
+                                  elevation: 0,
                                   foregroundColor: AppColors.primary,
                                 ),
                               ),
@@ -167,11 +167,12 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                       ImageSource.gallery,
                                     ),
                                 icon: const Icon(Icons.photo_library),
-                                label: Text("Galerie".tr),
+                                label: Text("gallery".tr),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary.withValues(
                                     alpha: 0.1,
                                   ),
+                                  elevation: 0,
                                   foregroundColor: AppColors.primary,
                                 ),
                               ),
@@ -207,7 +208,7 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                 width: 20,
                                 child: const CircularProgressIndicator(),
                               )
-                              : Text("Envoyer le rapport".tr),
+                              : Text("send_report".tr),
                     ),
                   ),
                 ],

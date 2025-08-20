@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
 import 'package:video_spliter/app/modules/home/views/progressing_view.dart';
-import 'package:video_spliter/app/modules/settings/views/about_app_view.dart';
 import 'package:video_spliter/app/modules/settings/views/settings_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
 import 'package:video_spliter/app/widgets/time_slicing_sheet.dart';
@@ -40,6 +40,7 @@ class HomeView extends GetView<HomeController> {
                     end: Alignment.bottomCenter,
                     colors: [AppColors.secondary, AppColors.primary],
                   ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Stack(
                   children: [
@@ -77,8 +78,8 @@ class HomeView extends GetView<HomeController> {
                             ),
                           const Spacer(),
 
-                          const Text(
-                            'Découpez, partagez et enregistrez vos vidéos en quelques clics',
+                          Text(
+                            "cut_share_save".tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 25,
@@ -95,15 +96,20 @@ class HomeView extends GetView<HomeController> {
                                       onPressed: () {
                                         controller.pickVideo();
                                       },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.white,
+                                        foregroundColor: AppColors.primary,
+                                        elevation: 10,
+                                      ),
                                       label: Text(
-                                        'Charger une vidéo',
+                                        'load_video'.tr,
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.w800,
                                             ),
                                       ),
                                       icon: const Icon(
-                                        Icons.video_call_rounded,
+                                        CupertinoIcons.videocam,
                                         color: AppColors.primary,
                                         size: 30,
                                       ),
@@ -156,7 +162,7 @@ class HomeView extends GetView<HomeController> {
                                       size: 24,
                                     ),
                                     label: Text(
-                                      'Découper',
+                                      'cut_video'.tr,
                                       style: theme.textTheme.titleMedium
                                           ?.copyWith(
                                             fontWeight: FontWeight.w800,
@@ -179,44 +185,57 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                 ],
                               ),
-                          const Spacer(flex: 2),
-                          GestureDetector(
-                            onTap: () {
-                              controller.pageController.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.swipe_vertical,
-                                  color: AppColors.white,
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 70,
-                                      height: 4,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12),
+                          const Spacer(),
+                          SafeArea(
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                        Icons
+                                            .keyboard_double_arrow_down_rounded,
+                                        color: AppColors.white,
+                                      )
+                                      .animate(
+                                        autoPlay: true,
+                                        onPlay: (controller) {
+                                          controller.repeat();
+                                        },
+                                      )
+                                      .slideY(
+                                        duration: const Duration(
+                                          milliseconds: 1000,
+                                        ),
+                                        curve: Curves.easeInOut,
+                                        begin: -0.5,
+                                        end: 0.5,
+                                      )
+                                      .then()
+                                      .slideY(
+                                        duration: const Duration(
+                                          milliseconds: 1000,
+                                        ),
+                                        curve: Curves.easeInOut,
+                                        begin: 0.5,
+                                        end: -0.5,
                                       ),
+                                  const SizedBox(height: 5),
+
+                                  Text(
+                                    "my_cutouts".tr,
+                                    style: theme.textTheme.titleLarge?.copyWith(
+                                      // fontWeight: FontWeight.w800,
+                                      color: AppColors.white,
                                     ),
-                                    Container(),
-                                  ],
-                                ),
-                                Text(
-                                  "Mes découpages",
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    // fontWeight: FontWeight.w800,
-                                    color: AppColors.white,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(height: 12),

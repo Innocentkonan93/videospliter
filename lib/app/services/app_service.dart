@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -12,11 +13,7 @@ class AppService {
 
     final url = Platform.isAndroid ? playStoreLink : appStoreLink;
     await SharePlus.instance.share(
-      ShareParams(
-        title: 'Découpe tes vidéos comme un pro ! 🎬✨',
-        text:
-            '🚀 Hey ! Je viens de découvrir Cutit, une app géniale qui découpe automatiquement les longues vidéos en petits segments parfaits pour les stories et les statuts ! Plus besoin de galérer, c\'est magique ✨ Teste-la ici : $url',
-      ),
+      ShareParams(title: 'share_app_title'.tr, text: 'share_app_text'.tr + url),
     );
   }
 

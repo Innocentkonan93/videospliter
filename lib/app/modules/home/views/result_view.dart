@@ -6,7 +6,6 @@ import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
-import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
 import '../controllers/home_controller.dart';
 
 class ResultView extends StatefulWidget {
@@ -49,6 +48,7 @@ class _ResultViewState extends State<ResultView> {
                 onPressed: () {
                   controller.canSelectVideo.value = false;
                   controller.selectedVideoParts.clear();
+                  controller.selectedFolder.value = "";
                   controller.update();
                 },
                 icon: const Icon(Icons.close),
@@ -178,6 +178,7 @@ class _ResultViewState extends State<ResultView> {
             },
           ),
           bottomNavigationBar: BottomAppBar(
+            color: AppColors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -192,27 +193,29 @@ class _ResultViewState extends State<ResultView> {
                     }
                     VideoService.shareVideos(controller.selectedVideoParts);
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
-                  ),
+                  style:
+                      controller.selectedVideoParts.isEmpty
+                          ? TextButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              222,
+                              222,
+                              222,
+                            ),
+                          )
+                          : TextButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white,
+                          ),
                   icon: const Icon(Icons.share),
                   label: const Text('Partager'),
                 ),
                 if (!widget.isSaved)
                   TextButton.icon(
                     onPressed: () async {
-                      final result = await showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return FolderNameDialog(
-                            folderName: controller.selectedFolder.value,
-                          );
-                        },
-                      );
+                      final result = await controller.showFolderDialog();
                       if (result != null) {
-                        controller.saveSegments(result);
+                        controller.saveSegments(result as String);
                       }
                     },
                     style: TextButton.styleFrom(

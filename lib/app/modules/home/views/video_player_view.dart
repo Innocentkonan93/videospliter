@@ -78,7 +78,7 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
+    // final theme = context.theme;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -182,17 +182,17 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      IconButton(
+                                      IconButton.filledTonal(
                                         icon: Icon(
                                           _controller.value.isPlaying
                                               ? Icons.pause
                                               : Icons.play_arrow,
                                           size: 40,
-                                          color: Colors.white,
+                                          color: AppColors.primary,
                                         ),
                                         onPressed: _togglePlayback,
                                       ),
-                                      IconButton(
+                                      IconButton.filled(
                                         icon: const Icon(
                                           Icons.share,
                                           color: Colors.white,

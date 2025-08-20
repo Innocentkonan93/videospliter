@@ -31,6 +31,14 @@ class SettingsController extends GetxController {
   final uploadingFilesPath = <Map<dynamic, String>>[].obs;
   final selectedFilesPath = <Map<dynamic, String>>[].obs;
 
+  RxBool isFrench = (Get.locale?.languageCode.toString() == 'fr').obs;
+
+  void selectLanguage(String language) {
+    Get.updateLocale(Locale(language));
+    isFrench.value = language == 'fr';
+    update();
+  }
+
   Future<void> pickImage(ImageSource source) async {
     if (source == ImageSource.camera) {
       await Permission.camera.request();

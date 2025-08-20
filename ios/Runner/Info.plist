@@ -49,5 +49,18 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.meetsum.cutit</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>cutit</string>
+			</array>
+		</dict>
+	</array>
+	<key>AppGroupId</key>
+	<string>group.com.meetsum.cutit</string>
 </dict>
 </plist>
