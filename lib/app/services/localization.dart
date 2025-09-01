@@ -285,10 +285,10 @@ class Localization extends Translations {
           'Nous apprécions votre aide pour améliorer l\'application.',
 
       // Folder operations
-      'rename_folder': 'Renommer le dossier',
+      'rename_folder': 'Renommer',
       'save_folder': 'Enregistrer le dossier',
       'new_folder': 'Nouveau dossier',
-      'delete_folder': 'Suppression du dossier',
+      'delete_folder': 'Supprimer',
       'delete_folder_confirm':
           'Êtes-vous sûr de vouloir supprimer le dossier ? \nCette action est irréversible.',
       'cancel': 'Annuler',

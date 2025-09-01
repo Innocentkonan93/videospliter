@@ -18,34 +18,30 @@ Future<void> launchUri(Uri parse) async {
 
 var settings = [
   {
-    'title': 'how_it_works'.tr,
+    'title': 'how_it_works',
     'icon': Icons.help,
     'onTap': () {
       Get.to(() => const HowItWorkView());
     },
   },
   {
-    'title': 'contact_us'.tr,
+    'title': 'contact_us',
     'icon': Icons.mail,
     'onTap': () {
       Get.to(() => const ContactUsView());
     },
   },
   {
-    'title': 'report_issue'.tr,
+    'title': 'report_issue',
     'icon': Icons.bug_report,
     'onTap': () {
       Get.to(() => const FeedbacksView());
     },
   },
+  {'title': 'rate_app', 'icon': Icons.star, 'onTap': AppService.askForRating},
+  {'title': 'share_app', 'icon': Icons.share, 'onTap': AppService.shareApp},
   {
-    'title': 'rate_app'.tr,
-    'icon': Icons.star,
-    'onTap': AppService.askForRating,
-  },
-  {'title': 'share_app'.tr, 'icon': Icons.share, 'onTap': AppService.shareApp},
-  {
-    'title': 'language'.tr,
+    'title': 'language',
     'icon': Icons.language,
     'onTap': () {
       showModalBottomSheet(
@@ -57,7 +53,7 @@ var settings = [
     },
   },
   {
-    'title': 'privacy_policy'.tr,
+    'title': 'privacy_policy',
     'icon': Icons.privacy_tip,
     'onTap': () {
       final url = 'https://cutitapp.net/privacy-policy';
@@ -65,7 +61,7 @@ var settings = [
     },
   },
   {
-    'title': 'about'.tr,
+    'title': 'about',
     'icon': Icons.info,
     'onTap': () {
       Get.to(() => const AboutAppView());
