@@ -86,3 +86,16 @@ var introductions = <Map<String, dynamic>>[
   },
 ];
 var aboutApp = "about_cutit".tr;
+
+var languages = [
+  {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷'},
+  {'code': 'en', 'name': 'English', 'flag': '🇺🇸'},
+  {'code': 'es', 'name': 'Español', 'flag': '🇪🇸'},
+  // {'code': 'de', 'name': 'Deutsch', 'flag': '🇩🇪'},
+  // {'code': 'it', 'name': 'Italiano', 'flag': '🇮🇹'},
+  // {'code': 'nl', 'name': 'Nederlands', 'flag': '🇳🇱'},
+  // {'code': 'pt', 'name': 'Português', 'flag': '🇵🇹'},
+  // {'code': 'ru', 'name': 'Русский', 'flag': '🇷🇺'},
+  // {'code': 'tr', 'name': 'Türkçe', 'flag': '🇹🇷'},
+  // {'code': 'zh', 'name': '中文', 'flag': '🇨🇳'},
+];

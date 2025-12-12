@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 
 class LanguageSelectionSheet extends GetWidget<SettingsController> {
   const LanguageSelectionSheet({super.key});
@@ -25,38 +26,31 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
-                  children: [
-                    ListTile(
-                      leading: const Text(
-                        '🇫🇷',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      title: const Text('Français'),
-                      onTap: () {
-                        controller.selectLanguage('fr');
-                        Get.back();
-                      },
-                      trailing:
-                          controller.isFrench.value == true
-                              ? const Icon(Icons.check)
-                              : const SizedBox.shrink(),
-                    ),
-                    ListTile(
-                      leading: const Text(
-                        '🇺🇸',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      title: const Text('English'),
-                      onTap: () {
-                        controller.selectLanguage('en');
-                        Get.back();
-                      },
-                      trailing:
-                          controller.isFrench.value == false
-                              ? const Icon(Icons.check)
-                              : const SizedBox.shrink(),
-                    ),
-                  ],
+                  children:
+                      languages.map((language) {
+                        final code = language['code'] as String;
+                        final name = language['name'] as String;
+                        final flag = language['flag'] as String;
+                        final isSelected =
+                            (code == 'fr' && controller.isFrench.value) ||
+                            (code == 'en' && !controller.isFrench.value);
+
+                        return ListTile(
+                          leading: Text(
+                            flag,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                          title: Text(name),
+                          onTap: () {
+                            controller.selectLanguage(code);
+                            Get.back();
+                          },
+                          trailing:
+                              isSelected
+                                  ? const Icon(Icons.check)
+                                  : const SizedBox.shrink(),
+                        );
+                      }).toList(),
                 ),
               ),
             ],
