@@ -11,7 +11,7 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
       builder: (controller) {
         return Container(
           height: 300,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

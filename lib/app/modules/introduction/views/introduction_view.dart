@@ -14,6 +14,8 @@ class IntroductionView extends GetWidget<IntroductionController> {
   Widget build(BuildContext context) {
     Get.put(IntroductionController());
     final theme = context.theme;
+    final size = MediaQuery.sizeOf(context);
+    final height = size.height;
     return GetBuilder<IntroductionController>(
       init: IntroductionController(),
       builder: (controller) {
@@ -115,6 +117,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                   replacement: SizedBox.shrink(),
                                   child: Image.asset(
                                         "assets/images/intro/$imagePath",
+                                        height: height * .45,
                                       )
                                       .animate(delay: 200.ms)
                                       .slideY(
@@ -124,29 +127,34 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                       )
                                       .fadeIn(duration: 1500.ms),
                                 ),
-                                SizedBox(height: 100),
                                 if (controller.currentPage.value >= 4)
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      controller.requestNotifications();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: AppColors.black,
-                                      shape: RoundedSuperellipseBorder(
-                                        borderRadius: BorderRadius.circular(40),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "allow".tr,
-                                      style: theme.textTheme.titleMedium
-                                          ?.copyWith(
-                                            color: AppColors.primary,
-                                            fontWeight: FontWeight.w600,
+                                  Column(
+                                    children: [
+                                      SizedBox(height: 50),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          controller.requestNotifications();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: AppColors.black,
+                                          shape: RoundedSuperellipseBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              40,
+                                            ),
                                           ),
-                                    ),
+                                        ),
+                                        child: Text(
+                                          "allow".tr,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                // Text(introductions[index]['description']),
                               ],
                             ),
                           );

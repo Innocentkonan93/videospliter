@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_theme.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
+import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/localization.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
@@ -17,8 +18,22 @@ import 'app/routes/app_pages.dart';
 
 bool isIntroductionViewed = false;
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppService().handleRatingRequestOnLaunch();
+    });
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {

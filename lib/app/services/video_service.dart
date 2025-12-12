@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
+import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class VideoService {
@@ -265,6 +266,8 @@ class VideoService {
       return;
     }
     await SharePlus.instance.share(ShareParams(files: filesToShare));
+    // Demande de notation après un partage réussi
+    AppService().handleRatingRequestAfterShare();
     adMobService.loadInterstitialAd(
       onAdDismissed: () {},
       onAdReady: () {

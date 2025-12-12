@@ -153,6 +153,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     selectedVideo.value = null;
     pageController.jumpToPage(1);
     clearAll();
+    // Demande de notation après une sauvegarde réussie
+    AppService().handleRatingRequestAfterCutting();
     adMobService.loadInterstitialAd(
       onAdDismissed: () {
         update();
@@ -255,9 +257,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       );
     }
 
-    // Demande une évaluation tous les 3 découpages
-    if (successfulCuts.value % 3 == 0) {
-      AppService.askForRating();
+    // Demande une évaluation tous les 2 découpages
+    if (successfulCuts.value % 2 == 0) {
+      AppService().handleRatingRequestAfterCutting();
       successfulCuts.value = 0;
     }
 

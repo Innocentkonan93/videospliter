@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_spliter/app/modules/settings/views/thank_you_view.dart';
+import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/bot_service.dart';
 import 'package:video_spliter/app/services/firebase_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -123,6 +124,8 @@ class SettingsController extends GetxController {
       if (isSent) {
         clearForm();
         Get.off(() => const ThankYouView());
+        // Demande de notation après un feedback envoyé avec succès
+        AppService().handleRatingRequestAfterFeedback();
         isSending(false);
         update();
       } else {

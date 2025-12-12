@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.1+18
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 1.0.2+21
 
 environment:
   sdk: ^3.7.0
@@ -47,7 +47,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   rxdart: ^0.28.0
-
 
 flutter:
   uses-material-design: true

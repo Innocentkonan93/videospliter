@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId = "com.meetsum.cutIt"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

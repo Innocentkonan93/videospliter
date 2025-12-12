@@ -6,6 +6,7 @@ import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
+import 'package:video_spliter/app/utils/responsive.dart';
 import '../controllers/home_controller.dart';
 
 class ResultView extends StatefulWidget {
@@ -87,8 +88,8 @@ class _ResultViewState extends State<ResultView> {
           ),
           body: GridView.builder(
             padding: const EdgeInsets.all(8.0),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: Responsive.isMobile(context) ? 3 : 5,
               childAspectRatio: 1,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,

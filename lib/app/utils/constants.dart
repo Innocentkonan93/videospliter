@@ -46,6 +46,7 @@ var settings = [
     'onTap': () {
       showModalBottomSheet(
         context: Get.context!,
+        showDragHandle: true,
         builder: (context) {
           return const LanguageSelectionSheet();
         },

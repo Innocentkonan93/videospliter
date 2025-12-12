@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/utils/constants.dart';
+import 'package:video_spliter/app/utils/responsive.dart';
 import 'package:video_spliter/app/widgets/folder_item.dart';
 import 'package:video_spliter/app/widgets/folder_options.dart';
 
@@ -112,13 +113,12 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                       ? Center(child: Text('no_cutouts_found'.tr))
                       : GridView.builder(
                         itemCount: splitFolders.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              childAspectRatio: 1,
-                            ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          childAspectRatio: 1,
+                        ),
                         itemBuilder: (context, index) {
                           final folder = splitFolders[index];
                           final folderName = p.basename(folder.path);
