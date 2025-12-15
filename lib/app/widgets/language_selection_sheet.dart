@@ -11,7 +11,7 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
     return GetBuilder<SettingsController>(
       builder: (controller) {
         return Container(
-          height: 300,
+          height: 500,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,17 +32,17 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
                         final name = language['name'] as String;
                         final flag = language['flag'] as String;
                         final isSelected =
-                            (code == 'fr' && controller.isFrench.value) ||
-                            (code == 'en' && !controller.isFrench.value);
+                            controller.selectedLanguage.value == code;
 
                         return ListTile(
                           leading: Text(
                             flag,
                             style: const TextStyle(fontSize: 24),
                           ),
-                          title: Text(name),
+                          title: Text(name.tr),
                           onTap: () {
                             controller.selectLanguage(code);
+                            controller.selectedLanguage.value = code;
                             Get.back();
                           },
                           trailing:

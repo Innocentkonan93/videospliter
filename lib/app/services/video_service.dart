@@ -55,7 +55,7 @@ class VideoService {
 
       return videoParts;
     } catch (e) {
-      print('${'error_cutting'.tr}: $e');
+      // print('${'error_cutting'.tr}: $e');
       rethrow;
     }
   }

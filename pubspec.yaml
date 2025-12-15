@@ -14,6 +14,7 @@ dependencies:
   file_picker: ^10.1.9
   # firebase_app_distribution: ^1.1.1
   firebase_analytics: ^11.4.6
+  firebase_crashlytics: any
   firebase_core: ^3.13.1
   firebase_messaging: ^15.2.6
   firebase_storage: ^12.4.7

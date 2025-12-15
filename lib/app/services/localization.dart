@@ -483,5 +483,318 @@ class Localization extends Translations {
       'error_sharing_videos': 'Error al compartir los videos',
       'no_video_to_share': 'No hay video para compartir',
     },
+    'pt': {
+      // App name and general
+      'app_name': 'Cutit',
+      'folder_name': 'Cutit',
+
+      // Introduction screens
+      'skip': 'Pular',
+      'welcome_cutit':
+          'Bem-vindo ao Cutit, a ferramenta simples e rápida para cortar seus vídeos longos em formatos curtos e impactantes.\nNão é necessário criar uma conta',
+      'choose_video': 'Escolha facilmente um vídeo para cortar da sua galeria',
+      'define_duration':
+          'Defina a duração desejada, e o Cutit cuida do corte automático. Rápido, suave, eficiente.',
+      'share_moments':
+          'Compartilhe facilmente os melhores momentos nas suas redes favoritas: TikTok, Instagram, WhatsApp, YouTube Shorts... tudo pronto, no formato certo.',
+      'allow_notifications':
+          'Permita notificações para garantir que você não perca nenhuma mensagem',
+      'allow': 'Permitir',
+
+      // Home screen
+      'cut_share_save':
+          'Corte, compartilhe e salve seus vídeos em alguns cliques',
+      'load_video': 'Carregar um vídeo',
+      'select_video': 'Selecionar um vídeo',
+      'cut_video': 'Cortar vídeo',
+      'my_cutouts': 'Meus cortes',
+      'no_cutouts_found': 'Nenhum corte encontrado.',
+
+      // Processing screen
+      'cutting_in_progress': '✂️ Corte em progresso... não saia do aplicativo.',
+      'no_manual_cutting':
+          '🔪 Não há mais necessidade de cortar manualmente seus vídeos.',
+      'share_easily':
+          '📱 Compartilhe vídeos longos mais facilmente em várias partes.',
+      'transform_video':
+          '🎯 Transforme um vídeo em vários status com um clique.',
+      'ideal_for_stories':
+          '📸 Ideal para stories, status do WhatsApp e seus YouTube shorts.',
+      'videos_become_simple':
+          '🚀 Seus vídeos longos se tornam simples de publicar.',
+      'create_automatically':
+          '⏱️ Crie automaticamente trechos de 10, 30, 60 segundos.',
+      'use_cutit_like_pro':
+          '🎬 Use cutit para cortar seus vídeos como um profissional',
+      'cut_done_title': 'Corte concluído 💯',
+      'cut_done_body': 'Você pode compartilhar ou salvar',
+      'cut_done_notification':
+          'Corte concluído, você pode compartilhar ou salvar',
+      'error_cutting': 'Erro ao cortar, por favor tente novamente',
+
+      // Result screen
+      'clips_selected': 'clipes selecionados',
+      'clip_selected': 'clipe selecionado',
+      'select': 'Selecionar',
+      'cutting_results': 'Resultados do corte',
+      'share': 'Compartilhar',
+      'save': 'Salvar',
+      'no_video_selected':
+          'Nenhum vídeo selecionado. Por favor selecione pelo menos um vídeo',
+      'duration': 'Duração',
+      'size': 'Tamanho',
+
+      // Settings
+      'settings': 'Configurações',
+      'how_it_works': 'Como funciona?',
+      'contact_us': 'Entre em contato',
+      'report_issue': 'Reportar um problema',
+      'rate_app': 'Avaliar o aplicativo',
+      'share_app': 'Compartilhar o aplicativo',
+      'about': 'Sobre',
+      'language': 'Idioma',
+      'privacy_policy': 'Política de privacidade',
+
+      // How it works
+      'welcome_cutit_title': 'Bem-vindo ao Cutit!',
+      'step1_title': '1. Selecione um vídeo',
+      'step1_desc':
+          'Escolha um vídeo da sua galeria ou compartilhe-o diretamente de outro aplicativo.',
+      'step2_title': '2. Ajuste a duração',
+      'step2_desc':
+          'Defina a duração desejada para cada segmento (30 segundos por padrão).',
+      'step3_title': '3. Corte automaticamente',
+      'step3_desc':
+          'O aplicativo corta automaticamente seu vídeo em segmentos da duração escolhida.',
+      'step4_title': '4. Selecione e salve',
+      'step4_desc':
+          'Escolha os segmentos para manter e salve-os na sua galeria.',
+      'step5_title': '5. Compartilhe nas redes sociais',
+      'step5_desc':
+          'Compartilhe seus segmentos no TikTok, Instagram, WhatsApp e mais.',
+      'step_tip':
+          'Você também pode compartilhar um vídeo diretamente da sua galeria para o Cutit para cortá-lo instantaneamente!',
+      'tip': '💡Dica!',
+      // Contact us
+      'question_problem': 'Uma pergunta? Um problema?',
+      'contact_description':
+          'Não hesite em nos contatar, responderemos o mais rápido possível.',
+      'send_email': 'Enviar um e-mail',
+
+      // About app
+      'about_cutit':
+          '✂️ Sobre o Cutit\n\nCutit é um aplicativo inovador que transforma seus vídeos longos em segmentos curtos perfeitos para redes sociais. Em alguns cliques, corte automaticamente seus vídeos em segmentos de um minuto ou menos, ideais para TikTok, Instagram Reels, YouTube Shorts e mais.\n\nCaracterísticas principais:\n• Interface simples e intuitiva\n• Corte automático inteligente\n• Duração personalizável (30 segundos por padrão)\n• Exportação rápida e otimizada\n• Compatível com todos os formatos populares\n\nSeja você um criador de conteúdo ou um usuário simples, o Cutit economiza seu tempo precioso automatizando o corte de seus vídeos preservando sua qualidade.\n\nComece agora a transformar seus vídeos longos em conteúdo envolvente!',
+      'version': 'Versão',
+
+      // Feedback
+      'sorry_problem':
+          'Lamentamos que você esteja enfrentando um problema. Descreva o que aconteceu e faremos o nosso melhor para ajudá-lo.',
+      'describe_problem': 'Descreva o problema em detalhes...',
+      'describe_problem_validation': 'Por favor descreva o problema encontrado',
+      'screenshots': 'Capturas de tela',
+      'camera': 'Câmera',
+      'gallery': 'Galeria',
+      'send_report': 'Enviar relatório',
+      'screenshots_title': 'Capturas de tela',
+      'screenshots_description':
+          'Adicione capturas de tela para nos ajudar a entender melhor o problema',
+
+      // Share app
+      'share_app_title': 'Cutit',
+      'share_app_text':
+          'Ei! Acabei de descobrir o Cutit, um aplicativo incrível que corta automaticamente vídeos longos em pequenos segmentos perfeitos para stories e status! Não precisa mais se preocupar, é mágico ✨ Teste aqui: ',
+
+      // Thank you
+      'thank_you_report': 'Obrigado pelo seu relatório!',
+      'appreciate_help': 'Agradecemos sua ajuda para melhorar o aplicativo.',
+
+      // Folder operations
+      'rename_folder': 'Renomear pasta',
+      'save_folder': 'Salvar pasta',
+      'new_folder': 'Nova pasta',
+      'delete_folder': 'Excluir pasta',
+      'delete_folder_confirm':
+          'Tem certeza de que deseja excluir a pasta? \nEsta ação é irreversível.',
+      'cancel': 'Cancelar',
+      'delete': 'Excluir',
+      'ok': 'Ok',
+      'error_loading_video':
+          '❌ Erro ao carregar o vídeo, por favor tente novamente',
+
+      // Time slicing
+      'define_duration_excerpts': 'Defina a duração de cada trecho de vídeo',
+      'duration_defined': 'Duração definida: ',
+      'cut': 'Cortar',
+
+      // Notifications
+      'notification_title': 'Cutit',
+      'notification_body': 'Seu vídeo foi cortado com sucesso!',
+
+      // General
+      'hello': 'Olá',
+
+      // Saving
+      'saving_videos': 'Vídeos salvos com sucesso',
+      'error_saving_videos': 'Erro ao salvar os vídeos',
+      'no_segment_to_save': 'Nenhum segmento para salvar',
+      'error_accessing_external_directory':
+          'Não é possível acessar o diretório externo',
+      'platform_not_supported': 'Plataforma não suportada',
+
+      // Sharing
+      'error_sharing_videos': 'Erro ao compartilhar os vídeos',
+      'no_video_to_share': 'Nenhum vídeo para compartilhar',
+    },
+    'ar': {
+      // App name and general
+      'app_name': 'Cutit',
+      'folder_name': 'Cutit',
+
+      // Introduction screens
+      'skip': 'تخطي',
+      'welcome_cutit':
+          'مرحباً بك في Cutit، الأداة البسيطة والسريعة لقص مقاطع الفيديو الطويلة إلى تنسيقات قصيرة ومؤثرة.\nلا حاجة لإنشاء حساب',
+      'choose_video': 'اختر بسهولة فيديو للقص من معرض الصور الخاص بك',
+      'define_duration':
+          'حدد المدة المطلوبة، ويتولى Cutit القص التلقائي. سريع، سلس، فعال.',
+      'share_moments':
+          'شارك بسهولة أفضل اللحظات على شبكاتك المفضلة: TikTok، Instagram، WhatsApp، YouTube Shorts... كل شيء جاهز، بالتنسيق الصحيح.',
+      'allow_notifications': 'اسمح بالإشعارات لضمان عدم تفويت أي رسالة',
+      'allow': 'السماح',
+
+      // Home screen
+      'cut_share_save': 'اقطع وشارك واحفظ مقاطع الفيديو الخاصة بك في بضع نقرات',
+      'load_video': 'تحميل فيديو',
+      'select_video': 'اختر فيديو',
+      'cut_video': 'قص الفيديو',
+      'my_cutouts': 'قصاتي',
+      'no_cutouts_found': 'لم يتم العثور على قصات.',
+
+      // Processing screen
+      'cutting_in_progress': '✂️ القص قيد التنفيذ... لا تغادر التطبيق.',
+      'no_manual_cutting': '🔪 لا حاجة بعد الآن لقص مقاطع الفيديو يدوياً.',
+      'share_easily': '📱 شارك مقاطع الفيديو الطويلة بسهولة أكبر في عدة أجزاء.',
+      'transform_video': '🎯 حوّل فيديو إلى عدة حالات بنقرة واحدة.',
+      'ideal_for_stories':
+          '📸 مثالي للقصص وحالات WhatsApp ومقاطع YouTube القصيرة الخاصة بك.',
+      'videos_become_simple':
+          '🚀 مقاطع الفيديو الطويلة الخاصة بك تصبح بسيطة للنشر.',
+      'create_automatically':
+          '⏱️ أنشئ تلقائياً مقتطفات مدتها 10، 30، 60 ثانية.',
+      'use_cutit_like_pro':
+          '🎬 استخدم Cutit لقص مقاطع الفيديو الخاصة بك مثل محترف',
+      'cut_done_title': 'تم القص 💯',
+      'cut_done_body': 'يمكنك مشاركته أو حفظه',
+      'cut_done_notification': 'تم القص، يمكنك مشاركته أو حفظه',
+      'error_cutting': 'حدث خطأ أثناء القص، يرجى المحاولة مرة أخرى',
+
+      // Result screen
+      'clips_selected': 'مقاطع محددة',
+      'clip_selected': 'مقطع محدد',
+      'select': 'تحديد',
+      'cutting_results': 'نتائج القص',
+      'share': 'مشاركة',
+      'save': 'حفظ',
+      'no_video_selected':
+          'لم يتم تحديد أي فيديو. يرجى تحديد فيديو واحد على الأقل',
+      'duration': 'المدة',
+      'size': 'الحجم',
+
+      // Settings
+      'settings': 'الإعدادات',
+      'how_it_works': 'كيف يعمل؟',
+      'contact_us': 'اتصل بنا',
+      'report_issue': 'الإبلاغ عن مشكلة',
+      'rate_app': 'قيّم التطبيق',
+      'share_app': 'مشاركة التطبيق',
+      'about': 'حول',
+      'language': 'اللغة',
+      'privacy_policy': 'سياسة الخصوصية',
+
+      // How it works
+      'welcome_cutit_title': 'مرحباً بك في Cutit!',
+      'step1_title': '1. اختر فيديو',
+      'step1_desc':
+          'اختر فيديو من معرض الصور الخاص بك أو شاركه مباشرة من تطبيق آخر.',
+      'step2_title': '2. اضبط المدة',
+      'step2_desc': 'حدد المدة المطلوبة لكل مقطع (30 ثانية افتراضياً).',
+      'step3_title': '3. اقطع تلقائياً',
+      'step3_desc':
+          'يقطع التطبيق تلقائياً مقطع الفيديو الخاص بك إلى مقاطع بالمدّة المختارة.',
+      'step4_title': '4. اختر واحفظ',
+      'step4_desc':
+          'اختر المقاطع التي تريد الاحتفاظ بها واحفظها في معرض الصور الخاص بك.',
+      'step5_title': '5. شارك على الشبكات الاجتماعية',
+      'step5_desc': 'شارك مقاطعك على TikTok و Instagram و WhatsApp والمزيد.',
+      'step_tip':
+          'يمكنك أيضاً مشاركة فيديو مباشرة من معرض الصور الخاص بك إلى Cutit لقصه على الفور!',
+      'tip': '💡 نصيحة!',
+      // Contact us
+      'question_problem': 'سؤال؟ مشكلة؟',
+      'contact_description': 'لا تتردد في الاتصال بنا، سنرد في أقرب وقت ممكن.',
+      'send_email': 'إرسال بريد إلكتروني',
+
+      // About app
+      'about_cutit':
+          '✂️ حول Cutit\n\nCutit هو تطبيق مبتكر يحوّل مقاطع الفيديو الطويلة الخاصة بك إلى مقاطع قصيرة مثالية للشبكات الاجتماعية. في بضع نقرات، اقطع تلقائياً مقاطع الفيديو الخاصة بك إلى مقاطع مدتها دقيقة أو أقل، مثالية لـ TikTok و Instagram Reels و YouTube Shorts والمزيد.\n\nالميزات الرئيسية:\n• واجهة بسيطة وبديهية\n• قص تلقائي ذكي\n• مدة قابلة للتخصيص (30 ثانية افتراضياً)\n• تصدير سريع ومحسّن\n• متوافق مع جميع التنسيقات الشائعة\n\nسواء كنت منشئ محتوى أو مستخدم عادي، يوفر لك Cutit وقتاً ثميناً من خلال أتمتة قص مقاطع الفيديو الخاصة بك مع الحفاظ على جودتها.\n\nابدأ الآن لتحويل مقاطع الفيديو الطويلة الخاصة بك إلى محتوى جذاب!',
+      'version': 'الإصدار',
+
+      // Feedback
+      'sorry_problem':
+          'نأسف لأنك تواجه مشكلة. صف ما حدث وسنبذل قصارى جهدنا لمساعدتك.',
+      'describe_problem': 'صِف المشكلة بالتفصيل...',
+      'describe_problem_validation': 'يرجى وصف المشكلة التي واجهتها',
+      'screenshots': 'لقطات الشاشة',
+      'camera': 'الكاميرا',
+      'gallery': 'المعرض',
+      'send_report': 'إرسال التقرير',
+      'screenshots_title': 'لقطات الشاشة',
+      'screenshots_description':
+          'أضف لقطات الشاشة لمساعدتنا على فهم المشكلة بشكل أفضل',
+
+      // Share app
+      'share_app_title': 'Cutit',
+      'share_app_text':
+          'مرحباً! لقد اكتشفت للتو Cutit، تطبيق رائع يقص تلقائياً مقاطع الفيديو الطويلة إلى مقاطع صغيرة مثالية للقصص والحالات! لم تعد هناك حاجة للمعاناة، إنه سحري ✨ جرّبه هنا: ',
+
+      // Thank you
+      'thank_you_report': 'شكراً لتقريرك!',
+      'appreciate_help': 'نقدّر مساعدتك في تحسين التطبيق.',
+
+      // Folder operations
+      'rename_folder': 'إعادة تسمية المجلد',
+      'save_folder': 'حفظ المجلد',
+      'new_folder': 'مجلد جديد',
+      'delete_folder': 'حذف المجلد',
+      'delete_folder_confirm':
+          'هل أنت متأكد من أنك تريد حذف المجلد؟ \nهذا الإجراء لا يمكن التراجع عنه.',
+      'cancel': 'إلغاء',
+      'delete': 'حذف',
+      'ok': 'موافق',
+      'error_loading_video': '❌ خطأ في تحميل الفيديو، يرجى المحاولة مرة أخرى',
+
+      // Time slicing
+      'define_duration_excerpts': 'حدد مدة كل مقتطف فيديو',
+      'duration_defined': 'المدة المحددة: ',
+      'cut': 'قص',
+
+      // Notifications
+      'notification_title': 'Cutit',
+      'notification_body': 'تم قص مقطع الفيديو الخاص بك بنجاح!',
+
+      // General
+      'hello': 'مرحباً',
+
+      // Saving
+      'saving_videos': 'تم حفظ مقاطع الفيديو بنجاح',
+      'error_saving_videos': 'خطأ في حفظ مقاطع الفيديو',
+      'no_segment_to_save': 'لا يوجد مقطع للحفظ',
+      'error_accessing_external_directory': 'تعذر الوصول إلى الدليل الخارجي',
+      'platform_not_supported': 'المنصة غير مدعومة',
+
+      // Sharing
+      'error_sharing_videos': 'خطأ في مشاركة مقاطع الفيديو',
+      'no_video_to_share': 'لا يوجد فيديو للمشاركة',
+    },
   };
 }

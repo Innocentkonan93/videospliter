@@ -32,11 +32,14 @@ class SettingsController extends GetxController {
   final uploadingFilesPath = <Map<dynamic, String>>[].obs;
   final selectedFilesPath = <Map<dynamic, String>>[].obs;
 
-  RxBool isFrench = (Get.locale?.languageCode.toString() == 'fr').obs;
+  // RxBool isFrench = (Get.locale?.languageCode.toString() == 'fr').obs;
+
+  final selectedLanguage = ''.obs;
 
   void selectLanguage(String language) {
     Get.updateLocale(Locale(language));
-    isFrench.value = language == 'fr';
+    // isFrench.value = language == 'fr';
+    selectedLanguage.value = language;
     update();
   }
 
