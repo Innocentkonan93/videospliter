@@ -7,7 +7,6 @@ class StartingView extends GetWidget<IntroductionController> {
   const StartingView({super.key});
   @override
   Widget build(BuildContext context) {
-    Get.put(IntroductionController());
     return Scaffold(
       body: Center(
         child: Column(

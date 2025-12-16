@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 import 'package:video_spliter/app/utils/constants.dart';
+import 'package:video_spliter/app/widgets/premium_card.dart';
 
 class SettingsView extends GetWidget<SettingsController> {
   const SettingsView({super.key});
@@ -14,32 +15,57 @@ class SettingsView extends GetWidget<SettingsController> {
     return Scaffold(
       appBar: AppBar(title: Text('settings'.tr), centerTitle: true),
       backgroundColor: AppColors.white,
-      body: GetBuilder<SettingsController>(
-        init: controller,
-        builder: (controller) {
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: settings.length,
-            itemBuilder: (context, index) {
-              final title = settings[index]['title'] as String;
-              final icon = settings[index]['icon'] as IconData;
-              final onTap = settings[index]['onTap'] as VoidCallback;
-              return Padding(
-                key: ValueKey(settings[index]['title']),
-                padding: const EdgeInsets.only(bottom: 16),
-                child: ListTile(
-                  title: Text(title.tr, style: theme.textTheme.titleMedium),
-                  tileColor: AppColors.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  leading: Icon(icon, color: AppColors.primary),
-                  onTap: onTap,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bg.png'),
+            fit: BoxFit.cover,
+            opacity: .1,
+          ),
+        ),
+        child: SizedBox.expand(
+          child: GetBuilder<SettingsController>(
+            init: controller,
+            builder: (controller) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Premium Card
+                    // PremiumCard(),
+                    // Settings List
+                    ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: settings.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final title = settings[index]['title'] as String;
+                        final icon = settings[index]['icon'] as IconData;
+                        final onTap = settings[index]['onTap'] as VoidCallback;
+                        return Padding(
+                          key: ValueKey(settings[index]['title']),
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: ListTile(
+                            title: Text(
+                              title.tr,
+                              style: theme.textTheme.titleMedium,
+                            ),
+                            tileColor: AppColors.background,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            leading: Icon(icon, color: AppColors.primary),
+                            onTap: onTap,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

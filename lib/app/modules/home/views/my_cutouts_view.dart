@@ -28,6 +28,7 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
   }
 
   Future<void> _loadCutoutFolders() async {
+    print('🔍 _loadCutoutFolders');
     setState(() {
       isLoading = true;
     });
@@ -81,7 +82,6 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
     }
 
     return GetBuilder<HomeController>(
-      init: HomeController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.white,
@@ -135,7 +135,9 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
           extendBody: true,
           bottomSheet: FolderOptions(
             onDone: () {
+              print('🔍 onDone');
               _loadCutoutFolders();
+              setState(() {});
             },
           ),
         );

@@ -12,12 +12,10 @@ class IntroductionView extends GetWidget<IntroductionController> {
   const IntroductionView({super.key});
   @override
   Widget build(BuildContext context) {
-    Get.put(IntroductionController());
     final theme = context.theme;
     final size = MediaQuery.sizeOf(context);
     final height = size.height;
     return GetBuilder<IntroductionController>(
-      init: IntroductionController(),
       builder: (controller) {
         if (controller.isLoading.value) {
           return StartingView();

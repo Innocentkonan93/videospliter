@@ -7,7 +7,7 @@ import 'package:video_spliter/app/modules/home/controllers/home_controller.dart'
 
 class FolderOptions extends GetWidget<HomeController> {
   const FolderOptions({super.key, required this.onDone});
-  final VoidCallback onDone;
+  final Function() onDone;
 
   @override
   Widget build(BuildContext context) {

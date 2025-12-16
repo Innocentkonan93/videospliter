@@ -5,6 +5,7 @@ import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -254,26 +255,39 @@ class VideoService {
   }
 
   static Future<void> shareVideos(List<File> videoParts) async {
-    final adMobService = AdMobService();
-    final filesToShare =
-        videoParts
-            .where((file) => file.existsSync())
-            .map((file) => XFile(file.path))
-            .toList();
+    final context = Get.context;
+    final box = context?.findRenderObject() as RenderBox?;
+    try {
+      final adMobService = AdMobService();
+      final filesToShare =
+          videoParts
+              .where((file) => file.existsSync())
+              .map((file) => XFile(file.path))
+              .toList();
 
-    if (filesToShare.isEmpty) {
-      Get.snackbar('error_sharing_videos'.tr, 'no_video_to_share'.tr);
-      return;
+      if (filesToShare.isEmpty) {
+        Get.snackbar('error_sharing_videos'.tr, 'no_video_to_share'.tr);
+        return;
+      }
+      await SharePlus.instance.share(
+        ShareParams(
+          files: filesToShare,
+          sharePositionOrigin:
+              box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+        ),
+      );
+      // Demande de notation après un partage réussi
+      AppService().handleRatingRequestAfterShare();
+      adMobService.loadInterstitialAd(
+        onAdDismissed: () {},
+        onAdReady: () {
+          // print('ad ready');
+          adMobService.showInterstitialAd();
+        },
+      );
+    } catch (e) {
+      showSnackBar('${'error_sharing_videos'.tr} $e', isError: true);
+      print(e);
     }
-    await SharePlus.instance.share(ShareParams(files: filesToShare));
-    // Demande de notation après un partage réussi
-    AppService().handleRatingRequestAfterShare();
-    adMobService.loadInterstitialAd(
-      onAdDismissed: () {},
-      onAdReady: () {
-        // print('ad ready');
-        adMobService.showInterstitialAd();
-      },
-    );
   }
 }

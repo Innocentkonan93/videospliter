@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/modules/settings/views/thank_you_view.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/bot_service.dart';
 import 'package:video_spliter/app/services/firebase_service.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class SettingsController extends GetxController {
@@ -36,11 +38,35 @@ class SettingsController extends GetxController {
 
   final selectedLanguage = ''.obs;
 
-  void selectLanguage(String language) {
+  Future<void> selectLanguage(String language) async {
     Get.updateLocale(Locale(language));
     // isFrench.value = language == 'fr';
     selectedLanguage.value = language;
+    // Sauvegarder la langue sélectionnée dans le cache
+    await CacheHelper.saveData(key: selectedLanguageKey, value: language);
     update();
+  }
+
+  Future<void> loadSavedLanguage() async {
+    try {
+      final savedLanguage = await CacheHelper.getString(
+        key: selectedLanguageKey,
+      );
+      if (savedLanguage.isNotEmpty) {
+        selectedLanguage.value = savedLanguage;
+        Get.updateLocale(Locale(savedLanguage));
+      } else {
+        // Si aucune langue n'est sauvegardée, utiliser la langue du système
+        final deviceLocale = Get.deviceLocale;
+        if (deviceLocale != null) {
+          selectedLanguage.value = deviceLocale.languageCode;
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Erreur lors du chargement de la langue sauvegardée: $e');
+      }
+    }
   }
 
   Future<void> pickImage(ImageSource source) async {
@@ -157,6 +183,7 @@ class SettingsController extends GetxController {
   @override
   void onInit() {
     getPackageInfo();
+    loadSavedLanguage();
     super.onInit();
   }
 

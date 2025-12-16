@@ -157,6 +157,11 @@ class Localization extends Translations {
       // Sharing
       'error_sharing_videos': 'Error while sharing videos',
       'no_video_to_share': 'No video to share',
+      'export_failed': 'Export failed',
+      'export_success': 'Export successful',
+      // Premium
+      'premium_title': 'Premium',
+      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
     },
     'fr': {
       // App name and general
@@ -315,10 +320,15 @@ class Localization extends Translations {
       'error_accessing_external_directory':
           'Impossible d\'accéder au répertoire externe',
       'platform_not_supported': 'Plateforme non supportée',
+      'export_failed': 'Export échoué',
+      'export_success': 'Export réussi',
 
       // Sharing
       'error_sharing_videos': 'Erreur lors du partage des vidéos',
       'no_video_to_share': 'Aucune vidéo à partager',
+      //
+      'premium_title': 'Premium',
+      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
     },
     'es': {
       // App name and general
@@ -482,6 +492,9 @@ class Localization extends Translations {
       // Sharing
       'error_sharing_videos': 'Error al compartir los videos',
       'no_video_to_share': 'No hay video para compartir',
+      //
+      'premium_title': 'Premium',
+      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
     },
     'pt': {
       // App name and general
@@ -640,10 +653,15 @@ class Localization extends Translations {
       'error_accessing_external_directory':
           'Não é possível acessar o diretório externo',
       'platform_not_supported': 'Plataforma não suportada',
+      'export_failed': 'Export falhou',
+      'export_success': 'Export bem-sucedido',
 
       // Sharing
       'error_sharing_videos': 'Erro ao compartilhar os vídeos',
       'no_video_to_share': 'Nenhum vídeo para compartilhar',
+      //
+      'premium_title': 'Premium',
+      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
     },
     'ar': {
       // App name and general
@@ -792,9 +810,15 @@ class Localization extends Translations {
       'error_accessing_external_directory': 'تعذر الوصول إلى الدليل الخارجي',
       'platform_not_supported': 'المنصة غير مدعومة',
 
+      'export_failed': 'فشل التصدير',
+      'export_success': 'تم التصدير بنجاح',
+
       // Sharing
       'error_sharing_videos': 'خطأ في مشاركة مقاطع الفيديو',
       'no_video_to_share': 'لا يوجد فيديو للمشاركة',
+      //
+      'premium_title': 'Premium',
+      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
     },
   };
 }

@@ -26,7 +26,6 @@ class FolderItem extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     final theme = context.theme;
     return GetBuilder<HomeController>(
-      init: HomeController(),
       builder: (controller) {
         return GestureDetector(
           onTap: () async {

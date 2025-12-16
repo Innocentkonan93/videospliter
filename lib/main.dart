@@ -8,15 +8,51 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_theme.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
+import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/localization.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
 
 import 'app/routes/app_pages.dart';
 
 bool isIntroductionViewed = false;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotificationService().initializeNotification();
+  await AdMobService().init();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await CacheHelper.init();
+
+  // Charger la langue sauvegardée depuis le cache
+  try {
+    final savedLanguage = await CacheHelper.getString(key: selectedLanguageKey);
+    if (savedLanguage.isNotEmpty) {
+      Get.updateLocale(Locale(savedLanguage));
+    } else {
+      Get.updateLocale(Get.deviceLocale ?? const Locale('en'));
+    }
+  } catch (e) {
+    // En cas d'erreur, utiliser la langue par défaut du système
+    print('Erreur lors du chargement de la langue sauvegardée: $e');
+  }
+
+  // Initialiser le service analytics
+  await AnalyticsService.initialize();
+
+  // Initialiser le service de partage
+  Get.put(SharingService());
+
+  final config = ClarityConfig(
+    projectId: "s204qm61cv",
+    logLevel: LogLevel.None,
+  );
+
+  runApp(ClarityWidget(app: MyApp(), clarityConfig: config));
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -43,8 +79,7 @@ class _MyAppState extends State<MyApp> {
       getPages: AppPages.routes,
       theme: appTheme,
       debugShowCheckedModeBanner: false,
-      // locale: const Locale('fr'),
-      locale: Get.deviceLocale,
+      locale: Get.locale ?? Get.deviceLocale,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -60,22 +95,4 @@ class _MyAppState extends State<MyApp> {
       translations: Localization(),
     );
   }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await LocalNotificationService().initializeNotification();
-  await AdMobService().init();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await CacheHelper.init();
-
-  // Initialiser le service de partage
-  Get.put(SharingService());
-
-  final config = ClarityConfig(
-    projectId: "s204qm61cv",
-    logLevel: LogLevel.None,
-  );
-
-  runApp(ClarityWidget(app: MyApp(), clarityConfig: config));
 }

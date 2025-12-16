@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 
 import '../modules/home/controllers/home_controller.dart';
 
@@ -32,6 +33,63 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 24),
+
+                //
+                // Liste de durées prédéfinies
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...predefinedDurations.map(
+                        (duration) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: ChoiceChip(
+                            label: Text("${duration}s"),
+                            checkmarkColor: Colors.white,
+                            selected:
+                                controller.sliceDuration.value.toInt() ==
+                                duration,
+                            selectedColor: AppColors.orange,
+                            onSelected: (selected) {
+                              if (selected) {
+                                setState(() {
+                                  controller.sliceDuration.value =
+                                      duration.toDouble();
+                                  initValue = duration.toDouble();
+                                });
+                              }
+                            },
+                            labelStyle: TextStyle(
+                              color:
+                                  controller.sliceDuration.value.toInt() ==
+                                          duration
+                                      ? AppColors.white
+                                      : AppColors.black,
+                            ),
+
+                            backgroundColor: AppColors.white,
+                            shape: StadiumBorder(
+                              side: BorderSide(
+                                width: 0.5,
+                                color:
+                                    controller.sliceDuration.value.toInt() ==
+                                            duration
+                                        ? AppColors.orange
+                                        : const Color.fromARGB(
+                                          100,
+                                          167,
+                                          167,
+                                          167,
+                                        ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Text('1s', style: theme.textTheme.titleMedium),
@@ -42,9 +100,9 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                         max: 60,
                         divisions: 60,
                         label: '${initValue.toInt()}s',
-                        thumbColor: AppColors.primary,
+                        thumbColor: AppColors.orange,
                         padding: EdgeInsets.zero,
-                        activeColor: AppColors.primary,
+                        activeColor: AppColors.orange,
                         value: controller.sliceDuration.value,
                         onChanged: (value) {
                           controller.sliceDuration.value = value;

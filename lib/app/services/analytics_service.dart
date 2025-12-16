@@ -29,7 +29,7 @@ class AnalyticsService {
     if (!prefs.containsKey(_firstLaunchKey)) {
       await prefs.setString(_firstLaunchKey, now.toIso8601String());
       await _analytics.logEvent(
-        name: 'first_open',
+        name: 'cutit_first_open',
         parameters: {'timestamp': now.millisecondsSinceEpoch},
       );
       await _analytics.setUserProperty(

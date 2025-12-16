@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
 import 'package:flutter_sharing_intent/model/sharing_file.dart';
@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
+import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -102,7 +103,33 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       final result = await FilePicker.platform.pickFiles(type: FileType.video);
 
       if (result != null && result.files.single.path != null) {
-        selectedVideo.value = File(result.files.single.path!);
+        final videoFile = File(result.files.single.path!);
+        selectedVideo.value = videoFile;
+
+        // Enregistrer l'import de la vidéo dans analytics
+        try {
+          final mediaInfoSession = await FFprobeKit.getMediaInformation(
+            videoFile.path,
+          );
+          final info = mediaInfoSession.getMediaInformation();
+          final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
+          final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+
+          await AnalyticsService.videoImported(
+            durationSec: durationSec.round(),
+            sizeMb: sizeMb,
+            source: 'file_picker',
+          );
+        } catch (e) {
+          // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
+          // avec des valeurs par défaut
+          final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+          await AnalyticsService.videoImported(
+            durationSec: 0,
+            sizeMb: sizeMb,
+            source: 'file_picker',
+          );
+        }
       }
 
       update();

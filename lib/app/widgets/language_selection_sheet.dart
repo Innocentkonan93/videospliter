@@ -40,9 +40,8 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
                             style: const TextStyle(fontSize: 24),
                           ),
                           title: Text(name.tr),
-                          onTap: () {
-                            controller.selectLanguage(code);
-                            controller.selectedLanguage.value = code;
+                          onTap: () async {
+                            await controller.selectLanguage(code);
                             Get.back();
                           },
                           trailing:

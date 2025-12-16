@@ -11,10 +11,13 @@ import 'package:video_spliter/app/widgets/language_selection_sheet.dart';
 const String appName = 'Cutit';
 const String folderName = 'Cutit';
 const String introductionKey = 'introduction_key';
+const String selectedLanguageKey = 'selected_language_key';
 
 Future<void> launchUri(Uri parse) async {
   await launchUrl(parse);
 }
+
+final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60];
 
 var settings = [
   {

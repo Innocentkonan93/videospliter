@@ -19,14 +19,13 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.clearAll();
+    // controller.clearAll();
     final theme = context.theme;
     final size = MediaQuery.sizeOf(context);
     final height = size.height;
     final width = size.width;
     Get.put(SettingsController());
     return GetBuilder<HomeController>(
-      init: controller,
       builder: (controller) {
         return Scaffold(
           body: PageView(
