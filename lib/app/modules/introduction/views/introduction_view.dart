@@ -109,7 +109,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                   ),
                                   textAlign: TextAlign.center,
                                 ).animate().fadeIn(),
-                                SizedBox(height: 100),
+                                // SizedBox(height: 100),
                                 Visibility(
                                   visible: imagePath.isNotEmpty,
                                   replacement: SizedBox.shrink(),
@@ -128,7 +128,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                 if (controller.currentPage.value >= 4)
                                   Column(
                                     children: [
-                                      SizedBox(height: 50),
+                                      SizedBox(height: 0),
                                       ElevatedButton(
                                         onPressed: () {
                                           controller.requestNotifications();
@@ -149,6 +149,16 @@ class IntroductionView extends GetWidget<IntroductionController> {
                                                 color: AppColors.primary,
                                                 fontWeight: FontWeight.w600,
                                               ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          controller.completedIntro();
+                                        },
+                                        child: Text(
+                                          "later".tr,
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(color: Colors.white),
                                         ),
                                       ),
                                     ],

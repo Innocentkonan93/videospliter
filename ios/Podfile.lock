@@ -346,7 +346,7 @@ SPEC CHECKSUMS:
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  ffmpeg_kit_flutter_new: 5dc6b1aa0a6f6a97c878783cd4b70fc4e4d77dfe
+  ffmpeg_kit_flutter_new: 1be4ac1d0c080cd1d9a08c1b19ddadccd9f378e8
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: 3435bc66b4d494c2f22c79fd3aae4c1db6662327
   firebase_analytics: 6f88ffa3cb60c55a9d6364581585647fd003be1b

@@ -74,7 +74,7 @@ var settings = [
 ];
 
 var introductions = <Map<String, dynamic>>[
-  {"title": "", "description": "welcome_cutit".tr, "image_path": ""},
+  {"title": "", "description": "welcome_cutit".tr, "image_path": "cut.png"},
 
   {"title": "", "description": "choose_video".tr, "image_path": "upload.png"},
 

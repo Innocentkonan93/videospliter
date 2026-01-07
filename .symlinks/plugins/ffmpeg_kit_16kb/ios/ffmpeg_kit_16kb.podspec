@@ -1,0 +1,1 @@
+/Users/innocent/.pub-cache/hosted/pub.dev/ffmpeg_kit_16kb-1.0.4/ios/ffmpeg_kit_flutter_new.podspec

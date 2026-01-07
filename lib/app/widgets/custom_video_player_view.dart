@@ -80,12 +80,22 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: IconButton(
+                child: IconButton.filledTonal(
                   onPressed: () {
                     controller.clearAll();
                     controller.update();
                   },
-                  icon: const Icon(Icons.cancel, color: AppColors.white),
+                  icon: const Icon(
+                    Icons.delete,
+                    color: AppColors.red,
+                    size: 15,
+                  ),
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.white.withValues(alpha: .1),
+
+                    minimumSize: const Size(20, 20),
+                    maximumSize: const Size(35, 35),
+                  ),
                 ),
               ),
               Align(

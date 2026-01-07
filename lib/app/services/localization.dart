@@ -10,8 +10,9 @@ class Localization extends Translations {
 
       // Introduction screens
       'skip': 'Skip',
+      'later': 'Later',
       'welcome_cutit':
-          'Welcome to Cutit, the simple and fast tool to cut your long videos into short and impactful formats.\nNo need to create an account',
+          'Welcome to Cutit\nThe simple and fast tool to cut your long videos into short and impactful formats.\nNo need to create an account',
       'choose_video': 'Easily choose a video to cut from your gallery',
       'define_duration':
           'Define the desired duration, and Cutit takes care of automatic cutting. Fast, smooth, efficient.',
@@ -19,6 +20,8 @@ class Localization extends Translations {
           'Easily share the best moments on your favorite networks: TikTok, Instagram, WhatsApp, YouTube Shorts... everything is ready, in the right format.',
       'allow_notifications':
           'Allow notifications to ensure you don\'t miss any message',
+      'permission_denied_to_receive_notifications':
+          'Permission denied to receive notifications',
       'allow': 'Allow',
 
       // Home screen
@@ -170,6 +173,7 @@ class Localization extends Translations {
 
       // Introduction screens
       'skip': 'Passer',
+      'later': 'Plus tard',
       'welcome_cutit':
           'Bienvenue sur Cutit, l\'outil simple et rapide pour découper vos vidéos longues en formats courts et percutants.\nPas besoin de créer un compte',
       'choose_video':
@@ -180,6 +184,8 @@ class Localization extends Translations {
           'Partagez facilement les meilleurs moments sur vos réseaux préférés : TikTok, Instagram, WhatsApp, YouTube Shorts… tout est prêt, au bon format.',
       'allow_notifications':
           'Autorisez les notifications pour vous assurer de ne manquer aucun message',
+      'permission_denied_to_receive_notifications':
+          'Autorisation refusée pour recevoir les notifications',
       'allow': 'Autoriser',
 
       // Home screen
@@ -337,8 +343,9 @@ class Localization extends Translations {
 
       // Introduction screens
       'skip': 'Omitir',
+      'later': 'Más tarde',
       'welcome_cutit':
-          'Bienvenido a Cutit, la herramienta simple y rápida para cortar tus videos largos en formatos cortos e impactantes.\nNo es necesario crear una cuenta',
+          'Bienvenido a Cutit\n, la herramienta simple y rápida para cortar tus videos largos en formatos cortos e impactantes.\nNo es necesario crear una cuenta',
       'choose_video': 'Elige fácilmente un video para cortar desde tu galería',
       'define_duration':
           'Define la duración deseada, y Cutit se encarga del corte automático. Rápido, fluido, eficiente.',
@@ -346,6 +353,8 @@ class Localization extends Translations {
           'Comparte fácilmente los mejores momentos en tus redes favoritas: TikTok, Instagram, WhatsApp, YouTube Shorts... todo está listo, en el formato correcto.',
       'allow_notifications':
           'Permite las notificaciones para asegurarte de no perder ningún mensaje',
+      'permission_denied_to_receive_notifications':
+          'Permiso denegado para recibir notificaciones',
       'allow': 'Permitir',
 
       // Home screen
@@ -504,7 +513,7 @@ class Localization extends Translations {
       // Introduction screens
       'skip': 'Pular',
       'welcome_cutit':
-          'Bem-vindo ao Cutit, a ferramenta simples e rápida para cortar seus vídeos longos em formatos curtos e impactantes.\nNão é necessário criar uma conta',
+          'Bem-vindo ao Cutit\n, a ferramenta simples e rápida para cortar seus vídeos longos em formatos curtos e impactantes.\nNão é necessário criar uma conta',
       'choose_video': 'Escolha facilmente um vídeo para cortar da sua galeria',
       'define_duration':
           'Defina a duração desejada, e o Cutit cuida do corte automático. Rápido, suave, eficiente.',
@@ -512,6 +521,8 @@ class Localization extends Translations {
           'Compartilhe facilmente os melhores momentos nas suas redes favoritas: TikTok, Instagram, WhatsApp, YouTube Shorts... tudo pronto, no formato certo.',
       'allow_notifications':
           'Permita notificações para garantir que você não perca nenhuma mensagem',
+      'permission_denied_to_receive_notifications':
+          'Permissão negada para receber notificações',
       'allow': 'Permitir',
 
       // Home screen
@@ -670,14 +681,17 @@ class Localization extends Translations {
 
       // Introduction screens
       'skip': 'تخطي',
+      'later': 'لاحقًا',
       'welcome_cutit':
-          'مرحباً بك في Cutit، الأداة البسيطة والسريعة لقص مقاطع الفيديو الطويلة إلى تنسيقات قصيرة ومؤثرة.\nلا حاجة لإنشاء حساب',
+          'مرحباً بك في Cutit\n, الأداة البسيطة والسريعة لقص مقاطع الفيديو الطويلة إلى تنسيقات قصيرة ومؤثرة.\nلا حاجة لإنشاء حساب',
       'choose_video': 'اختر بسهولة فيديو للقص من معرض الصور الخاص بك',
       'define_duration':
           'حدد المدة المطلوبة، ويتولى Cutit القص التلقائي. سريع، سلس، فعال.',
       'share_moments':
           'شارك بسهولة أفضل اللحظات على شبكاتك المفضلة: TikTok، Instagram، WhatsApp، YouTube Shorts... كل شيء جاهز، بالتنسيق الصحيح.',
       'allow_notifications': 'اسمح بالإشعارات لضمان عدم تفويت أي رسالة',
+      'permission_denied_to_receive_notifications':
+          'تم رفض الإذن بتلقي الإشعارات',
       'allow': 'السماح',
 
       // Home screen

@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalyticsService {
@@ -48,7 +51,7 @@ class AnalyticsService {
           name: 'user_returned',
           parameters: {
             'days_since_last_session': daysSinceLastSession,
-            'is_same_day': daysSinceLastSession == 0,
+            'is_same_day': daysSinceLastSession == 0 ? 'true' : 'false',
           },
         );
       }
@@ -180,6 +183,7 @@ class AnalyticsService {
     required int videoDurationSec,
     required int segmentCount,
   }) async {
+    debugPrint('videoProcessingStarted: $videoDurationSec, $segmentCount');
     await _analytics.logEvent(
       name: 'video_processing_started',
       parameters: {
@@ -196,6 +200,9 @@ class AnalyticsService {
     required int segmentCount,
     required int videoDurationSec,
   }) async {
+    debugPrint(
+      'videoProcessingCompleted: $processingTimeSec, $segmentCount, $videoDurationSec',
+    );
     await _analytics.logEvent(
       name: 'video_processing_completed',
       parameters: {
@@ -597,6 +604,7 @@ class AnalyticsService {
     String? method, // 'native_share', 'save_to_gallery', etc.
     bool? isPremium,
   }) async {
+    debugPrint('Video Sharing opened: $segmentCount, $method, $isPremium');
     await _analytics.logEvent(
       name: 'video_shared',
       parameters: {

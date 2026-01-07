@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
@@ -141,18 +142,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   // ==================== MÉTHODES DE TRAITEMENT VIDÉO ====================
 
   /// Découpe la vidéo sélectionnée en segments de durée définie (méthode synchrone)
-  /// Retourne la liste des fichiers générés ou null si aucune vidéo n'est sélectionnée
-  Future<List<File>?> splitVideo() async {
-    if (selectedVideo.value == null) return null;
+  // /// Retourne la liste des fichiers générés ou null si aucune vidéo n'est sélectionnée
+  // Future<List<File>?> splitVideo() async {
+  //   if (selectedVideo.value == null) return null;
 
-    videoParts.clear();
-    final parts = await VideoService.splitBySS(
-      videoFile: selectedVideo.value!,
-      sliceDuration: sliceDuration.value,
-    );
-    videoParts.addAll(parts);
-    return parts;
-  }
+  //   videoParts.clear();
+  //   final parts = await VideoService.splitBySS(
+  //     videoFile: selectedVideo.value!,
+  //     sliceDuration: sliceDuration.value,
+  //   );
+  //   videoParts.addAll(parts);
+  //   return parts;
+  // }
 
   /// Découpe la vidéo sélectionnée en segments de durée définie (méthode asynchrone avec isolate)
   /// Améliore les performances en utilisant un thread séparé

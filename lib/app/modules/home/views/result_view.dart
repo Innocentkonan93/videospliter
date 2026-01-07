@@ -25,8 +25,8 @@ class _ResultViewState extends State<ResultView> {
   @override
   void initState() {
     super.initState();
-    controller.canSelectVideo.value = true;
-    controller.selectedVideoParts.addAll(widget.parts);
+    // controller.canSelectVideo.value = true;
+    // controller.selectedVideoParts.addAll(widget.parts);
     controller.initVideoControllers(widget.parts, isSaved: widget.isSaved);
   }
 

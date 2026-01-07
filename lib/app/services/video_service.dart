@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/return_code.dart';
+import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_16kb/return_code.dart';
+// import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -13,6 +16,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
+import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class VideoService {
@@ -276,6 +280,7 @@ class VideoService {
               box != null ? box.localToGlobal(Offset.zero) & box.size : null,
         ),
       );
+      AnalyticsService.videoShared(segmentCount: videoParts.length);
       // Demande de notation après un partage réussi
       AppService().handleRatingRequestAfterShare();
       adMobService.loadInterstitialAd(

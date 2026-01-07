@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
+import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
@@ -54,8 +55,13 @@ class _ProcessingViewState extends State<ProcessingView> {
 
   Future<void> _processVideo() async {
     // final parts = await controller.splitVideo();
+    final startTime = DateTime.now();
     try {
       final parts = await controller.splitVideoIsolate();
+      AnalyticsService.videoProcessingStarted(
+        videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
+        segmentCount: parts?.length ?? 0,
+      );
       if (parts != null) {
         await controller.initVideoControllers(parts);
         await Future.delayed(const Duration(seconds: 1));
@@ -71,6 +77,11 @@ class _ProcessingViewState extends State<ProcessingView> {
         }
         showSnackBar("cut_done_notification".tr);
         controller.videoParts.sort((a, b) => a.path.compareTo(b.path));
+        AnalyticsService.videoProcessingCompleted(
+          processingTimeSec: DateTime.now().difference(startTime).inSeconds,
+          segmentCount: parts.length,
+          videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
+        );
       }
     } catch (e) {
       print(e);

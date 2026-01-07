@@ -170,6 +170,27 @@ class HomeView extends GetView<HomeController> {
                                       ),
                                     ),
 
+                                    Row(
+                                      children: [
+                                        // IconButton.filledTonal(
+                                        //   onPressed: () {
+                                        //     controller.clearAll();
+                                        //     controller.update();
+                                        //   },
+                                        //   icon: const Icon(
+                                        //     Icons.delete,
+                                        //     color: AppColors.red,
+                                        //   ),
+                                        // ),
+                                        // IconButton.filledTonal(
+                                        //   onPressed: () {},
+                                        //   icon: const Icon(
+                                        //     Icons.add,
+                                        //     color: AppColors.primary,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
                                     const SizedBox(height: 16),
                                     ElevatedButton.icon(
                                       icon: const Icon(

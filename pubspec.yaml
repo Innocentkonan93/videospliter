@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A new Flutter project."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 1.0.2+23
+version: 1.0.2+29
 
 environment:
   sdk: ^3.7.0
@@ -10,7 +10,8 @@ dependencies:
   animated_digit: ^3.2.3
   clarity_flutter: ^1.0.0
   cupertino_icons: ^1.0.8
-  ffmpeg_kit_flutter_new: ^1.2.1
+  ffmpeg_kit_16kb: ^1.0.4
+  # ffmpeg_kit_flutter_new: ^1.2.1
   file_picker: ^10.1.9
   # firebase_app_distribution: ^1.1.1
   firebase_analytics: ^11.4.6
@@ -26,7 +27,7 @@ dependencies:
     sdk: flutter
   flutter_sharing_intent: ^1.1.1
   get: ^4.7.2
-  google_fonts: ^6.2.1
+  google_fonts: ^6.3.3
   google_mobile_ads: ^6.0.0
   image_picker: ^1.1.2
   in_app_review: ^2.0.10
@@ -48,6 +49,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   rxdart: ^0.28.0
+
+dependency_overrides:
+  # ffmpeg_kit_flutter_new: ^2.0.0
 
 flutter:
   uses-material-design: true
