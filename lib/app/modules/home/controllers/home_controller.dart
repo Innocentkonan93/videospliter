@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 // import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
