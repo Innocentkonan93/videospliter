@@ -89,6 +89,51 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: AppColors.white),
+            onSelected: (String value) {
+              // Handle menu item tap actions here
+              // e.g. if (value == 'share') { ... }
+            },
+            itemBuilder:
+                (BuildContext context) => <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'share',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.share, color: AppColors.primary),
+                        const SizedBox(width: 8),
+                        Text('share'.tr),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'save',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.save_alt, color: AppColors.primary),
+                        const SizedBox(width: 8),
+                        Text('save'.tr),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'details',
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text('details'.tr),
+                      ],
+                    ),
+                  ),
+                ],
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(

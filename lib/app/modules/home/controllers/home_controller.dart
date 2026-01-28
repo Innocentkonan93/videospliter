@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
 // import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result != null && result.files.single.path != null) {
         final videoFile = File(result.files.single.path!);
         selectedVideo.value = videoFile;
+        // compresser les videos de grande taille
 
+        log((videoFile.lengthSync() / (1024 * 1024)).toString());
         // Enregistrer l'import de la vidéo dans analytics
         try {
           final mediaInfoSession = await FFprobeKit.getMediaInformation(
@@ -115,12 +117,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           final info = mediaInfoSession.getMediaInformation();
           final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
           final sizeMb = videoFile.lengthSync() / (1024 * 1024);
-
+          // Enregistrer l'import de la vidéo dans analytics
           await AnalyticsService.videoImported(
             durationSec: durationSec.round(),
             sizeMb: sizeMb,
             source: 'file_picker',
           );
+          // Compresser uniquement les vidéos lourdes (> 50 Mo) pour optimiser le temps
+          if (sizeMb > 1) {
+            await compressVideo();
+          }
         } catch (e) {
           // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
           // avec des valeurs par défaut
@@ -142,18 +148,19 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   // ==================== MÉTHODES DE TRAITEMENT VIDÉO ====================
 
   /// Découpe la vidéo sélectionnée en segments de durée définie (méthode synchrone)
-  // /// Retourne la liste des fichiers générés ou null si aucune vidéo n'est sélectionnée
-  // Future<List<File>?> splitVideo() async {
-  //   if (selectedVideo.value == null) return null;
 
-  //   videoParts.clear();
-  //   final parts = await VideoService.splitBySS(
-  //     videoFile: selectedVideo.value!,
-  //     sliceDuration: sliceDuration.value,
-  //   );
-  //   videoParts.addAll(parts);
-  //   return parts;
-  // }
+  /// Retourne la liste des fichiers générés ou null si aucune vidéo n'est sélectionnée
+
+  Future<void> compressVideo() async {
+    if (selectedVideo.value == null) return;
+    final compressedVideo = await VideoService().compressVideo(
+      inputPath: selectedVideo.value!.path,
+      outputPath: '${selectedVideo.value!.path}.compressed.mp4',
+    );
+    if (compressedVideo != null) {
+      selectedVideo.value = File(compressedVideo);
+    }
+  }
 
   /// Découpe la vidéo sélectionnée en segments de durée définie (méthode asynchrone avec isolate)
   /// Améliore les performances en utilisant un thread séparé

@@ -165,6 +165,12 @@ class Localization extends Translations {
       // Premium
       'premium_title': 'Premium',
       'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      // Rating
+      'enjoying_app_title': 'Are you satisfied?',
+      'enjoying_app_body':
+          'We hope you liked the result! If so, would you mind rating us?',
+      'yes_i_love_it': 'Yes, I love it!',
+      'not_really': 'Not really',
     },
     'fr': {
       // App name and general
@@ -335,6 +341,12 @@ class Localization extends Translations {
       //
       'premium_title': 'Premium',
       'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      // Rating
+      'enjoying_app_title': 'Êtes-vous satisfait ?',
+      'enjoying_app_body':
+          'Nous espérons que le résultat vous plaît ! Si c\'est le cas, voulez-vous nous noter ?',
+      'yes_i_love_it': 'Oui, j\'adore !',
+      'not_really': 'Pas vraiment',
     },
     'es': {
       // App name and general
@@ -504,6 +516,12 @@ class Localization extends Translations {
       //
       'premium_title': 'Premium',
       'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      // Rating
+      'enjoying_app_title': '¿Estás satisfecho?',
+      'enjoying_app_body':
+          '¡Esperamos que te guste el resultado! Si es así, ¿te importaría calificarnos?',
+      'yes_i_love_it': '¡Sí, me encanta!',
+      'not_really': 'No realmente',
     },
     'pt': {
       // App name and general
@@ -673,6 +691,12 @@ class Localization extends Translations {
       //
       'premium_title': 'Premium',
       'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      // Rating
+      'enjoying_app_title': 'Você está satisfeito?',
+      'enjoying_app_body':
+          'Esperamos que você tenha gostado do resultado! Se sim, você se importaria de nos avaliar?',
+      'yes_i_love_it': 'Sim, eu adoro!',
+      'not_really': 'Não muito',
     },
     'ar': {
       // App name and general
@@ -833,6 +857,12 @@ class Localization extends Translations {
       //
       'premium_title': 'Premium',
       'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      // Rating
+      'enjoying_app_title': 'هل أنت راضٍ؟',
+      'enjoying_app_body':
+          'نأمل أن تكون النتيجة قد أعجبتك! إذا كان الأمر كذلك، هل تمانع في تقييمنا؟',
+      'yes_i_love_it': 'نعم، أحبه!',
+      'not_really': 'ليس حقاً',
     },
   };
 }

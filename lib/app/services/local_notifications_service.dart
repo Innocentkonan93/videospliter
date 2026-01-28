@@ -79,7 +79,6 @@ class LocalNotificationService {
           priority: Priority.high,
           channelDescription: "Description",
         );
-
     const DarwinNotificationDetails iosNotificationDetails =
         DarwinNotificationDetails(sound: 'send_message.wav');
 

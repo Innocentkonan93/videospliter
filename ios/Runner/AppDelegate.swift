@@ -95,15 +95,15 @@ import UIKit
 
           result(videoUrl)
         } else {
-          print("📱 AppDelegate: Vidéo partagée expirée")
+          
           result(nil)
         }
       } else {
-        print("📱 AppDelegate: Aucune vidéo partagée trouvée")
+        
         result(nil)
       }
     } else {
-      print("❌ AppDelegate: Impossible d'accéder à UserDefaults partagé")
+      
       result(
         FlutterError(
           code: "UNAVAILABLE", message: "UserDefaults partagé non accessible", details: nil))

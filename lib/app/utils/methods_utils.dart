@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:path/path.dart' as p;
 
 void showSnackBar(String message, {bool? isError = false}) {
   ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
@@ -39,4 +43,31 @@ void vibrate() async {
   HapticFeedback.mediumImpact(); // moyen
   // HapticFeedback.heavyImpact(); // fort
   // HapticFeedback.selectionClick(); // clic type sélection
+}
+
+Future<String> normalizePickedVideo(String pickedPath) async {
+  final tempDir = await getTemporaryDirectory();
+
+  // sécurité : créer le dossier
+  if (!await tempDir.exists()) {
+    await tempDir.create(recursive: true);
+  }
+
+  final extension = pickedPath.split('.').last;
+  final normalizedPath =
+      '${tempDir.path}/input_${DateTime.now().millisecondsSinceEpoch}.$extension';
+
+  final sourceFile = File(pickedPath);
+
+  if (!await sourceFile.exists()) {
+    throw Exception('Source video does not exist');
+  }
+
+  final copiedFile = await sourceFile.copy(normalizedPath);
+
+  // 🔍 debug critique
+  debugPrint('Normalized exists: ${await copiedFile.exists()}');
+  debugPrint('Normalized path: ${copiedFile.path}');
+
+  return copiedFile.path;
 }

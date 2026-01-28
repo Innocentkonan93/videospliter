@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_spliter/app/modules/settings/views/feedbacks_view.dart';
+import 'package:video_spliter/app/widgets/pre_rating_dialog.dart';
 
 class AppService {
   AppService();
@@ -61,6 +63,7 @@ class AppService {
     await _handleRatingRequest(
       incrementLaunchCount: true,
       requireLaunchThreshold: true,
+      usePreDialog: false,
     );
   }
 
@@ -70,6 +73,7 @@ class AppService {
     await _handleRatingRequest(
       incrementLaunchCount: false,
       requireLaunchThreshold: false,
+      usePreDialog: true,
     );
   }
 
@@ -77,6 +81,8 @@ class AppService {
     await _handleRatingRequest(
       incrementLaunchCount: true,
       requireLaunchThreshold: false,
+      usePreDialog:
+          false, // Déjà engagé, on peut demander direct ou pas du tout
     );
   }
 
@@ -88,6 +94,7 @@ class AppService {
       incrementLaunchCount: true,
       requireLaunchThreshold: false,
       requireMinInstallDuration: false,
+      usePreDialog: true,
     );
   }
 
@@ -99,6 +106,7 @@ class AppService {
       incrementLaunchCount: true,
       requireLaunchThreshold: false,
       requireMinInstallDuration: false,
+      usePreDialog: true,
     );
   }
 
@@ -106,10 +114,12 @@ class AppService {
   /// - [incrementLaunchCount] : incrémente le compteur de lancements si true.
   /// - [requireLaunchThreshold] : exige que le seuil de lancements soit atteint si true.
   /// - [requireMinInstallDuration] : exige que la durée minimale d'installation soit atteinte si true.
+  /// - [usePreDialog] : Affiche d'abord le dialogue "Êtes-vous satisfait ?".
   Future<void> _handleRatingRequest({
     required bool incrementLaunchCount,
     required bool requireLaunchThreshold,
     bool requireMinInstallDuration = true,
+    bool usePreDialog = false,
   }) async {
     try {
       // Récupère les préférences partagées.
@@ -135,10 +145,10 @@ class AppService {
         await prefs.setInt(_launchCountKey, launchCount);
       }
 
-      // Vérifie si l'utilisateur a déjà vu et accepté/refusé le prompt de notation.
+      // Vérifie si le prompt est désactivé (optionnel, si on veut ajouter un bouton "Ne plus jamais demander")
       final promptDisabled = prefs.getBool(_promptDisabledKey) ?? false;
       if (promptDisabled) {
-        return; // Ne rien faire si le prompt ne doit plus apparaître.
+        return;
       }
 
       // Conditions à respecter pour afficher le prompt :
@@ -162,13 +172,44 @@ class AppService {
 
       // Si toutes les conditions sont réunies, alors on tente d'afficher le prompt.
       if (meetsLaunchThreshold && meetsInstallDuration && cooldownExpired) {
-        final prompted = await _askForRating();
-        if (prompted) {
-          // Si l'utilisateur a répondu, on désactive définitivement le prompt.
-          await prefs.setBool(_promptDisabledKey, true);
+        if (usePreDialog) {
+          Get.dialog(
+            PreRatingDialog(
+              onRate: () async {
+                final prompted = await _askForRating();
+                if (prompted) {
+                  // Mettre à jour la date du dernier prompt
+                  await prefs.setString(
+                    _lastPromptDateKey,
+                    now.toIso8601String(),
+                  );
+                }
+              },
+              onFeedback: () async {
+                // Rediriger vers la page de feedback
+                Get.to(() => const FeedbacksView());
+                // On met quand même à jour le cooldown pour ne pas redemander tout de suite
+                await prefs.setString(
+                  _lastPromptDateKey,
+                  now.toIso8601String(),
+                );
+              },
+              onDismiss: () async {
+                // Si l'utilisateur ferme, on retentera plus tard (respect du cooldown ou pas ?)
+                // Pour l'instant on considère ça comme une interaction, on met le cooldown
+                await prefs.setString(
+                  _lastPromptDateKey,
+                  now.toIso8601String(),
+                );
+              },
+            ),
+          );
         } else {
-          // Sinon, on enregistre la date à laquelle on a affiché le prompt (pour le cooldown).
-          await prefs.setString(_lastPromptDateKey, now.toIso8601String());
+          final prompted = await _askForRating();
+          if (prompted) {
+            // On enregistre la date à laquelle on a affiché le prompt
+            await prefs.setString(_lastPromptDateKey, now.toIso8601String());
+          }
         }
       }
     } catch (e) {

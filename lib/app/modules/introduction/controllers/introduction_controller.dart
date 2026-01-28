@@ -5,7 +5,6 @@ import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/routes/app_pages.dart';
 import 'package:video_spliter/app/services/firebase_notification_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
-import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class IntroductionController extends GetxController {
   bool? isIntroductionViewed;
@@ -19,10 +18,11 @@ class IntroductionController extends GetxController {
       await FirebaseNotificationService().initFirebaseNotifications();
       completedIntro();
     } else {
-      showSnackBar(
-        "permission_denied_to_receive_notifications".tr,
-        isError: true,
-      );
+      // showSnackBar(
+      //   "permission_denied_to_receive_notifications".tr,
+      //   isError: true,
+      // );
+      completedIntro();
     }
   }
 

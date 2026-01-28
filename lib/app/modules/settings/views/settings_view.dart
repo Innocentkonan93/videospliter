@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 import 'package:video_spliter/app/utils/constants.dart';
-import 'package:video_spliter/app/widgets/premium_card.dart';
 
 class SettingsView extends GetWidget<SettingsController> {
   const SettingsView({super.key});

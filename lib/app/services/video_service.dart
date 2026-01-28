@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
 // import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
 // import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/return_code.dart';
-// import 'package:ffmpeg_kit_flutter_new/return_code.dart';
+// import 'package:ffmpeg_kit_16kb/return_code.dart';
+import 'package:ffmpeg_kit_16kb/return_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:video_compress/video_compress.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
@@ -20,6 +21,32 @@ import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class VideoService {
+  /// Pre-compress a video to improve performance for further processing
+  /// Returns the output path of the compressed video
+  Future<String?> compressVideo({
+    required String inputPath,
+    required String outputPath,
+  }) async {
+    try {
+      final info = await VideoCompress.compressVideo(
+        inputPath,
+        quality: VideoQuality.MediumQuality,
+        deleteOrigin: false,
+        includeAudio: true,
+      );
+      log('info: ${info?.path}');
+      if (info?.filesize != null) {
+        log('info: ${info!.filesize! / (1024 * 1024)}');
+      } else {
+        log('info: filesize is null');
+      }
+      return info?.path;
+    } catch (e) {
+      log('Error during video compression: $e');
+      return null;
+    }
+  }
+
   static Future<List<File>> splitVideo(
     File videoFile,
     double sliceDuration,
@@ -103,7 +130,7 @@ class VideoService {
         '-c:v',
         'mpeg4',
         '-qscale:v',
-        '2', // ✅ qualité élevée
+        '5', // ✅ qualité équili = 2
         '-c:a',
         'aac',
         '-b:a',
@@ -180,7 +207,7 @@ class VideoService {
         '-vf', "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
         // Vidéo (ton choix mpeg4, qualité élevée)
         '-c:v', 'mpeg4',
-        '-qscale:v', '2',
+        '-qscale:v', '5',
         // Audio
         '-c:a', 'aac',
         '-b:a', '128k',
