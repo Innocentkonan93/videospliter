@@ -7,14 +7,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/modules/settings/views/thank_you_view.dart';
 import 'package:video_spliter/app/services/app_service.dart';
-import 'package:video_spliter/app/services/bot_service.dart';
+import 'package:video_spliter/app/services/feedback_service.dart';
 import 'package:video_spliter/app/services/firebase_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class SettingsController extends GetxController {
   final firebaseService = FirebaseService();
-  final botService = BotService();
 
   final formKey = GlobalKey<FormState>();
   final imagePicker = ImagePicker();
@@ -146,32 +145,45 @@ class SettingsController extends GetxController {
     try {
       isSending(true);
       update();
-      final isSent = await botService.sendFeedback(
-        bugDescriptionController.text,
-        imagePaths: selectedImagesPath,
-      );
-      if (isSent) {
-        clearForm();
-        Get.off(() => const ThankYouView());
-        // Demande de notation après un feedback envoyé avec succès
-        AppService().handleRatingRequestAfterFeedback();
-        isSending(false);
-        update();
-      } else {
-        Get.back();
-        clearForm();
-        showSnackBar(
-          "Une erreur est survenue lors de l'envoi du rapport, veuillez réessayer plus tard",
-          isError: true,
-        );
+
+      List<String> imageUrls = [];
+      if (selectedImagesPath.isNotEmpty) {
+        for (String path in selectedImagesPath) {
+          try {
+            String url = await firebaseService.uploadImage(
+              "/reports/bugs/",
+              path,
+            );
+            imageUrls.add(url);
+          } catch (e) {
+            print("Failed to upload image $path: $e");
+          }
+        }
       }
+
+      await FeedbackService().send(
+        message: bugDescriptionController.text,
+        type: FeedbackType.manual,
+        step: 'manual_report',
+        attachments: imageUrls,
+      );
+
+      clearForm();
+      Get.off(() => const ThankYouView());
+      // Demande de notation après un feedback envoyé avec succès
+      AppService().handleRatingRequestAfterFeedback();
+      isSending(false);
+      update();
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
       isSending(false);
       Get.back();
-      clearForm();
+      // clearForm(); // Maybe don't clear form on error so user can retry?
+      // But original code cleared it. I will follow original behavior or improve?
+      // Original: clearForm(); showSnackBar(...)
+      // Better UX: keep form so they don't lose text.
       showSnackBar(
         "Une erreur est survenue lors de l'envoi du rapport, veuillez réessayer plus tard",
         isError: true,

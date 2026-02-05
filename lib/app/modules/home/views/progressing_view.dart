@@ -4,6 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
+import 'package:video_spliter/app/services/feedback_service.dart';
 import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import '../controllers/home_controller.dart';
@@ -62,7 +63,7 @@ class _ProcessingViewState extends State<ProcessingView> {
         videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
         segmentCount: parts?.length ?? 0,
       );
-      if (parts != null) {
+      if (parts != null && parts.isNotEmpty) {
         await controller.initVideoControllers(parts);
         await Future.delayed(const Duration(seconds: 1));
         vibrate();
@@ -82,9 +83,33 @@ class _ProcessingViewState extends State<ProcessingView> {
           segmentCount: parts.length,
           videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
         );
+      } else {
+        Get.back();
+        showSnackBar(
+          "Aucun segment généré (vidéo trop courte ou erreur)",
+          isError: true,
+        );
       }
     } catch (e) {
       print(e);
+      FeedbackService().send(
+        message: 'Découpage échoué',
+        step: 'cutting',
+        type: FeedbackType.automatic,
+        error: {
+          'code': 'FFMPEG_ERROR',
+          'raw': e.toString(),
+          'stack_trace': StackTrace.current.toString(),
+        },
+        videoContext: {
+          'path': controller.selectedVideo.value?.path,
+          'size_bytes':
+              controller.selectedVideo.value?.existsSync() == true
+                  ? controller.selectedVideo.value?.lengthSync()
+                  : 0,
+          'slice_duration': controller.sliceDuration.value,
+        },
+      );
       Get.back();
       showSnackBar("error_cutting".tr, isError: true);
     }

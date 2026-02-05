@@ -19,6 +19,7 @@ import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
+import 'package:video_spliter/app/utils/video_logic.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
@@ -89,6 +90,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   /// Indicateur si la bannière publicitaire est chargée
   final isBannerLoaded = false.obs;
+  final isVideoLoading = false.obs;
 
   /// Dossier actuellement sélectionné pour les options
   final selectedFolder = "".obs;
@@ -101,6 +103,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     try {
       selectedFolder.value = "";
       await requestPermissions();
+      isVideoLoading.value = true;
       final result = await FilePicker.platform.pickFiles(type: FileType.video);
 
       if (result != null && result.files.single.path != null) {
@@ -124,10 +127,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             source: 'file_picker',
           );
           // Compresser uniquement les vidéos lourdes (> 50 Mo) pour optimiser le temps
-          if (sizeMb > 1) {
+          if (VideoLogic.shouldCompress(sizeMb, 1)) {
             await compressVideo();
           }
+          isVideoLoading.value = false;
+          update();
         } catch (e) {
+          isVideoLoading.value = false;
           // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
           // avec des valeurs par défaut
           final sizeMb = videoFile.lengthSync() / (1024 * 1024);
@@ -136,6 +142,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             sizeMb: sizeMb,
             source: 'file_picker',
           );
+          update();
         }
       }
 
@@ -383,7 +390,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Gère deux cas: app en mémoire et app lancée via partage
   void initSharingListener() {
     log("listening");
-
     // Cas 1 : Application déjà en mémoire
     intentDataStreamSubscription = FlutterSharingIntent.instance
         .getMediaStream()
@@ -448,7 +454,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           "📱 HomeController: Vidéo partagée reçue via extension: ${sharedVideo.path}",
         );
         selectedVideo.value = sharedVideo;
-
         // Afficher une notification à l'utilisateur
         Get.snackbar(
           'Vidéo reçue',
@@ -458,7 +463,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           colorText: Colors.white,
           duration: const Duration(seconds: 3),
         );
-
         update();
       }
     } catch (e) {

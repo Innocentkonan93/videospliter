@@ -47,7 +47,8 @@ class Localization extends Translations {
       'cut_done_title': 'Cutting done 💯',
       'cut_done_body': 'You can share or save it',
       'cut_done_notification': 'Cutting done, you can share or save it',
-      'error_cutting': 'Error while cutting, please try again',
+      'error_cutting':
+          '❌ Unable to cut this video\n👉 Ensure the video is stored on your phone\n🔁 Try again with a shorter video',
 
       // Result screen
       'clips_selected': 'clips selected',
@@ -233,7 +234,8 @@ class Localization extends Translations {
           'Découpage terminé, vous pouvez le partager ou l\'enregistrer',
       'no_video_selected':
           'Aucune vidéo sélectionnée. Veuillez sélectionner au moins une vidéo',
-      'error_cutting': 'Erreur lors du découpage, veuillez réessayer',
+      'error_cutting':
+          '❌ Impossible de découper cette vidéo\n👉 Assure-toi que la vidéo est stockée sur ton téléphone\n🔁 Réessaie avec une vidéo plus courte',
       'duration': 'Durée',
       'size': 'Taille',
       // Settings

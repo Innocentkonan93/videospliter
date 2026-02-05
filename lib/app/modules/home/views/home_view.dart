@@ -149,6 +149,31 @@ class HomeView extends GetView<HomeController> {
                                         end: const Offset(1.0, 1.0),
                                       ),
                                 )
+                                : controller.isVideoLoading.value
+                                ? Center(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 10,
+                                    children: [
+                                      SizedBox(
+                                        width: 12,
+                                        height: 12,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          valueColor: AlwaysStoppedAnimation(
+                                            AppColors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "Chargement de la vidéo...",
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(color: AppColors.white),
+                                      ),
+                                    ],
+                                  ),
+                                )
                                 : Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -170,27 +195,6 @@ class HomeView extends GetView<HomeController> {
                                       ),
                                     ),
 
-                                    Row(
-                                      children: [
-                                        // IconButton.filledTonal(
-                                        //   onPressed: () {
-                                        //     controller.clearAll();
-                                        //     controller.update();
-                                        //   },
-                                        //   icon: const Icon(
-                                        //     Icons.delete,
-                                        //     color: AppColors.red,
-                                        //   ),
-                                        // ),
-                                        // IconButton.filledTonal(
-                                        //   onPressed: () {},
-                                        //   icon: const Icon(
-                                        //     Icons.add,
-                                        //     color: AppColors.primary,
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
                                     const SizedBox(height: 16),
                                     ElevatedButton.icon(
                                       icon: const Icon(

@@ -19,6 +19,7 @@ import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
+import 'package:video_spliter/app/utils/video_logic.dart';
 
 class VideoService {
   /// Pre-compress a video to improve performance for further processing
@@ -34,133 +35,17 @@ class VideoService {
         deleteOrigin: false,
         includeAudio: true,
       );
-      log('info: ${info?.path}');
-      if (info?.filesize != null) {
-        log('info: ${info!.filesize! / (1024 * 1024)}');
-      } else {
-        log('info: filesize is null');
-      }
+      // log('info: ${info?.path}');
+      // if (info?.filesize != null) {
+      //   log('info: ${info!.filesize! / (1024 * 1024)}');
+      // } else {
+      //   log('info: filesize is null');
+      // }
       return info?.path;
     } catch (e) {
       log('Error during video compression: $e');
       return null;
     }
-  }
-
-  static Future<List<File>> splitVideo(
-    File videoFile,
-    double sliceDuration,
-  ) async {
-    // ✅ Ne pas exécuter sur des plateformes non supportées
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
-      throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
-    }
-
-    try {
-      // Dossier temporaire
-      final directory = await getTemporaryDirectory();
-      final String outputPath = directory.path;
-      final String outputPattern = '$outputPath/cut_it_%03d.mp4';
-
-      final command =
-          '-i "${videoFile.path}" -c copy -map 0 -segment_time $sliceDuration -f segment "$outputPattern"';
-
-      // Exécution de la commande FFmpeg
-      final session = await FFmpegKit.execute(command);
-
-      final returnCode = await session.getReturnCode();
-      if (returnCode?.isValueSuccess() != true) {
-        final logs = await session.getAllLogsAsString();
-        throw Exception("FFmpeg failed. Logs:\n$logs");
-      }
-
-      // Récupération des segments
-      final List<FileSystemEntity> files = directory.listSync();
-      final List<File> videoParts =
-          files
-              .where(
-                (file) =>
-                    file.path.contains('cut_it_') && file.path.endsWith('.mp4'),
-              )
-              .map((file) => File(file.path))
-              .toList();
-
-      return videoParts;
-    } catch (e) {
-      // print('${'error_cutting'.tr}: $e');
-      rethrow;
-    }
-  }
-
-  static Future<List<File>> splitBySS({
-    required File videoFile,
-    required double sliceDuration,
-  }) async {
-    HomeController homeController = Get.find<HomeController>();
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
-      throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
-    }
-
-    final videoParts = <File>[];
-    final tempDir = await getTemporaryDirectory();
-
-    final mediaInfoSession = await FFprobeKit.getMediaInformation(
-      videoFile.path,
-    );
-    final info = mediaInfoSession.getMediaInformation();
-    final totalDuration = double.tryParse(info?.getDuration() ?? '0') ?? 0;
-
-    int index = 0;
-    double start = 0;
-    final totalSegments = (totalDuration / sliceDuration).ceil();
-
-    while (start < totalDuration) {
-      final output =
-          '${tempDir.path}/cut_it_${index.toString().padLeft(3, '0')}.mp4';
-
-      final command = [
-        '-ss',
-        '$start',
-        '-t',
-        '$sliceDuration',
-        '-i',
-        '"${videoFile.path}"',
-        '-vf',
-        "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
-        '-c:v',
-        'mpeg4',
-        '-qscale:v',
-        '5', // ✅ qualité équili = 2
-        '-c:a',
-        'aac',
-        '-b:a',
-        '128k',
-        '-y',
-        '"$output"',
-      ].join(' ');
-
-      final session = await FFmpegKit.execute(command);
-      final returnCode = await session.getReturnCode();
-      if (returnCode?.isValueSuccess() == true) {
-        videoParts.add(File(output));
-      } else {
-        final logs = await session.getAllLogsAsString();
-        log(logs ?? 'Erreur FFmpeg sur le segment $index');
-        showSnackBar(
-          "Erreur FFmpeg sur le segment $index\n$logs",
-          isError: true,
-        );
-        throw Exception("Erreur FFmpeg sur le segment $index\n$logs");
-      }
-
-      index++;
-      start += sliceDuration;
-      homeController.progress.value = index / totalSegments; // 👈 progression
-      homeController.update();
-    }
-
-    // videoParts.sort((a, b) => a.path.compareTo(b.path));
-    return videoParts;
   }
 
   static Future<List<File>> splitBySSAsync({
@@ -184,7 +69,10 @@ class VideoService {
       throw Exception('Impossible de déterminer la durée de la vidéo.');
     }
 
-    final totalSegments = (totalDuration / sliceDuration).ceil();
+    final totalSegments = VideoLogic.calculateSegmentCount(
+      totalDuration,
+      sliceDuration,
+    );
     final fileBase = p.basenameWithoutExtension(videoFile.path);
     final List<File> videoParts = [];
 
@@ -194,29 +82,27 @@ class VideoService {
       final isLast = (start + sliceDuration) > totalDuration;
       final segDur = isLast ? (totalDuration - start) : sliceDuration;
 
+      // Nettoyage automatique : ignorer les micro-segments (< 1 seconde)
+      if (segDur < 1.0) {
+        log('Skipping micro-segment: duration $segDur is too short.');
+        // Mettre à jour la progression pour ne pas bloquer l'UI
+        final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
+        homeController.progress.value = global;
+        homeController.update();
+        continue;
+      }
+
       final outPath = p.join(
         tempDir.path,
         '${fileBase}_part_${(index + 1).toString().padLeft(3, '0')}.mp4',
       );
 
-      final args = <String>[
-        '-ss', fmt(start),
-        '-t', fmt(segDur),
-        '-i', videoFile.path,
-        // Évite dimensions impaires
-        '-vf', "crop='floor(in_w/2)*2:floor(in_h/2)*2'",
-        // Vidéo (ton choix mpeg4, qualité élevée)
-        '-c:v', 'mpeg4',
-        '-qscale:v', '5',
-        // Audio
-        '-c:a', 'aac',
-        '-b:a', '128k',
-        // Lecture web/phone plus rapide
-        '-movflags', '+faststart',
-        // Overwrite
-        '-y',
-        outPath,
-      ];
+      final args = VideoLogic.generateSplitArgs(
+        inputPath: videoFile.path,
+        outputPath: outPath,
+        startTime: start,
+        duration: segDur,
+      );
 
       // Completer pour ce segment
       final segCompleter = Completer<void>();
@@ -228,7 +114,11 @@ class VideoService {
         (session) async {
           final rc = await session.getReturnCode();
           if (ReturnCode.isSuccess(rc)) {
-            videoParts.add(File(outPath));
+            final file = File(outPath);
+            // Vérifier que le fichier existe et n'est pas vide
+            if (await file.exists() && await file.length() > 0) {
+              videoParts.add(file);
+            }
             // Fixe la progression à la fin du segment (100% du segment)
             final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
             homeController.progress.value = global;

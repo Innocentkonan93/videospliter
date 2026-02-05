@@ -9,7 +9,9 @@ environment:
 dependencies:
   animated_digit: ^3.2.3
   clarity_flutter: ^1.0.0
+  cloud_firestore: ^5.6.9
   cupertino_icons: ^1.0.8
+  device_info_plus: ^12.3.0
   ffmpeg_kit_16kb: ^1.0.4
   # ffmpeg_kit_flutter_new: ^1.2.1
   file_picker: ^10.1.9
