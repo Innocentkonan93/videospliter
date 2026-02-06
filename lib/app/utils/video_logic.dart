@@ -10,6 +10,16 @@ class VideoLogic {
     return fileSizeMb > thresholdMb;
   }
 
+  /// Vérifie si la taille de la vidéo est dans la limite acceptée
+  static bool isFileSizeValid(double fileSizeMb, double limitMb) {
+    return fileSizeMb <= limitMb;
+  }
+
+  /// Vérifie si la durée de la vidéo est dans la limite acceptée
+  static bool isDurationValid(double durationSec, double limitSec) {
+    return durationSec <= limitSec;
+  }
+
   /// Génère la liste des arguments pour la commande FFmpeg de découpage.
   static List<String> generateSplitArgs({
     required String inputPath,

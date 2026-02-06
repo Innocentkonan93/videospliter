@@ -57,5 +57,29 @@ void main() {
       // Logic was: fileSizeMb > thresholdMb
       expect(VideoLogic.shouldCompress(1.0, 1.0), false);
     });
+
+    test('isFileSizeValid returns true when within limit', () {
+      expect(VideoLogic.isFileSizeValid(500, 1000), true);
+    });
+
+    test('isFileSizeValid returns false when exceeds limit', () {
+      expect(VideoLogic.isFileSizeValid(1001, 1000), false);
+    });
+
+    test('isFileSizeValid returns true when exact limit', () {
+      expect(VideoLogic.isFileSizeValid(1000, 1000), true);
+    });
+
+    test('isDurationValid returns true when within limit', () {
+      expect(VideoLogic.isDurationValid(1800, 3600), true);
+    });
+
+    test('isDurationValid returns false when exceeds limit', () {
+      expect(VideoLogic.isDurationValid(3601, 3600), false);
+    });
+
+    test('isDurationValid returns true when exact limit', () {
+      expect(VideoLogic.isDurationValid(3600, 3600), true);
+    });
   });
 }

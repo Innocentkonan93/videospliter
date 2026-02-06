@@ -20,6 +20,7 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
+import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
@@ -100,18 +101,31 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Permet à l'utilisateur de sélectionner une vidéo depuis le système de fichiers
   /// Demande les permissions nécessaires avant la sélection
   Future<void> pickVideo() async {
+    isVideoLoading.value = true;
+    update();
     try {
       selectedFolder.value = "";
       await requestPermissions();
-      isVideoLoading.value = true;
+
       final result = await FilePicker.platform.pickFiles(type: FileType.video);
 
       if (result != null && result.files.single.path != null) {
         final videoFile = File(result.files.single.path!);
-        selectedVideo.value = videoFile;
-        // compresser les videos de grande taille
 
-        log((videoFile.lengthSync() / (1024 * 1024)).toString());
+        // Vérification de la taille
+        final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+        if (!VideoLogic.isFileSizeValid(sizeMb, maxVideoSizeMb)) {
+          showSnackBar(
+            "La vidéo est trop lourde. Essayez avec une vidéo !",
+            isError: true,
+          );
+          isVideoLoading.value = false;
+          update();
+          return;
+        }
+
+        // compresser les videos de grande taille
+        log(sizeMb.toString());
         // Enregistrer l'import de la vidéo dans analytics
         try {
           final mediaInfoSession = await FFprobeKit.getMediaInformation(
@@ -119,7 +133,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           );
           final info = mediaInfoSession.getMediaInformation();
           final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
-          final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+
+          // Vérification de la durée
+          if (!VideoLogic.isDurationValid(durationSec, maxVideoDurationSec)) {
+            showSnackBar(
+              "La vidéo est trop longue. Veuillez choisir une vidéo moins longue",
+              isError: true,
+            );
+            isVideoLoading.value = false;
+            update();
+            return;
+          }
+
+          selectedVideo.value = videoFile;
+
           // Enregistrer l'import de la vidéo dans analytics
           await AnalyticsService.videoImported(
             durationSec: durationSec.round(),
@@ -127,7 +154,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             source: 'file_picker',
           );
           // Compresser uniquement les vidéos lourdes (> 50 Mo) pour optimiser le temps
-          if (VideoLogic.shouldCompress(sizeMb, 1)) {
+          if (VideoLogic.shouldCompress(sizeMb, maxVideoSizeMbForCompress)) {
             await compressVideo();
           }
           isVideoLoading.value = false;
@@ -136,7 +163,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           isVideoLoading.value = false;
           // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
           // avec des valeurs par défaut
-          final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+          selectedVideo.value = videoFile;
           await AnalyticsService.videoImported(
             durationSec: 0,
             sizeMb: sizeMb,
@@ -148,6 +175,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
       update();
     } catch (e) {
+      isVideoLoading.value = false;
       showSnackBar(e.toString());
     }
   }

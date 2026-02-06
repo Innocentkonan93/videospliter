@@ -13,6 +13,11 @@ const String folderName = 'Cutit';
 const String introductionKey = 'introduction_key';
 const String selectedLanguageKey = 'selected_language_key';
 
+// Limites pour les vidéos uploadées
+const double maxVideoSizeMb = 1000.0; // 1 Go
+const double maxVideoDurationSec = 3600.0; // 1 Heure
+const double maxVideoSizeMbForCompress = 100.0; // 100 Mo
+
 Future<void> launchUri(Uri parse) async {
   await launchUrl(parse);
 }

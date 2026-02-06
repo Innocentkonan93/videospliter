@@ -59,6 +59,15 @@ class SettingsView extends GetWidget<SettingsController> {
                         );
                       },
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${'version'.tr} ${controller.version.value}",
+                          style: theme.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               );

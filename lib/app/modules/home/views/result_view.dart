@@ -41,8 +41,10 @@ class _ResultViewState extends State<ResultView> {
     return GetBuilder<HomeController>(
       builder: (controller) {
         return Scaffold(
-          // backgroundColor: AppColors.white,d
+          backgroundColor: AppColors.background,
           appBar: AppBar(
+            backgroundColor: AppColors.background,
+            elevation: 0,
             leading: Visibility(
               visible: !controller.canSelectVideo.value,
               replacement: IconButton(
@@ -52,9 +54,10 @@ class _ResultViewState extends State<ResultView> {
                   controller.selectedFolder.value = "";
                   controller.update();
                 },
-                icon: const Icon(Icons.close),
+                icon: const Icon(Icons.close, color: AppColors.black),
               ),
               child: BackButton(
+                color: AppColors.black,
                 onPressed: () {
                   Get.back();
                   controller.clearAll();
@@ -63,10 +66,12 @@ class _ResultViewState extends State<ResultView> {
             ),
             title: Text(
               controller.canSelectVideo.value
-                  ? controller.selectedVideoParts.isNotEmpty
-                      ? '${controller.selectedVideoParts.length} ${'clip'.tr}${controller.selectedVideoParts.length > 1 ? 's' : ''} ${'selected'.tr}${controller.selectedVideoParts.length > 1 ? 's' : ''}'
-                      : 'select'.tr
+                  ? '${controller.selectedVideoParts.length} ${controller.selectedVideoParts.length > 1 ? 'clips_selected'.tr : 'clip_selected'.tr}'
                   : 'cutting_results'.tr,
+              style: const TextStyle(
+                color: AppColors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             actions: [
               IconButton(
@@ -87,18 +92,18 @@ class _ResultViewState extends State<ResultView> {
             ],
           ),
           body: GridView.builder(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: Responsive.isMobile(context) ? 3 : 5,
-              childAspectRatio: 1,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+              childAspectRatio: 0.8,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
             ),
             itemCount: widget.parts.length,
             itemBuilder: (context, index) {
-              // widget.parts.sort((a, b) => a.path.compareTo(b.path));
               final file = widget.parts[index];
               final playerController = controller.videoControllers[file];
+              final isSelected = controller.selectedVideoParts.contains(file);
 
               return GestureDetector(
                 onLongPress: () {
@@ -106,123 +111,217 @@ class _ResultViewState extends State<ResultView> {
                   controller.selectVideoPart(file);
                   controller.update();
                 },
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if (controller.canSelectVideo.value) {
-                          controller.selectVideoPart(file);
-                        } else {
-                          // Get.to(() => VideoPreviewView(videoFile: file));
-                          Get.to(
-                            () => AllVideosPreview(
-                              parts: widget.parts,
-                              currentIndex: index,
-                            ),
-                          );
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child:
-                                playerController != null &&
-                                        playerController.value.isInitialized
-                                    ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          AspectRatio(
-                                            aspectRatio:
-                                                playerController
-                                                    .value
-                                                    .aspectRatio,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: VideoPlayer(
-                                                playerController,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                    : const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                          ),
-                        ],
+                onTap: () {
+                  if (controller.canSelectVideo.value) {
+                    controller.selectVideoPart(file);
+                  } else {
+                    Get.to(
+                      () => AllVideosPreview(
+                        parts: widget.parts,
+                        currentIndex: index,
                       ),
-                    ),
-                    if (controller.canSelectVideo.value)
-                      IgnorePointer(
-                        ignoring: true,
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            controller.selectedVideoParts.contains(file)
-                                ? Icons.check_circle_rounded
-                                : Icons.circle_outlined,
-                            color:
-                                controller.selectedVideoParts.contains(file)
-                                    ? AppColors.primary
-                                    : AppColors.grey,
+                    );
+                  }
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border:
+                        isSelected
+                            ? Border.all(color: AppColors.primary, width: 3)
+                            : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Stack(
+                      children: [
+                        // Video Thumbnail/Preview
+                        Positioned.fill(
+                          child:
+                              playerController != null &&
+                                      playerController.value.isInitialized
+                                  ? FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: SizedBox(
+                                      width: playerController.value.size.width,
+                                      height:
+                                          playerController.value.size.height,
+                                      child: VideoPlayer(playerController),
+                                    ),
+                                  )
+                                  : const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                        ),
+                        // Gradient Overlay
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  Colors.black.withValues(alpha: 0.7),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                        // Play Icon
+                        if (!controller.canSelectVideo.value)
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.play_arrow_rounded,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                            ),
+                          ),
+                        // Part Number
+                        Positioned(
+                          bottom: 8,
+                          left: 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Partie ${index + 1}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              if (playerController != null &&
+                                  playerController.value.isInitialized)
+                                Text(
+                                  formatDuration(
+                                    playerController.value.duration,
+                                  ),
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        // Selection Indicator
+                        if (controller.canSelectVideo.value)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                color:
+                                    isSelected
+                                        ? AppColors.primary
+                                        : Colors.white.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                                border:
+                                    isSelected
+                                        ? null
+                                        : Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ),
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child:
+                                  isSelected
+                                      ? const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 16,
+                                      )
+                                      : const SizedBox(width: 16, height: 16),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
           ),
           bottomNavigationBar: BottomAppBar(
+            elevation: 20,
             color: AppColors.white,
+            surfaceTintColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextButton.icon(
-                  onPressed: () {
-                    if (controller.selectedVideoParts.isEmpty) {
-                      showSnackBar('no_video_selected'.tr, isError: true);
-                      return;
-                    }
-                    VideoService.shareVideos(controller.selectedVideoParts);
-                  },
-                  style:
-                      controller.selectedVideoParts.isEmpty
-                          ? TextButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                              255,
-                              222,
-                              222,
-                              222,
-                            ),
-                          )
-                          : TextButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.white,
-                          ),
-                  icon: const Icon(Icons.share),
-                  label: Text('share'.tr),
-                ),
-                if (!widget.isSaved)
-                  TextButton.icon(
-                    onPressed: () async {
-                      final result = await controller.showFolderDialog();
-                      if (result != null) {
-                        controller.saveSegments(result as String);
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      if (controller.selectedVideoParts.isEmpty) {
+                        showSnackBar('no_video_selected'.tr, isError: true);
+                        return;
                       }
+                      VideoService.shareVideos(controller.selectedVideoParts);
                     },
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.green,
-                      foregroundColor: AppColors.white,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          controller.selectedVideoParts.isEmpty
+                              ? Colors.grey[200]
+                              : AppColors.primary,
+                      foregroundColor:
+                          controller.selectedVideoParts.isEmpty
+                              ? Colors.grey
+                              : AppColors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    icon: const Icon(Icons.save),
-                    label: Text('save'.tr),
+                    icon: const Icon(Icons.share),
+                    label: Text('share'.tr),
                   ),
+                ),
+                if (!widget.isSaved) ...[
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        final result = await controller.showFolderDialog();
+                        if (result != null) {
+                          controller.saveSegments(result as String);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.green,
+                        foregroundColor: AppColors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: const Icon(Icons.save),
+                      label: Text('save'.tr),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
