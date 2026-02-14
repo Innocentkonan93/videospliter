@@ -47,6 +47,8 @@
 	<string>Cette application utilise le micro pour l'audio dans les vidéos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Cette application a besoin d'accéder à votre galerie pour lire et sauvegarder les vidéos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Cette application a besoin d'accéder à votre galerie pour sauvegarder les vidéos découpées.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

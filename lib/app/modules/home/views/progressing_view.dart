@@ -163,31 +163,6 @@ class _ProcessingViewState extends State<ProcessingView> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Lottie.asset(
-                    //   'assets/animations/loading.json',
-                    //   width: 200,
-                    //   height: 200,
-                    // ),
-                    // TweenAnimationBuilder<double>(
-                    //   tween: Tween<double>(
-                    //     begin: 0,
-                    //     end: controller.progress.value,
-                    //   ),
-                    //   duration: const Duration(milliseconds: 300),
-                    //   builder: (context, value, _) {
-                    //     return ClipRRect(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       child: LinearProgressIndicator(
-                    //         value: value,
-                    //         minHeight: 12,
-                    //         backgroundColor: Colors.grey[300],
-                    //         valueColor: AlwaysStoppedAnimation<Color>(
-                    //           AppColors.primary,
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
                     CircularPercentIndicator(
                       radius: 100.0,
                       lineWidth: 10.0,
@@ -209,14 +184,6 @@ class _ProcessingViewState extends State<ProcessingView> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                      // AnimatedDigitWidget(
-                      //   value: controller.progress.value * 100,
-                      //   duration: const Duration(milliseconds: 1000),
-                      //   textStyle: const TextStyle(
-                      //     fontSize: 24,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
                       progressColor:
                           controller.progress.value == 1.0
                               ? AppColors.green
@@ -229,30 +196,6 @@ class _ProcessingViewState extends State<ProcessingView> {
                         height: 20,
                         child: CircularProgressIndicator.adaptive(),
                       ),
-                    // const SizedBox(height: 10),
-                    // Text(
-                    //   "${(controller.progress.value * 100).toStringAsFixed(1)} %",
-                    // ),
-                    // SizedBox(height: 80),
-                    // Divider(color: Colors.grey[300], height: 1),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Icon(
-                    //       Icons.warning_rounded,
-                    //       color: const Color.fromARGB(255, 198, 136, 20),
-                    //       size: 60,
-                    //     ),
-                    //   ],
-                    // ),
-                    // Text(
-                    //   "Ne vérrouillez pas l'écran et ne quittez pas l'application pendant le traitement",
-                    //   style: TextStyle(
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    //   textAlign: TextAlign.center,
-                    // ),
                   ],
                 ),
               ),

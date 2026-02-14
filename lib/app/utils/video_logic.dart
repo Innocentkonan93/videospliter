@@ -1,4 +1,22 @@
+import 'package:gal/gal.dart';
+
 class VideoLogic {
+  /// Sauvegarde une vidéo dans la galerie.
+  /// Retourne true si succès, false sinon.
+  static Future<bool> saveVideoToGallery(String videoPath) async {
+    try {
+      final hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        await Gal.requestAccess();
+      }
+      await Gal.putVideo(videoPath);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   /// Calcule le nombre de segments nécessaires pour une durée totale et une durée de découpe données.
   static int calculateSegmentCount(double totalDuration, double sliceDuration) {
     if (sliceDuration <= 0) return 0;

@@ -213,4 +213,37 @@ class VideoService {
       print(e);
     }
   }
+
+  static Future<void> saveVideos(List<File> videoParts) async {
+    try {
+      final adMobService = AdMobService();
+      final filesToSave =
+          videoParts
+              .where((file) => file.existsSync())
+              .map((file) => file.path)
+              .toList();
+
+      if (filesToSave.isEmpty) {
+        Get.snackbar('error_saving_videos'.tr, 'no_video_to_save'.tr);
+        return;
+      }
+
+      for (var videoPath in filesToSave) {
+        await VideoLogic.saveVideoToGallery(videoPath);
+      }
+
+      // Demande de notation après un partage réussi
+      AppService().handleRatingRequestAfterShare();
+      adMobService.loadInterstitialAd(
+        onAdDismissed: () {},
+        onAdReady: () {
+          // print('ad ready');
+          adMobService.showInterstitialAd();
+        },
+      );
+    } catch (e) {
+      showSnackBar('${'error_saving_videos'.tr} $e', isError: true);
+      print(e);
+    }
+  }
 }

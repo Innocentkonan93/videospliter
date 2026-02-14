@@ -55,6 +55,8 @@ class Localization extends Translations {
       'clip_selected': 'clip selected',
       'select': 'Select',
       'cutting_results': 'Cutting results',
+      'preview': 'Preview',
+      'segment': 'Part',
       'share': 'Share',
       'save': 'Save',
       'no_video_selected':
@@ -226,6 +228,8 @@ class Localization extends Translations {
       'clip_selected': 'clip sélectionné',
       'select': 'Sélectionner',
       'cutting_results': 'Résultats du découpage',
+      'preview': 'Aperçu',
+      'segment': 'Partie',
       'share': 'Partager',
       'save': 'Enregistrer',
       'cut_done_title': 'Découpage terminée 💯',
@@ -406,6 +410,8 @@ class Localization extends Translations {
       'clip_selected': 'clip seleccionado',
       'select': 'Seleccionar',
       'cutting_results': 'Resultados del corte',
+      'preview': 'Vista previa',
+      'segment': 'Parte',
       'share': 'Compartir',
       'save': 'Guardar',
       'no_video_selected':
@@ -581,6 +587,8 @@ class Localization extends Translations {
       'clip_selected': 'clipe selecionado',
       'select': 'Selecionar',
       'cutting_results': 'Resultados do corte',
+      'preview': 'Visualização',
+      'segment': 'Parte',
       'share': 'Compartilhar',
       'save': 'Salvar',
       'no_video_selected':
@@ -751,6 +759,8 @@ class Localization extends Translations {
       'clip_selected': 'مقطع محدد',
       'select': 'تحديد',
       'cutting_results': 'نتائج القص',
+      'preview': 'معاينة',
+      'segment': 'جزء',
       'share': 'مشاركة',
       'save': 'حفظ',
       'no_video_selected':
