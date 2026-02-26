@@ -171,6 +171,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           );
           update();
         }
+      } else {
+        isVideoLoading.value = false;
       }
 
       update();

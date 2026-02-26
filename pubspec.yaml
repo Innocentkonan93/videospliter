@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A new Flutter project."
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.0.4+31
+version: 1.0.5+32
 
 environment:
   sdk: ^3.7.0

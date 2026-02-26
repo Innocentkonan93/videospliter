@@ -101,7 +101,32 @@ class HomeView extends GetView<HomeController> {
                             ),
                             const Spacer(),
                             // Affichage conditionnel selon la vidéo choisie
-                            controller.selectedVideo.value == null
+                            controller.isVideoLoading.value
+                                ? Center(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 10,
+                                    children: [
+                                      SizedBox(
+                                        width: 12,
+                                        height: 12,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          valueColor: AlwaysStoppedAnimation(
+                                            AppColors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "Chargement de la vidéo...",
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(color: AppColors.white),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : controller.selectedVideo.value == null
                                 ? Center(
                                   child: ElevatedButton.icon(
                                         onPressed: () {
@@ -148,31 +173,6 @@ class HomeView extends GetView<HomeController> {
                                         begin: const Offset(1.1, 1.1),
                                         end: const Offset(1.0, 1.0),
                                       ),
-                                )
-                                : controller.isVideoLoading.value
-                                ? Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    spacing: 10,
-                                    children: [
-                                      SizedBox(
-                                        width: 12,
-                                        height: 12,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.5,
-                                          valueColor: AlwaysStoppedAnimation(
-                                            AppColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "Chargement de la vidéo...",
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(color: AppColors.white),
-                                      ),
-                                    ],
-                                  ),
                                 )
                                 : Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
