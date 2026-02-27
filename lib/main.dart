@@ -13,6 +13,7 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/localization.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
+import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
 
@@ -45,6 +46,9 @@ void main() async {
 
   // Initialiser le service de partage
   Get.put(SharingService());
+
+  // Initialize RevenueCat service for subscriptions
+  await Get.putAsync(() => RevenueCatService().init());
 
   final config = ClarityConfig(
     projectId: "s204qm61cv",

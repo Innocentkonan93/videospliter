@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/services/revenuecat_service.dart';
 
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
@@ -8,57 +9,155 @@ class PremiumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    return Card(
-      color: AppColors.primary.withValues(alpha: 0.95),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 0,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          Get.snackbar(
-            "Premium",
-            "Upgrade to Cutit Premium coming soon!",
-            backgroundColor: AppColors.white,
-            colorText: AppColors.primary,
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Row(
-            children: [
-              Icon(
-                Icons.workspace_premium_rounded,
-                color: Colors.yellow,
-                size: 36,
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "premium_title".tr,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      "premium_subtitle".tr,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
+    return Obx(() {
+      if (Get.isRegistered<RevenueCatService>() &&
+          Get.find<RevenueCatService>().isProUser.value) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: ShapeDecoration(
+            shape: RoundedSuperellipseBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            gradient: const LinearGradient(
+              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.workspace_premium_rounded,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
-              ),
-              Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 18),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "cutit_pro_active".tr,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        "enjoy_pro_features".tr,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: ShapeDecoration(
+          shape: RoundedSuperellipseBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          gradient: const LinearGradient(
+            colors: [AppColors.orange, Color(0xFFE94057), AppColors.primary],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: const Color(0xFFE94057).withValues(alpha: 0.3),
+          //     blurRadius: 15,
+          //     offset: const Offset(0, 8),
+          //   ),
+          // ],
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            Get.find<RevenueCatService>().presentPaywall();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.star_rounded,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "premium_title".tr,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "premium_subtitle".tr,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontWeight: FontWeight.w500,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

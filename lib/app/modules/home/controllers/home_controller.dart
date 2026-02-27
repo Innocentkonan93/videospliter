@@ -24,6 +24,7 @@ import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
+import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
 import 'package:video_spliter/app/widgets/deletion_dialog.dart';
 import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
@@ -114,11 +115,21 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
         // Vérification de la taille
         final sizeMb = videoFile.lengthSync() / (1024 * 1024);
-        if (!VideoLogic.isFileSizeValid(sizeMb, maxVideoSizeMb)) {
-          showSnackBar(
-            "La vidéo est trop lourde. Essayez avec une vidéo !",
-            isError: true,
-          );
+        final isPro =
+            Get.isRegistered<RevenueCatService>() &&
+            Get.find<RevenueCatService>().isProUser.value;
+        final maxAllowedSize = isPro ? maxVideoSizeMb : maxVideoSizeMbFree;
+
+        if (!VideoLogic.isFileSizeValid(sizeMb, maxAllowedSize)) {
+          if (!isPro && sizeMb <= maxVideoSizeMb) {
+            // Dans ce cas, l'utilisateur a dépassé la limite gratuite, mais la vidéo est valide en Pro
+            Get.find<RevenueCatService>().presentPaywall();
+          } else {
+            showSnackBar(
+              "La vidéo est trop lourde. Essayez avec une vidéo !",
+              isError: true,
+            );
+          }
           isVideoLoading.value = false;
           update();
           return;
@@ -135,11 +146,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
 
           // Vérification de la durée
-          if (!VideoLogic.isDurationValid(durationSec, maxVideoDurationSec)) {
-            showSnackBar(
-              "La vidéo est trop longue. Veuillez choisir une vidéo moins longue",
-              isError: true,
-            );
+          final maxAllowedDuration =
+              isPro ? maxVideoDurationSec : maxVideoDurationSecFree;
+
+          if (!VideoLogic.isDurationValid(durationSec, maxAllowedDuration)) {
+            if (!isPro && durationSec <= maxVideoDurationSec) {
+              Get.find<RevenueCatService>().presentPaywall();
+            } else {
+              showSnackBar(
+                "La vidéo est trop longue. Veuillez choisir une vidéo moins longue",
+                isError: true,
+              );
+            }
             isVideoLoading.value = false;
             update();
             return;
@@ -410,7 +428,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Charge et affiche la bannière publicitaire
   void loadBannerAd() {
     banner = adMobService.loadBannerAd();
-    isBannerLoaded.value = true;
+    isBannerLoaded.value = banner != null;
     update();
   }
 
@@ -511,6 +529,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     initSharedVideoListener();
     WidgetsBinding.instance.addObserver(this);
     successfulCuts.value = CacheHelper.getInteger(key: "successfulCuts");
+
+    if (Get.isRegistered<RevenueCatService>()) {
+      ever(Get.find<RevenueCatService>().isProUser, (isPro) {
+        if (isPro) {
+          banner?.dispose();
+          banner = null;
+          isBannerLoaded.value = false;
+          update();
+        }
+      });
+    }
+
     super.onInit();
   }
 

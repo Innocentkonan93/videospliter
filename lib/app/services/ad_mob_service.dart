@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:get/get.dart';
+import 'package:video_spliter/app/services/revenuecat_service.dart';
 
 class AdMobService {
   static final AdMobService _instance = AdMobService._internal();
@@ -70,7 +72,11 @@ class AdMobService {
   }
 
   /// Bannière
-  BannerAd loadBannerAd() {
+  BannerAd? loadBannerAd() {
+    if (Get.isRegistered<RevenueCatService>() &&
+        Get.find<RevenueCatService>().isProUser.value) {
+      return null;
+    }
     return BannerAd(
       adUnitId: bannerAdUnitId,
       size: AdSize.banner,
@@ -87,6 +93,11 @@ class AdMobService {
 
   /// Interstitiel
   void loadInterstitialAd({Function()? onAdReady, Function()? onAdDismissed}) {
+    if (Get.isRegistered<RevenueCatService>() &&
+        Get.find<RevenueCatService>().isProUser.value) {
+      if (onAdDismissed != null) onAdDismissed();
+      return;
+    }
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: AdRequest(),
@@ -122,6 +133,11 @@ class AdMobService {
 
   /// Rewarded
   void loadRewardedAd({Function()? onEarnedReward}) {
+    if (Get.isRegistered<RevenueCatService>() &&
+        Get.find<RevenueCatService>().isProUser.value) {
+      if (onEarnedReward != null) onEarnedReward();
+      return;
+    }
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
       request: AdRequest(),

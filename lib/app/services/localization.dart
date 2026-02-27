@@ -66,6 +66,10 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Settings',
+      'purchases': 'Purchases',
+      'restore_purchases': 'Restore Purchases',
+      'general': 'General',
+      'support_and_about': 'Support & About',
       'how_it_works': 'How it works?',
       'contact_us': 'Contact us',
       'report_issue': 'Report an issue',
@@ -166,8 +170,10 @@ class Localization extends Translations {
       'export_failed': 'Export failed',
       'export_success': 'Export successful',
       // Premium
-      'premium_title': 'Premium',
-      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      'premium_title': 'Unlock Cutit Pro ✨',
+      'premium_subtitle': 'No ads • Videos > 10 min • No size limit',
+      'cutit_pro_active': 'Cutit Pro Active',
+      'enjoy_pro_features': 'You have full access to all features',
       // Rating
       'enjoying_app_title': 'Are you satisfied?',
       'enjoying_app_body':
@@ -244,6 +250,10 @@ class Localization extends Translations {
       'size': 'Taille',
       // Settings
       'settings': 'Paramètres',
+      'purchases': 'Achats',
+      'restore_purchases': 'Restaurer les achats',
+      'general': 'Général',
+      'support_and_about': 'Support & À propos',
       'how_it_works': 'Comment ça marche ?',
       'contact_us': 'Contactez-nous',
       'report_issue': 'Signaler un problème',
@@ -345,8 +355,10 @@ class Localization extends Translations {
       'error_sharing_videos': 'Erreur lors du partage des vidéos',
       'no_video_to_share': 'Aucune vidéo à partager',
       //
-      'premium_title': 'Premium',
-      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      'premium_title': 'Débloquez Cutit Pro ✨',
+      'premium_subtitle': 'Zéro pub • Vidéos > 10 min • Sans limite',
+      'cutit_pro_active': 'Cutit Pro Actif',
+      'enjoy_pro_features': 'Vous avez accès à toutes les fonctionnalités',
       // Rating
       'enjoying_app_title': 'Êtes-vous satisfait ?',
       'enjoying_app_body':
@@ -421,6 +433,10 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Configuración',
+      'purchases': 'Compras',
+      'restore_purchases': 'Restaurar compras',
+      'general': 'General',
+      'support_and_about': 'Soporte y Acerca de',
       'how_it_works': '¿Cómo funciona?',
       'contact_us': 'Contáctanos',
       'report_issue': 'Reportar un problema',
@@ -522,8 +538,10 @@ class Localization extends Translations {
       'error_sharing_videos': 'Error al compartir los videos',
       'no_video_to_share': 'No hay video para compartir',
       //
-      'premium_title': 'Premium',
-      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      'premium_title': 'Desbloquea Cutit Pro ✨',
+      'premium_subtitle': 'Sin anuncios • Videos > 10 min • Sin límite',
+      'cutit_pro_active': 'Cutit Pro Activo',
+      'enjoy_pro_features': 'Tienes acceso a todas las funciones',
       // Rating
       'enjoying_app_title': '¿Estás satisfecho?',
       'enjoying_app_body':
@@ -598,6 +616,10 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Configurações',
+      'purchases': 'Compras',
+      'restore_purchases': 'Restaurar compras',
+      'general': 'Geral',
+      'support_and_about': 'Suporte e Sobre',
       'how_it_works': 'Como funciona?',
       'contact_us': 'Entre em contato',
       'report_issue': 'Reportar um problema',
@@ -699,8 +721,10 @@ class Localization extends Translations {
       'error_sharing_videos': 'Erro ao compartilhar os vídeos',
       'no_video_to_share': 'Nenhum vídeo para compartilhar',
       //
-      'premium_title': 'Premium',
-      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      'premium_title': 'Desbloquear Cutit Pro ✨',
+      'premium_subtitle': 'Sem anúncios • Vídeos > 10 min • Sem limite',
+      'cutit_pro_active': 'Cutit Pro Ativo',
+      'enjoy_pro_features': 'Você tem acesso a todas as funcionalidades',
       // Rating
       'enjoying_app_title': 'Você está satisfeito?',
       'enjoying_app_body':
@@ -770,6 +794,10 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'الإعدادات',
+      'purchases': 'المشتريات',
+      'restore_purchases': 'استعادة المشتريات',
+      'general': 'عام',
+      'support_and_about': 'الدعم وحول',
       'how_it_works': 'كيف يعمل؟',
       'contact_us': 'اتصل بنا',
       'report_issue': 'الإبلاغ عن مشكلة',
@@ -867,8 +895,10 @@ class Localization extends Translations {
       'error_sharing_videos': 'خطأ في مشاركة مقاطع الفيديو',
       'no_video_to_share': 'لا يوجد فيديو للمشاركة',
       //
-      'premium_title': 'Premium',
-      'premium_subtitle': 'Upgrade to Cutit Premium coming soon!',
+      'premium_title': 'افتح Cutit Pro ✨',
+      'premium_subtitle': 'بدون إعلانات • مقاطع فيديو > 10 دقائق • بدون حد',
+      'cutit_pro_active': 'Cutit Pro نشط',
+      'enjoy_pro_features': 'لديك وصول كامل إلى جميع الميزات',
       // Rating
       'enjoying_app_title': 'هل أنت راضٍ؟',
       'enjoying_app_body':
