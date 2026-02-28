@@ -75,7 +75,7 @@ class PreRatingDialog extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         onDismiss();
-                        onFeedback();
+                        Get.back();
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),

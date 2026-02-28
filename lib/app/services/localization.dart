@@ -68,6 +68,8 @@ class Localization extends Translations {
       'settings': 'Settings',
       'purchases': 'Purchases',
       'restore_purchases': 'Restore Purchases',
+      'no_active_subscription': 'No active subscription found to restore.',
+      'purchases_restored': 'Purchases restored successfully.',
       'general': 'General',
       'support_and_about': 'Support & About',
       'how_it_works': 'How it works?',
@@ -167,6 +169,7 @@ class Localization extends Translations {
       // Sharing
       'error_sharing_videos': 'Error while sharing videos',
       'no_video_to_share': 'No video to share',
+      'export': 'Export',
       'export_failed': 'Export failed',
       'export_success': 'Export successful',
       // Premium
@@ -174,6 +177,13 @@ class Localization extends Translations {
       'premium_subtitle': 'No ads • Videos > 10 min • No size limit',
       'cutit_pro_active': 'Cutit Pro Active',
       'enjoy_pro_features': 'You have full access to all features',
+      // Export modal
+      'export_type': 'Export Type',
+      'choose_export_quality': 'Choose your export quality.',
+      'export_standard': 'Standard Export (Free)',
+      'export_standard_desc': 'Standard quality with ads. Might take longer.',
+      'export_pro': 'Pro Export (Premium) 🚀',
+      'export_pro_desc': 'Ultra fast, highest quality, no ads.',
       // Rating
       'enjoying_app_title': 'Are you satisfied?',
       'enjoying_app_body':
@@ -252,6 +262,8 @@ class Localization extends Translations {
       'settings': 'Paramètres',
       'purchases': 'Achats',
       'restore_purchases': 'Restaurer les achats',
+      'no_active_subscription': 'Aucun abonnement actif trouvé à restaurer.',
+      'purchases_restored': 'Achats restaurés avec succès.',
       'general': 'Général',
       'support_and_about': 'Support & À propos',
       'how_it_works': 'Comment ça marche ?',
@@ -348,6 +360,7 @@ class Localization extends Translations {
       'error_accessing_external_directory':
           'Impossible d\'accéder au répertoire externe',
       'platform_not_supported': 'Plateforme non supportée',
+      'export': 'Exporter',
       'export_failed': 'Export échoué',
       'export_success': 'Export réussi',
 
@@ -359,6 +372,13 @@ class Localization extends Translations {
       'premium_subtitle': 'Zéro pub • Vidéos > 10 min • Sans limite',
       'cutit_pro_active': 'Cutit Pro Actif',
       'enjoy_pro_features': 'Vous avez accès à toutes les fonctionnalités',
+      // Export modal
+      'export_type': 'Type d\'exportation',
+      'choose_export_quality': 'Choisissez votre qualité d\'export.',
+      'export_standard': 'Export Standard (Gratuit)',
+      'export_standard_desc': 'Qualité normale avec publicités.',
+      'export_pro': 'Export Pro (Premium) 🚀',
+      'export_pro_desc': 'Ultra rapide, haute qualité, sans publicité.',
       // Rating
       'enjoying_app_title': 'Êtes-vous satisfait ?',
       'enjoying_app_body':
@@ -435,6 +455,9 @@ class Localization extends Translations {
       'settings': 'Configuración',
       'purchases': 'Compras',
       'restore_purchases': 'Restaurar compras',
+      'no_active_subscription':
+          'No se encontró ninguna suscripción activa para restaurar.',
+      'purchases_restored': 'Compras restauradas con éxito.',
       'general': 'General',
       'support_and_about': 'Soporte y Acerca de',
       'how_it_works': '¿Cómo funciona?',
@@ -533,6 +556,9 @@ class Localization extends Translations {
       'error_accessing_external_directory':
           'No se puede acceder al directorio externo',
       'platform_not_supported': 'Plataforma no soportada',
+      'export': 'Exportar',
+      'export_failed': 'Exportación fallida',
+      'export_success': 'Exportación exitosa',
 
       // Sharing
       'error_sharing_videos': 'Error al compartir los videos',
@@ -542,6 +568,13 @@ class Localization extends Translations {
       'premium_subtitle': 'Sin anuncios • Videos > 10 min • Sin límite',
       'cutit_pro_active': 'Cutit Pro Activo',
       'enjoy_pro_features': 'Tienes acceso a todas las funciones',
+      // Export modal
+      'export_type': 'Tipo de exportación',
+      'choose_export_quality': 'Elige la calidad de tu exportación.',
+      'export_standard': 'Exportación Estándar (Gratis)',
+      'export_standard_desc': 'Calidad normal, contiene anuncios.',
+      'export_pro': 'Exportación Pro (Premium) 🚀',
+      'export_pro_desc': 'Ultrarápido, alta calidad, sin anuncios.',
       // Rating
       'enjoying_app_title': '¿Estás satisfecho?',
       'enjoying_app_body':
@@ -618,6 +651,9 @@ class Localization extends Translations {
       'settings': 'Configurações',
       'purchases': 'Compras',
       'restore_purchases': 'Restaurar compras',
+      'no_active_subscription':
+          'Nenhuma assinatura ativa encontrada para restaurar.',
+      'purchases_restored': 'Compras restauradas com sucesso.',
       'general': 'Geral',
       'support_and_about': 'Suporte e Sobre',
       'how_it_works': 'Como funciona?',
@@ -714,6 +750,7 @@ class Localization extends Translations {
       'error_accessing_external_directory':
           'Não é possível acessar o diretório externo',
       'platform_not_supported': 'Plataforma não suportada',
+      'export': 'Exportar',
       'export_failed': 'Export falhou',
       'export_success': 'Export bem-sucedido',
 
@@ -725,6 +762,13 @@ class Localization extends Translations {
       'premium_subtitle': 'Sem anúncios • Vídeos > 10 min • Sem limite',
       'cutit_pro_active': 'Cutit Pro Ativo',
       'enjoy_pro_features': 'Você tem acesso a todas as funcionalidades',
+      // Export modal
+      'export_type': 'Tipo de exportação',
+      'choose_export_quality': 'Escolha a qualidade da sua exportação.',
+      'export_standard': 'Exportação Padrão (Gratuito)',
+      'export_standard_desc': 'Qualidade normal, contém anúncios.',
+      'export_pro': 'Exportação Pro (Premium) 🚀',
+      'export_pro_desc': 'Ultra rápido, alta qualidade, sem anúncios.',
       // Rating
       'enjoying_app_title': 'Você está satisfeito?',
       'enjoying_app_body':
@@ -796,6 +840,8 @@ class Localization extends Translations {
       'settings': 'الإعدادات',
       'purchases': 'المشتريات',
       'restore_purchases': 'استعادة المشتريات',
+      'no_active_subscription': 'لم يتم العثور على اشتراك نشط لاستعادته.',
+      'purchases_restored': 'تم استعادة المشتريات بنجاح.',
       'general': 'عام',
       'support_and_about': 'الدعم وحول',
       'how_it_works': 'كيف يعمل؟',
@@ -888,6 +934,7 @@ class Localization extends Translations {
       'error_accessing_external_directory': 'تعذر الوصول إلى الدليل الخارجي',
       'platform_not_supported': 'المنصة غير مدعومة',
 
+      'export': 'تصدير',
       'export_failed': 'فشل التصدير',
       'export_success': 'تم التصدير بنجاح',
 
@@ -899,6 +946,13 @@ class Localization extends Translations {
       'premium_subtitle': 'بدون إعلانات • مقاطع فيديو > 10 دقائق • بدون حد',
       'cutit_pro_active': 'Cutit Pro نشط',
       'enjoy_pro_features': 'لديك وصول كامل إلى جميع الميزات',
+      // Export modal
+      'export_type': 'نوع التصدير',
+      'choose_export_quality': 'اختر جودة التصدير.',
+      'export_standard': 'تصدير قياسي (مجاني)',
+      'export_standard_desc': 'جودة عادية، يحتوي على إعلانات.',
+      'export_pro': 'تصدير برو (ممتاز) 🚀',
+      'export_pro_desc': 'فائق السرعة، جودة عالية، بدون إعلانات.',
       // Rating
       'enjoying_app_title': 'هل أنت راضٍ؟',
       'enjoying_app_body':

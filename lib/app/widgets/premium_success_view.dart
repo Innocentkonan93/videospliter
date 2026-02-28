@@ -86,7 +86,7 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
               // Continue Button
               ElevatedButton(
                 onPressed: () {
-                  Get.off(() => const HomeView());
+                  Get.back();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -117,7 +117,7 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
               shouldLoop: false,
-              
+
               colors: const [
                 Colors.green,
                 Colors.blue,

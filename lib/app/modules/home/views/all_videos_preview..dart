@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/video_player_view.dart';
 import 'package:video_spliter/app/services/video_service.dart';
 
@@ -182,20 +183,20 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                 _buildSideActionButton(
                   icon: Icons.share_rounded,
                   label: 'share'.tr,
-                  isPrimary: true,
+                  isPrimary: false,
                   onTap: () {
                     VideoService.shareVideos([widget.parts[currentPage]]);
                   },
                 ),
-                // const SizedBox(height: 16),
-                // _buildSideActionButton(
-                //   icon: Icons.save_alt_rounded,
-                //   label: 'save'.tr,
-                //   isPrimary: true,
-                //   onTap: () {
-                //     VideoService.saveVideos([widget.parts[currentPage]]);
-                //   },
-                // ),
+                const SizedBox(height: 16),
+                _buildSideActionButton(
+                  icon: Icons.save_alt_rounded,
+                  label: 'export'.tr,
+                  isPrimary: true,
+                  onTap: () {
+                    VideoService.saveVideos([widget.parts[currentPage]]);
+                  },
+                ),
               ],
             ),
           ),
@@ -217,10 +218,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color:
-                  isPrimary
-                      ? Theme.of(context).primaryColor
-                      : Colors.black.withValues(alpha: 0.4),
+              color: isPrimary ? AppColors.orange : AppColors.primary,
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.2),

@@ -322,6 +322,33 @@ class _ResultViewState extends State<ResultView> {
                     ),
                   ),
                 ],
+                if (widget.isSaved) ...[
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        VideoService.saveVideos(controller.selectedVideoParts);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            controller.selectedVideoParts.isEmpty
+                                ? Colors.grey[200]
+                                : AppColors.orange,
+                        foregroundColor:
+                            controller.selectedVideoParts.isEmpty
+                                ? Colors.grey
+                                : AppColors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: const Icon(Icons.download_rounded),
+                      label: Text('export'.tr),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

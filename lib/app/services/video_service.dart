@@ -9,7 +9,7 @@ import 'package:ffmpeg_kit_16kb/return_code.dart';
 // import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -21,6 +21,7 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
+import 'package:video_spliter/app/widgets/export_type_sheet.dart';
 
 class VideoService {
   /// Pre-compress a video to improve performance for further processing
@@ -178,19 +179,59 @@ class VideoService {
 
   static Future<void> shareVideos(List<File> videoParts) async {
     final context = Get.context;
-    final box = context?.findRenderObject() as RenderBox?;
+    if (context == null) return;
+    final box = context.findRenderObject() as RenderBox?;
+
+    final exportType = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const ExportTypeSheet(),
+    );
+
+    if (exportType == null) return; // Action annulée
+
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
     try {
       final adMobService = AdMobService();
-      final filesToShare =
-          videoParts
-              .where((file) => file.existsSync())
-              .map((file) => XFile(file.path))
-              .toList();
+      final filesToProcess =
+          videoParts.where((file) => file.existsSync()).toList();
 
-      if (filesToShare.isEmpty) {
+      if (filesToProcess.isEmpty) {
+        Get.back();
         Get.snackbar('error_sharing_videos'.tr, 'no_video_to_share'.tr);
         return;
       }
+
+      List<XFile> filesToShare = [];
+
+      for (var file in filesToProcess) {
+        String finalPath = file.path;
+
+        if (!exportType) {
+          try {
+            final info = await VideoCompress.compressVideo(
+              file.path,
+              quality: VideoQuality.MediumQuality,
+              deleteOrigin: false,
+              includeAudio: true,
+            );
+            if (info != null && info.path != null) {
+              finalPath = info.path!;
+            }
+          } catch (e) {
+            log('Compression error: $e');
+          }
+        }
+        filesToShare.add(XFile(finalPath));
+      }
+
+      Get.back(); // Ferme le loading avant d'ouvrir le menu natif de partage
+
       await SharePlus.instance.share(
         ShareParams(
           files: filesToShare,
@@ -198,50 +239,89 @@ class VideoService {
               box != null ? box.localToGlobal(Offset.zero) & box.size : null,
         ),
       );
+
       AnalyticsService.videoShared(segmentCount: videoParts.length);
       // Demande de notation après un partage réussi
       AppService().handleRatingRequestAfterShare();
       adMobService.loadInterstitialAd(
         onAdDismissed: () {},
         onAdReady: () {
-          // print('ad ready');
           adMobService.showInterstitialAd();
         },
       );
     } catch (e) {
+      if (Get.isDialogOpen ?? false) Get.back();
       showSnackBar('${'error_sharing_videos'.tr} $e', isError: true);
       print(e);
     }
   }
 
   static Future<void> saveVideos(List<File> videoParts) async {
+    final context = Get.context;
+    if (context == null) return;
+
+    final exportType = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const ExportTypeSheet(),
+    );
+
+    if (exportType == null) return; // Action annulée par l'utilisateur
+
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
     try {
       final adMobService = AdMobService();
-      final filesToSave =
-          videoParts
-              .where((file) => file.existsSync())
-              .map((file) => file.path)
-              .toList();
 
-      if (filesToSave.isEmpty) {
+      if (videoParts.isEmpty) {
+        Get.back(); // Close loading
         Get.snackbar('error_saving_videos'.tr, 'no_video_to_save'.tr);
         return;
       }
 
-      for (var videoPath in filesToSave) {
-        await VideoLogic.saveVideoToGallery(videoPath);
+      // Si export Standard (exportType == false), on compresse les vidéos pour réduire la qualité
+      for (var video in videoParts) {
+        String finalPathToSave = video.path;
+
+        try {
+          final info = await VideoCompress.compressVideo(
+            video.path,
+            quality:
+                exportType
+                    ? VideoQuality.HighestQuality
+                    : VideoQuality.LowQuality,
+            deleteOrigin: false,
+            includeAudio: true,
+          );
+          if (info != null && info.path != null) {
+            finalPathToSave = info.path!;
+          }
+        } catch (e) {
+          log('Compression error: $e');
+          // Si erreur, on sauvegarde quand même l'original
+        }
+
+        await VideoLogic.saveVideoToGallery(finalPathToSave);
       }
 
-      // Demande de notation après un partage réussi
+      Get.back(); // Close loading
+      showSnackBar('export_success'.tr, isError: false);
+
+      // Demande de notation après un export réussi
       AppService().handleRatingRequestAfterShare();
+
       adMobService.loadInterstitialAd(
         onAdDismissed: () {},
         onAdReady: () {
-          // print('ad ready');
           adMobService.showInterstitialAd();
         },
       );
     } catch (e) {
+      Get.back(); // Close loading
       showSnackBar('${'error_saving_videos'.tr} $e', isError: true);
       print(e);
     }

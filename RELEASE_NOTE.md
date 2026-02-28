@@ -17,3 +17,21 @@
 ### Correctifs
 
 - **Général** : De nombreux correctifs de bugs et améliorations des performances pour une expérience plus fluide.
+
+**Date : 28 Février 2026**
+
+### Fonctionnalités
+
+- **Export Pro et Standard** : Il est désormais possible de choisir la qualité de son export vidéo (Standard avec publicités ou HD hyper rapide sans publicités pour les utilisateurs Pro).
+- **Traductions Ajoutés** : Nouvelle option d'Exportation qui supporte complètement les langues : Espagnol, Portugais et Arabe.
+- **Nouvelle Interface d'Export** : L'écran de choix de qualité vidéo a été entièrement repensé pour un design moderne et plus facile à l'utilisation.
+- **Support de Restauration des Achats Pro** : La restauration des achats sur un autre appareil fonctionne parfaitement pour conserver vos avantages Premium.
+
+### Améliorations
+
+- **Compression Vidéo** : Optimisation du poids des vidéos exportées en formule _Standard_ afin de faire des économies d'espace de stockage sur votre téléphone.
+- **UX** : Les boutons sauvegarder et partager sont dorénavant plus en valeur dans le visualiseur des morceaux de vidéos partagées.
+
+### Correctifs
+
+- **Correction Export Pro** : L'enregistrement d'une vidéo dans la galerie ou son partage en formule 'Haute Qualité' après un achat Pro a été corrigé avec succès et la stabilité a été renforcée.

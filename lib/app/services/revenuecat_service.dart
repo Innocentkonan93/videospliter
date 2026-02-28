@@ -141,7 +141,17 @@ class RevenueCatService extends GetxService {
       final customerInfo = await Purchases.restorePurchases();
       log(customerInfo.toString());
       _updateSubscriptionStatus(customerInfo);
-      Get.snackbar("Success", "Purchases restored successfully!");
+
+      if (customerInfo.entitlements.all[entitlementId] != null &&
+          customerInfo.entitlements.all[entitlementId]!.isActive) {
+        Get.off(() => const PremiumSuccessView());
+      } else {
+        Get.snackbar(
+          "info".tr,
+          "no_active_subscription".tr,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     } on PlatformException catch (e) {
       final errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode != PurchasesErrorCode.purchaseCancelledError) {

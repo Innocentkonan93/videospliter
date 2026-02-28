@@ -17,7 +17,7 @@ const String selectedLanguageKey = 'selected_language_key';
 // Limites pour les vidéos uploadées
 const double maxVideoSizeMb = 1000.0; // 1 Go (Pro)
 const double maxVideoDurationSec = 3600.0; // 1 Heure (Pro)
-const double maxVideoSizeMbFree = 100.0; // 100 Mo (Free)
+const double maxVideoSizeMbFree = 7.0; // 100 Mo (Free)
 const double maxVideoDurationSecFree = 600.0; // 10 Minutes (Free)
 const double maxVideoSizeMbForCompress = 100.0; // 100 Mo
 
