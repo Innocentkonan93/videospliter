@@ -222,9 +222,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   Future<List<File>?> splitVideoIsolate() async {
     if (selectedVideo.value == null) return null;
     videoParts.clear();
+
+    final isPro =
+        Get.isRegistered<RevenueCatService>() &&
+        Get.find<RevenueCatService>().isProUser.value;
+
     final parts = await VideoService.splitBySSAsync(
       videoFile: selectedVideo.value!,
       sliceDuration: sliceDuration.value,
+      isPro: isPro,
     );
     videoParts.addAll(parts);
     return parts;

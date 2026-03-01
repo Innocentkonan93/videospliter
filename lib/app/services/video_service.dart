@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_16kb/return_code.dart';
@@ -21,7 +22,6 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
-import 'package:video_spliter/app/widgets/export_type_sheet.dart';
 
 class VideoService {
   /// Pre-compress a video to improve performance for further processing
@@ -53,6 +53,7 @@ class VideoService {
   static Future<List<File>> splitBySSAsync({
     required File videoFile,
     required double sliceDuration,
+    required bool isPro,
   }) async {
     final HomeController homeController = Get.find<HomeController>();
 
@@ -62,6 +63,37 @@ class VideoService {
 
     // Dossier de sortie
     final tempDir = await getTemporaryDirectory();
+
+    String? watermarkTempPath;
+    int? watermarkWidth;
+    int? watermarkHeight;
+
+    if (!isPro) {
+      try {
+        final byteData = await DefaultAssetBundle.of(
+          Get.context!,
+        ).load('assets/logo/watermark.png');
+
+        final codec = await ui.instantiateImageCodec(
+          byteData.buffer.asUint8List(),
+        );
+        final frame = await codec.getNextFrame();
+        final image = frame.image;
+        watermarkWidth = image.width;
+        watermarkHeight = image.height;
+
+        final rawBytes = await image.toByteData(
+          format: ui.ImageByteFormat.rawRgba,
+        );
+        if (rawBytes != null) {
+          final file = File(p.join(tempDir.path, 'watermark_temp.raw'));
+          await file.writeAsBytes(rawBytes.buffer.asUint8List());
+          watermarkTempPath = file.path;
+        }
+      } catch (e) {
+        log('Error loading watermark asset: $e');
+      }
+    }
 
     // Récupérer la durée totale avec FFprobe (async)
     final probeSession = await FFprobeKit.getMediaInformation(videoFile.path);
@@ -104,6 +136,10 @@ class VideoService {
         outputPath: outPath,
         startTime: start,
         duration: segDur,
+        isPro: isPro,
+        watermarkPath: watermarkTempPath,
+        watermarkWidth: watermarkWidth,
+        watermarkHeight: watermarkHeight,
       );
 
       // Completer pour ce segment
@@ -128,8 +164,14 @@ class VideoService {
             segCompleter.complete();
           } else {
             final logs = await session.getAllLogsAsString();
+            log(logs.toString());
+            final logsLines = logs?.split('\n') ?? [];
+            final lastLogs =
+                logsLines.length > 20
+                    ? logsLines.sublist(logsLines.length - 20).join('\n')
+                    : logs;
             segCompleter.completeError(
-              Exception('Erreur FFmpeg sur le segment ${index + 1}\n$logs'),
+              Exception('Erreur FFmpeg sur le segment ${index + 1}\n$lastLogs'),
             );
           }
         },
@@ -182,15 +224,6 @@ class VideoService {
     if (context == null) return;
     final box = context.findRenderObject() as RenderBox?;
 
-    final exportType = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const ExportTypeSheet(),
-    );
-
-    if (exportType == null) return; // Action annulée
-
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
@@ -207,28 +240,8 @@ class VideoService {
         return;
       }
 
-      List<XFile> filesToShare = [];
-
-      for (var file in filesToProcess) {
-        String finalPath = file.path;
-
-        if (!exportType) {
-          try {
-            final info = await VideoCompress.compressVideo(
-              file.path,
-              quality: VideoQuality.MediumQuality,
-              deleteOrigin: false,
-              includeAudio: true,
-            );
-            if (info != null && info.path != null) {
-              finalPath = info.path!;
-            }
-          } catch (e) {
-            log('Compression error: $e');
-          }
-        }
-        filesToShare.add(XFile(finalPath));
-      }
+      List<XFile> filesToShare =
+          filesToProcess.map((file) => XFile(file.path)).toList();
 
       Get.back(); // Ferme le loading avant d'ouvrir le menu natif de partage
 
@@ -260,15 +273,6 @@ class VideoService {
     final context = Get.context;
     if (context == null) return;
 
-    final exportType = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const ExportTypeSheet(),
-    );
-
-    if (exportType == null) return; // Action annulée par l'utilisateur
-
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
@@ -283,29 +287,8 @@ class VideoService {
         return;
       }
 
-      // Si export Standard (exportType == false), on compresse les vidéos pour réduire la qualité
       for (var video in videoParts) {
-        String finalPathToSave = video.path;
-
-        try {
-          final info = await VideoCompress.compressVideo(
-            video.path,
-            quality:
-                exportType
-                    ? VideoQuality.HighestQuality
-                    : VideoQuality.LowQuality,
-            deleteOrigin: false,
-            includeAudio: true,
-          );
-          if (info != null && info.path != null) {
-            finalPathToSave = info.path!;
-          }
-        } catch (e) {
-          log('Compression error: $e');
-          // Si erreur, on sauvegarde quand même l'original
-        }
-
-        await VideoLogic.saveVideoToGallery(finalPathToSave);
+        await VideoLogic.saveVideoToGallery(video.path);
       }
 
       Get.back(); // Close loading

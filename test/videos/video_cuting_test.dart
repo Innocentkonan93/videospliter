@@ -9,6 +9,7 @@ void main() {
         outputPath: '/path/to/output.mp4',
         startTime: 0,
         duration: 30,
+        isPro: false,
       );
 
       // Verify essential arguments
@@ -34,6 +35,7 @@ void main() {
         outputPath: 'out.mp4',
         startTime: 10.123456,
         duration: 5.6789,
+        isPro: false,
       );
 
       expect(args[args.indexOf('-ss') + 1], '10.123');

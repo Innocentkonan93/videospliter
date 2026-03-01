@@ -18,6 +18,8 @@
 
 - **Général** : De nombreux correctifs de bugs et améliorations des performances pour une expérience plus fluide.
 
+------
+
 **Date : 28 Février 2026**
 
 ### Fonctionnalités
