@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:confetti/confetti.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
-import 'package:video_spliter/app/modules/home/views/home_view.dart';
 
 class PremiumSuccessView extends StatefulWidget {
   const PremiumSuccessView({super.key});

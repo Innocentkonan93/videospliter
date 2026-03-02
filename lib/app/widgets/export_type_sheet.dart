@@ -78,10 +78,11 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
           Row(
             children: [
+              Spacer(),
               Expanded(
                 child: _buildExportOption(
                   title: 'Normal',
@@ -105,10 +106,11 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                               Get.find<RevenueCatService>().presentPaywall(),
                 ),
               ),
+              Spacer(),
             ],
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 30),
 
           // Export Button
           SizedBox(
@@ -117,7 +119,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
               onPressed: _onExportPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.orange,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedSuperellipseBorder(
                   borderRadius: BorderRadius.circular(15),
                   side:
@@ -159,7 +161,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             width: double.infinity,
             decoration: ShapeDecoration(
               color:

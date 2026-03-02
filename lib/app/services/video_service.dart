@@ -22,6 +22,7 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
+import 'package:video_spliter/app/widgets/export_type_sheet.dart';
 
 class VideoService {
   /// Pre-compress a video to improve performance for further processing
@@ -273,6 +274,15 @@ class VideoService {
     final context = Get.context;
     if (context == null) return;
 
+    final exportType = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const ExportTypeSheet(),
+    );
+
+    if (exportType == null) return; // Action annulée par l'utilisateur
+
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
@@ -287,8 +297,29 @@ class VideoService {
         return;
       }
 
+      // Si export Standard (exportType == false), on compresse les vidéos pour réduire la qualité
       for (var video in videoParts) {
-        await VideoLogic.saveVideoToGallery(video.path);
+        String finalPathToSave = video.path;
+
+        try {
+          final info = await VideoCompress.compressVideo(
+            video.path,
+            quality:
+                exportType
+                    ? VideoQuality.HighestQuality
+                    : VideoQuality.LowQuality,
+            deleteOrigin: false,
+            includeAudio: true,
+          );
+          if (info != null && info.path != null) {
+            finalPathToSave = info.path!;
+          }
+        } catch (e) {
+          log('Compression error: $e');
+          // Si erreur, on sauvegarde quand même l'original
+        }
+
+        await VideoLogic.saveVideoToGallery(finalPathToSave);
       }
 
       Get.back(); // Close loading
@@ -309,4 +340,45 @@ class VideoService {
       print(e);
     }
   }
+
+  // static Future<void> exportVideos(List<File> videoParts) async {
+  //   final context = Get.context;
+  //   if (context == null) return;
+
+  //   Get.dialog(
+  //     const Center(child: CircularProgressIndicator()),
+  //     barrierDismissible: false,
+  //   );
+
+  //   try {
+  //     final adMobService = AdMobService();
+
+  //     if (videoParts.isEmpty) {
+  //       Get.back(); // Close loading
+  //       Get.snackbar('error_saving_videos'.tr, 'no_video_to_save'.tr);
+  //       return;
+  //     }
+
+  //     for (var video in videoParts) {
+  //       await VideoLogic.saveVideoToGallery(video.path);
+  //     }
+
+  //     Get.back(); // Close loading
+  //     showSnackBar('export_success'.tr, isError: false);
+
+  //     // Demande de notation après un export réussi
+  //     AppService().handleRatingRequestAfterShare();
+
+  //     adMobService.loadInterstitialAd(
+  //       onAdDismissed: () {},
+  //       onAdReady: () {
+  //         adMobService.showInterstitialAd();
+  //       },
+  //     );
+  //   } catch (e) {
+  //     Get.back(); // Close loading
+  //     showSnackBar('${'error_saving_videos'.tr} $e', isError: true);
+  //     print(e);
+  //   }
+  // }
 }

@@ -71,7 +71,7 @@ class VideoLogic {
         '-filter_complex',
         // crop the input, scale the watermark to reasonable size (e.g. 50px width), overlay in bottom left corner (15px margin)
         "[0:v]crop='floor(in_w/2)*2:floor(in_h/2)*2'[base];"
-            "[1:v]scale=50:-2[wm];"
+            "[1:v]scale=120:-2[wm];"
             "[base][wm]overlay=15:H-h-15",
         '-pix_fmt',
         'yuv420p',
