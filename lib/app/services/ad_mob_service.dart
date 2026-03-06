@@ -87,7 +87,9 @@ class AdMobService {
 
   InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
+
   RewardedAd? _rewardedAd;
+  bool _isRewardedAdReady = false;
 
   AppOpenAd? _appOpenAd;
   bool _isAppOpenAdShowing = false;
@@ -101,6 +103,7 @@ class AdMobService {
     await MobileAds.instance.initialize();
     _preloadInterstitialAd();
     _preloadAppOpenAd();
+    _preloadRewardedAd();
   }
 
   /// Bannière (Chargée une seule fois et gardée en mémoire)
@@ -235,40 +238,101 @@ class AdMobService {
     }
   }
 
-  /// Rewarded
-  void loadRewardedAd({Function()? onEarnedReward}) {
+  /// Rewarded Ad (Préchargement en arrière-plan)
+  void _preloadRewardedAd() {
     if (Get.isRegistered<RevenueCatService>() &&
         Get.find<RevenueCatService>().isProUser.value) {
-      if (onEarnedReward != null) onEarnedReward();
       return;
     }
+
+    if (_isRewardedAdReady) return;
+
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
+          _isRewardedAdReady = true;
+
           _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) {
               ad.dispose();
+              _isRewardedAdReady = false;
+              _rewardedAd = null;
+              _preloadRewardedAd(); // Recharge la suivante
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
-              print('Rewarded failed: $error');
+              print('Rewarded failed to show: $error');
+              _isRewardedAdReady = false;
+              _rewardedAd = null;
+              _preloadRewardedAd();
             },
           );
-          _rewardedAd!.show(
-            onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-              print('User earned reward: ${reward.amount} ${reward.type}');
-              if (onEarnedReward != null) onEarnedReward();
-            },
-          );
+          print('✅ Rewarded Ad preloaded successfully.');
         },
         onAdFailedToLoad: (LoadAdError error) {
-          print('Rewarded load error: $error');
+          print('❌ Rewarded load error: $error');
+          _isRewardedAdReady = false;
+          _rewardedAd = null;
         },
       ),
     );
+  }
+
+  /// Appelé pour afficher la pub récompensée (opt-in)
+  void showRewardedAd({
+    required Function() onEarnedReward,
+    Function()? onAdClosed,
+    Function()? onAdFailedToLoad,
+  }) {
+    if (Get.isRegistered<RevenueCatService>() &&
+        Get.find<RevenueCatService>().isProUser.value) {
+      onEarnedReward();
+      if (onAdClosed != null) onAdClosed();
+      return;
+    }
+
+    if (_isRewardedAdReady && _rewardedAd != null) {
+      // Surcharge temporaire pour ce show spécifique
+      _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _isRewardedAdReady = false;
+          _rewardedAd = null;
+          if (onAdClosed != null) onAdClosed();
+          _preloadRewardedAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _isRewardedAdReady = false;
+          _rewardedAd = null;
+          if (onAdFailedToLoad != null)
+            onAdFailedToLoad(); // En cas d'erreur de show, on peut gérer (ex: fallback)
+          if (onAdClosed != null) onAdClosed();
+          _preloadRewardedAd();
+        },
+      );
+
+      _rewardedAd!.show(
+        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+          print('User earned reward: ${reward.amount} ${reward.type}');
+          onEarnedReward();
+        },
+      );
+    } else {
+      print(
+        '⚠️ Rewarded Ad non prête. Déclenchement onAdFailedToLoad fallback.',
+      );
+      if (onAdFailedToLoad != null) {
+        onAdFailedToLoad();
+      } else {
+        // Fallback s'il n'y a pas de gestion d'erreur -> on donne la récompense au bénéfice du doute ?
+        // Ou on refuse. Pour l'instant on refuse.
+      }
+      _preloadRewardedAd();
+    }
   }
 
   /// App Open Ad (Préchargement)

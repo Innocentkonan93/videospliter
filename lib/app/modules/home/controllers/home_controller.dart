@@ -343,14 +343,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void onSplitDone() {
     successfulCuts.value++;
 
-    // Affiche une publicité récompensée tous les 5 découpages
-    if (successfulCuts.value % 5 == 0) {
-      adMobService.loadRewardedAd(
-        onEarnedReward: () {
-          successfulCuts.value = 0;
-        },
-      );
-    }
+    // Affiche une publicité récompensée tous les 5 découpages (Supprimé : on passe en Opt-in pour l'Export HD)
 
     // Demande une évaluation tous les 2 découpages
     if (successfulCuts.value % 2 == 0) {

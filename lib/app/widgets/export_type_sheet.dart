@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/ad_mob_service.dart';
 
 class ExportTypeSheet extends StatefulWidget {
   const ExportTypeSheet({super.key});
@@ -30,12 +31,84 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
       if (revenueCatService.isProUser.value) {
         Get.back(result: true); // true = pro
       } else {
-        Get.back(); // Close sheet
-        revenueCatService.presentPaywall();
+        // Option HD pour un utilisateur gratuit : proposer de regarder une pub
+        _showAdOrProDialog();
       }
     } else {
       Get.back(result: false); // false = free
     }
+  }
+
+  void _showAdOrProDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              'Export HD',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              'Regardez une courte vidéo publicitaire pour débloquer l\'export en HD, ou passez à la version Pro pour un accès illimité.',
+              style: TextStyle(fontSize: 15),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx); // Close dialog
+                  Get.find<RevenueCatService>().presentPaywall();
+                },
+                child: const Text(
+                  'Passer Pro',
+                  style: TextStyle(
+                    color: AppColors.orange,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(ctx); // Close dialog
+                  // Show rewarded ad
+                  AdMobService().showRewardedAd(
+                    onEarnedReward: () {
+                      Get.back(result: true); // Reward granted, proceed with HD
+                    },
+                    onAdFailedToLoad: () {
+                      Get.snackbar(
+                        'Erreur',
+                        'Impossible de charger la vidéo publicitaire. Veuillez réessayer plus tard.',
+                        backgroundColor: Colors.red[100],
+                        colorText: Colors.red[900],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.play_circle_fill,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                label: const Text(
+                  'Débloquer',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
@@ -99,11 +172,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                   color: AppColors.orange,
                   isProBadge: true,
                   isProUser: isUserPro,
-                  onTap:
-                      isUserPro
-                          ? () => setState(() => isProSelected = true)
-                          : () =>
-                              Get.find<RevenueCatService>().presentPaywall(),
+                  onTap: () => setState(() => isProSelected = true),
                 ),
               ),
               Spacer(),
