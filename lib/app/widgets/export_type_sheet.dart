@@ -48,24 +48,21 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text(
-              'Export HD',
+              'export_hd_title'.tr,
               style: TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            content: Text(
-              'Regardez une courte vidéo publicitaire pour débloquer l\'export en HD, ou passez à la version Pro pour un accès illimité.',
-              style: TextStyle(fontSize: 15),
-            ),
+            content: Text('export_hd_desc'.tr, style: TextStyle(fontSize: 15)),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(ctx); // Close dialog
                   Get.find<RevenueCatService>().presentPaywall();
                 },
-                child: const Text(
-                  'Passer Pro',
+                child: Text(
+                  'go_pro'.tr,
                   style: TextStyle(
                     color: AppColors.orange,
                     fontWeight: FontWeight.bold,
@@ -82,8 +79,8 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                     },
                     onAdFailedToLoad: () {
                       Get.snackbar(
-                        'Erreur',
-                        'Impossible de charger la vidéo publicitaire. Veuillez réessayer plus tard.',
+                        'error'.tr,
+                        'ad_load_error'.tr,
                         backgroundColor: Colors.red[100],
                         colorText: Colors.red[900],
                       );
@@ -95,9 +92,9 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                   color: Colors.white,
                   size: 20,
                 ),
-                label: const Text(
-                  'Débloquer',
-                  style: TextStyle(color: Colors.white),
+                label: Text(
+                  'unlock'.tr,
+                  style: const TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

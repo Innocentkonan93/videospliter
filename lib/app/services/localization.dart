@@ -191,6 +191,15 @@ class Localization extends Translations {
           'We hope you liked the result! If so, would you mind rating us?',
       'yes_i_love_it': 'Yes, I love it!',
       'not_really': 'Not really',
+
+      // Export HD Dialog
+      'export_hd_title': 'HD Export',
+      'export_hd_desc':
+          'Watch a short video ad to unlock HD export, or upgrade to Pro for unlimited access.',
+      'go_pro': 'Go Pro',
+      'unlock': 'Unlock',
+      'error': 'Error',
+      'ad_load_error': 'Unable to load the video ad. Please try again later.',
     },
     'fr': {
       // App name and general
@@ -387,6 +396,16 @@ class Localization extends Translations {
           'Nous espérons que le résultat vous plaît ! Si c\'est le cas, voulez-vous nous noter ?',
       'yes_i_love_it': 'Oui, j\'adore !',
       'not_really': 'Pas vraiment',
+
+      // Export HD Dialog
+      'export_hd_title': 'Export HD',
+      'export_hd_desc':
+          'Regardez une courte vidéo publicitaire pour débloquer l\'export en HD, ou passez à la version Pro pour un accès illimité.',
+      'go_pro': 'Passer Pro',
+      'unlock': 'Débloquer',
+      'error': 'Erreur',
+      'ad_load_error':
+          'Impossible de charger la vidéo publicitaire. Veuillez réessayer plus tard.',
     },
     'es': {
       // App name and general
@@ -584,6 +603,16 @@ class Localization extends Translations {
           '¡Esperamos que te guste el resultado! Si es así, ¿te importaría calificarnos?',
       'yes_i_love_it': '¡Sí, me encanta!',
       'not_really': 'No realmente',
+
+      // Export HD Dialog
+      'export_hd_title': 'Exportación HD',
+      'export_hd_desc':
+          'Mira un breve anuncio de video para desbloquear la exportación en HD, o actualiza a Pro para acceso ilimitado.',
+      'go_pro': 'Hazte Pro',
+      'unlock': 'Desbloquear',
+      'error': 'Error',
+      'ad_load_error':
+          'No se pudo cargar el anuncio de video. Por favor, inténtalo de nuevo más tarde.',
     },
     'pt': {
       // App name and general
@@ -779,6 +808,16 @@ class Localization extends Translations {
           'Esperamos que você tenha gostado do resultado! Se sim, você se importaria de nos avaliar?',
       'yes_i_love_it': 'Sim, eu adoro!',
       'not_really': 'Não muito',
+
+      // Export HD Dialog
+      'export_hd_title': 'Exportação HD',
+      'export_hd_desc':
+          'Assista a um curto anúncio em vídeo para desbloquear a exportação em HD, ou atualize para Pro para acesso ilimitado.',
+      'go_pro': 'Seja Pro',
+      'unlock': 'Desbloquear',
+      'error': 'Erro',
+      'ad_load_error':
+          'Não foi possível carregar o anúncio em vídeo. Por favor, tente novamente mais tarde.',
     },
     'ar': {
       // App name and general
@@ -964,6 +1003,16 @@ class Localization extends Translations {
           'نأمل أن تكون النتيجة قد أعجبتك! إذا كان الأمر كذلك، هل تمانع في تقييمنا؟',
       'yes_i_love_it': 'نعم، أحبه!',
       'not_really': 'ليس حقاً',
+
+      // Export HD Dialog
+      'export_hd_title': 'تصدير HD',
+      'export_hd_desc':
+          'شاهد إعلان فيديو قصير لفتح تصدير HD ، أو قم بالترقية إلى Pro للحصول على وصول غير محدود.',
+      'go_pro': 'الترقية إلى Pro',
+      'unlock': 'فتح',
+      'error': 'خطأ',
+      'ad_load_error':
+          'تعذر تحميل إعلان الفيديو. يرجى المحاولة مرة أخرى لاحقًا.',
     },
   };
 }
