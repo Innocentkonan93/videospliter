@@ -50,7 +50,7 @@ class SettingsView extends GetWidget<SettingsController> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8.0,
-                                vertical: 8.0,
+                                vertical: 4.0,
                               ),
                               child: Text(
                                 groupName,

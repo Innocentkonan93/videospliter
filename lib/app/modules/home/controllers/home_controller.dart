@@ -81,8 +81,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Indicateur si l'application est en arrière-plan
   final isAppInBackground = false.obs;
 
-  /// Bannière publicitaire
-  BannerAd? banner;
+  /// Raccourci vers la bannière globale
+  BannerAd? get banner => adMobService.bannerAd;
 
   /// Nombre de découpages réussis
   final successfulCuts = 0.obs;
@@ -91,7 +91,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxDouble progress = 0.0.obs;
 
   /// Indicateur si la bannière publicitaire est chargée
-  final isBannerLoaded = false.obs;
+  bool get isBannerLoaded => adMobService.isBannerAdLoaded;
   final isVideoLoading = false.obs;
 
   /// Dossier actuellement sélectionné pour les options
@@ -251,14 +251,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     clearAll();
     // Demande de notation après une sauvegarde réussie
     AppService().handleRatingRequestAfterCutting();
-    adMobService.loadInterstitialAd(
-      onAdDismissed: () {
+
+    adMobService.showInterstitialAd(
+      onAdClosed: () {
         update();
       },
-      onAdReady: () {
-        adMobService.showInterstitialAd();
-      },
     );
+
     return true;
   }
 
@@ -433,9 +432,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   /// Charge et affiche la bannière publicitaire
   void loadBannerAd() {
-    banner = adMobService.loadBannerAd();
-    isBannerLoaded.value = banner != null;
-    update();
+    adMobService.loadBannerAd(
+      onAdLoadedCallback: () {
+        update();
+      },
+    );
   }
 
   // ==================== MÉTHODES DE PARTAGE ====================
@@ -539,9 +540,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (Get.isRegistered<RevenueCatService>()) {
       ever(Get.find<RevenueCatService>().isProUser, (isPro) {
         if (isPro) {
-          banner?.dispose();
-          banner = null;
-          isBannerLoaded.value = false;
+          adMobService.disposeBannerAd();
           update();
         }
       });
@@ -552,7 +551,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    banner?.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.onClose();
   }
@@ -571,14 +569,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         final timeAway =
             _pausedTime != null ? now.difference(_pausedTime!).inSeconds : 0;
 
-        // Affiche une publicité si l'utilisateur revient après 30 secondes
+        // Affiche une publicité App Open si l'utilisateur revient après 30 secondes
         if (timeAway > 30 && !_interstitialRecentlyShown.value) {
           _interstitialRecentlyShown.value = true;
 
-          adMobService.loadInterstitialAd(
-            onAdDismissed: () {
-              // Empêche l'affichage répétitif pendant 3 minutes
-              Future.delayed(const Duration(minutes: 3), () {
+          adMobService.showAppOpenAdIfAvailable(
+            onAdClosed: () {
+              // Empêche l'affichage répétitif pendant 1 minute
+              Future.delayed(const Duration(minutes: 1), () {
                 _interstitialRecentlyShown.value = false;
               });
             },

@@ -15,10 +15,10 @@ const String introductionKey = 'introduction_key';
 const String selectedLanguageKey = 'selected_language_key';
 
 // Limites pour les vidéos uploadées
-const double maxVideoSizeMb = 1000.0; // 1 Go (Pro)
+const double maxVideoSizeMb = 1536.0; // 1.5 Go (Pro)
 const double maxVideoDurationSec = 3600.0; // 1 Heure (Pro)
-const double maxVideoSizeMbFree = 7.0; // 100 Mo (Free)
-const double maxVideoDurationSecFree = 600.0; // 10 Minutes (Free)
+const double maxVideoSizeMbFree = 500.0; // 500 Mo (Free)
+const double maxVideoDurationSecFree = 1200.0; // 20 Minutes (Free)
 const double maxVideoSizeMbForCompress = 100.0; // 100 Mo
 
 Future<void> launchUri(Uri parse) async {
@@ -87,6 +87,14 @@ var settingsGroups = [
         'icon': Icons.bug_report,
         'onTap': () {
           Get.to(() => const FeedbacksView());
+        },
+      },
+      {
+        'title': 'terms_of_use',
+        'icon': Icons.description,
+        'onTap': () {
+          final url = 'https://cutitapp.net/terms';
+          launchUri(Uri.parse(url));
         },
       },
       {

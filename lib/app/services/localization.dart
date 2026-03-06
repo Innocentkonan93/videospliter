@@ -80,6 +80,7 @@ class Localization extends Translations {
       'about': 'About',
       'language': 'Language',
       'privacy_policy': 'Privacy policy',
+      'terms_of_use': 'Terms of use',
 
       // How it works
       'welcome_cutit_title': 'Welcome to Cutit!',
@@ -174,7 +175,7 @@ class Localization extends Translations {
       'export_success': 'Export successful',
       // Premium
       'premium_title': 'Unlock Cutit Pro ✨',
-      'premium_subtitle': 'No ads • Videos > 10 min • No size limit',
+      'premium_subtitle': 'No ads • HD export • No size limit',
       'cutit_pro_active': 'Cutit Pro Active',
       'enjoy_pro_features': 'You have full access to all features',
       // Export modal
@@ -274,6 +275,7 @@ class Localization extends Translations {
       'about': 'À propos',
       'language': 'Langue',
       'privacy_policy': 'Confidentialité',
+      'terms_of_use': 'Conditions d\'utilisation',
 
       // How it works
       'welcome_cutit_title': 'Bienvenue sur Cutit !',
@@ -369,7 +371,7 @@ class Localization extends Translations {
       'no_video_to_share': 'Aucune vidéo à partager',
       //
       'premium_title': 'Débloquez Cutit Pro ✨',
-      'premium_subtitle': 'Zéro pub • Vidéos > 10 min • Sans limite',
+      'premium_subtitle': 'Zéro pub • Export HD • Sans limite',
       'cutit_pro_active': 'Cutit Pro Actif',
       'enjoy_pro_features': 'Vous avez accès à toutes les fonctionnalités',
       // Export modal
@@ -468,6 +470,7 @@ class Localization extends Translations {
       'about': 'Acerca de',
       'language': 'Idioma',
       'privacy_policy': 'Política de privacidad',
+      'terms_of_use': 'Condiciones de uso',
 
       // How it works
       'welcome_cutit_title': '¡Bienvenido a Cutit!',
@@ -565,7 +568,7 @@ class Localization extends Translations {
       'no_video_to_share': 'No hay video para compartir',
       //
       'premium_title': 'Desbloquea Cutit Pro ✨',
-      'premium_subtitle': 'Sin anuncios • Videos > 10 min • Sin límite',
+      'premium_subtitle': 'Sin anuncios • Exportación HD • Sin límite',
       'cutit_pro_active': 'Cutit Pro Activo',
       'enjoy_pro_features': 'Tienes acceso a todas las funciones',
       // Export modal
@@ -664,6 +667,7 @@ class Localization extends Translations {
       'about': 'Sobre',
       'language': 'Idioma',
       'privacy_policy': 'Política de privacidade',
+      'terms_of_use': 'Termos de uso',
 
       // How it works
       'welcome_cutit_title': 'Bem-vindo ao Cutit!',
@@ -759,7 +763,7 @@ class Localization extends Translations {
       'no_video_to_share': 'Nenhum vídeo para compartilhar',
       //
       'premium_title': 'Desbloquear Cutit Pro ✨',
-      'premium_subtitle': 'Sem anúncios • Vídeos > 10 min • Sem limite',
+      'premium_subtitle': 'Sem anúncios • Exportação HD • Sem limite',
       'cutit_pro_active': 'Cutit Pro Ativo',
       'enjoy_pro_features': 'Você tem acesso a todas as funcionalidades',
       // Export modal
@@ -852,6 +856,7 @@ class Localization extends Translations {
       'about': 'حول',
       'language': 'اللغة',
       'privacy_policy': 'سياسة الخصوصية',
+      'terms_of_use': 'شروط الاستخدام',
 
       // How it works
       'welcome_cutit_title': 'مرحباً بك في Cutit!',
@@ -943,7 +948,7 @@ class Localization extends Translations {
       'no_video_to_share': 'لا يوجد فيديو للمشاركة',
       //
       'premium_title': 'افتح Cutit Pro ✨',
-      'premium_subtitle': 'بدون إعلانات • مقاطع فيديو > 10 دقائق • بدون حد',
+      'premium_subtitle': 'بدون إعلانات • تصدير HD • بدون حد',
       'cutit_pro_active': 'Cutit Pro نشط',
       'enjoy_pro_features': 'لديك وصول كامل إلى جميع الميزات',
       // Export modal

@@ -17,8 +17,12 @@ class AppService {
   static const _promptDisabledKey = 'app_rating_disabled';
 
   static const int launchThreshold = 5;
+  static const int cutThreshold = 3; // Demander à la 3ème vidéo coupée
   static const Duration minInstallDuration = Duration(days: 7);
   static const Duration promptCooldown = Duration(days: 30);
+  static const Duration shortCooldown = Duration(
+    days: 3,
+  ); // Cooldown si "pas vraiment"
 
   final InAppReview _inAppReview = InAppReview.instance;
 
@@ -87,15 +91,21 @@ class AppService {
   }
 
   /// Tente d'afficher le prompt après un découpage réussi
-  /// Ignore le seuil de lancements et la durée minimale d'installation
-  /// pour permettre un prompt plus rapide après des actions positives
+  /// Demande uniquement après [cutThreshold] découpages
   Future<void> handleRatingRequestAfterCutting() async {
-    await _handleRatingRequest(
-      incrementLaunchCount: true,
-      requireLaunchThreshold: false,
-      requireMinInstallDuration: false,
-      usePreDialog: true,
-    );
+    final prefs = await SharedPreferences.getInstance();
+    int cutCount = prefs.getInt('app_rating_cut_count') ?? 0;
+    cutCount++;
+    await prefs.setInt('app_rating_cut_count', cutCount);
+
+    if (cutCount >= cutThreshold) {
+      await _handleRatingRequest(
+        incrementLaunchCount: true,
+        requireLaunchThreshold: false,
+        requireMinInstallDuration: false,
+        usePreDialog: true,
+      );
+    }
   }
 
   /// Tente d'afficher le prompt après un partage réussi
@@ -165,10 +175,24 @@ class AppService {
       final lastPromptIso = prefs.getString(_lastPromptDateKey);
       final lastPrompt =
           lastPromptIso == null ? null : DateTime.tryParse(lastPromptIso);
+
+      // On utilise 'promptCooldownDate' qui sera soit générée lors du prompt, soit lue
+      final promptCooldownIso = prefs.getString(
+        '${_lastPromptDateKey}_cooldown',
+      );
+      final applicableCooldown =
+          promptCooldownIso != null
+              ? Duration(
+                milliseconds:
+                    int.tryParse(promptCooldownIso) ??
+                    promptCooldown.inMilliseconds,
+              )
+              : promptCooldown;
+
       final cooldownExpired =
           lastPrompt == null
               ? true
-              : now.difference(lastPrompt) >= promptCooldown;
+              : now.difference(lastPrompt) >= applicableCooldown;
 
       // Si toutes les conditions sont réunies, alors on tente d'afficher le prompt.
       if (meetsLaunchThreshold && meetsInstallDuration && cooldownExpired) {
@@ -178,28 +202,39 @@ class AppService {
               onRate: () async {
                 final prompted = await _askForRating();
                 if (prompted) {
-                  // Mettre à jour la date du dernier prompt
+                  // Mettre à jour la date du dernier prompt (cooldown long car on a demandé sur le store)
                   await prefs.setString(
                     _lastPromptDateKey,
                     now.toIso8601String(),
+                  );
+                  await prefs.setString(
+                    '${_lastPromptDateKey}_cooldown',
+                    promptCooldown.inMilliseconds.toString(),
                   );
                 }
               },
               onFeedback: () async {
                 // Rediriger vers la page de feedback
                 Get.to(() => const FeedbacksView());
-                // On met quand même à jour le cooldown pour ne pas redemander tout de suite
+                // Cooldown plus court car on a eu un retour interne, on pourra retenter plus tard
                 await prefs.setString(
                   _lastPromptDateKey,
                   now.toIso8601String(),
                 );
+                await prefs.setString(
+                  '${_lastPromptDateKey}_cooldown',
+                  shortCooldown.inMilliseconds.toString(),
+                );
               },
               onDismiss: () async {
-                // Si l'utilisateur ferme, on retentera plus tard (respect du cooldown ou pas ?)
-                // Pour l'instant on considère ça comme une interaction, on met le cooldown
+                // Si l'utilisateur ferme simplement (la croix), on met le cooldown standard
                 await prefs.setString(
                   _lastPromptDateKey,
                   now.toIso8601String(),
+                );
+                await prefs.setString(
+                  '${_lastPromptDateKey}_cooldown',
+                  promptCooldown.inMilliseconds.toString(),
                 );
               },
             ),
@@ -209,6 +244,10 @@ class AppService {
           if (prompted) {
             // On enregistre la date à laquelle on a affiché le prompt
             await prefs.setString(_lastPromptDateKey, now.toIso8601String());
+            await prefs.setString(
+              '${_lastPromptDateKey}_cooldown',
+              promptCooldown.inMilliseconds.toString(),
+            );
           }
         }
       }

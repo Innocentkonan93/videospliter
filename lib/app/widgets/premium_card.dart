@@ -25,7 +25,7 @@ class PremiumCard extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
               children: [
                 Container(
@@ -100,7 +100,7 @@ class PremiumCard extends StatelessWidget {
             Get.find<RevenueCatService>().presentPaywall();
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
             child: Row(
               children: [
                 Container(

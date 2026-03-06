@@ -257,12 +257,7 @@ class VideoService {
       AnalyticsService.videoShared(segmentCount: videoParts.length);
       // Demande de notation après un partage réussi
       AppService().handleRatingRequestAfterShare();
-      adMobService.loadInterstitialAd(
-        onAdDismissed: () {},
-        onAdReady: () {
-          adMobService.showInterstitialAd();
-        },
-      );
+      adMobService.showInterstitialAd(onAdClosed: () {});
     } catch (e) {
       if (Get.isDialogOpen ?? false) Get.back();
       showSnackBar('${'error_sharing_videos'.tr} $e', isError: true);
@@ -307,7 +302,7 @@ class VideoService {
             quality:
                 exportType
                     ? VideoQuality.HighestQuality
-                    : VideoQuality.LowQuality,
+                    : VideoQuality.MediumQuality,
             deleteOrigin: false,
             includeAudio: true,
           );
@@ -328,12 +323,7 @@ class VideoService {
       // Demande de notation après un export réussi
       AppService().handleRatingRequestAfterShare();
 
-      adMobService.loadInterstitialAd(
-        onAdDismissed: () {},
-        onAdReady: () {
-          adMobService.showInterstitialAd();
-        },
-      );
+      adMobService.showInterstitialAd(onAdClosed: () {});
     } catch (e) {
       Get.back(); // Close loading
       showSnackBar('${'error_saving_videos'.tr} $e', isError: true);
@@ -369,11 +359,8 @@ class VideoService {
   //     // Demande de notation après un export réussi
   //     AppService().handleRatingRequestAfterShare();
 
-  //     adMobService.loadInterstitialAd(
-  //       onAdDismissed: () {},
-  //       onAdReady: () {
-  //         adMobService.showInterstitialAd();
-  //       },
+  //     adMobService.showInterstitialAd(
+  //       onAdClosed: () {},
   //     );
   //   } catch (e) {
   //     Get.back(); // Close loading

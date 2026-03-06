@@ -75,7 +75,8 @@ class PreRatingDialog extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         onDismiss();
-                        Get.back();
+                        Get.back(); // Ferme la popup
+                        onFeedback(); // Déclenche l'action de feedback
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -98,7 +99,8 @@ class PreRatingDialog extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         onDismiss();
-                        onRate();
+                        Get.back(); // Ferme la popup
+                        onRate(); // Ouvre le inAppReview
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),

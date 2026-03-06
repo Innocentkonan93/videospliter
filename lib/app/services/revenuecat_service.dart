@@ -8,6 +8,8 @@ import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:video_spliter/app/widgets/premium_success_view.dart';
 
 class RevenueCatService extends GetxService {
+  static const String _androidApiKey = "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV";
+  static const String _iosApiKey = "appl_NycGQMwdBmSQQHlkJxhLwBKhxWC";
   static const String _apiKey = "test_wkGiQsLnmkFBCIHmnhUtlKhiPEU";
   static const String entitlementId = "Cutit Pro";
   static const String monthlyProduct = "cutit_monthly";
@@ -22,21 +24,28 @@ class RevenueCatService extends GetxService {
       }
 
       PurchasesConfiguration? configuration;
-      if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
+
+      if (kDebugMode) {
         configuration = PurchasesConfiguration(_apiKey);
+      } else {
+        if (Platform.isAndroid) {
+          configuration = PurchasesConfiguration(_androidApiKey);
+        } else if (Platform.isIOS || Platform.isMacOS) {
+          configuration = PurchasesConfiguration(_iosApiKey);
+        }
       }
 
       if (configuration != null) {
         await Purchases.configure(configuration);
-
-        // Initial check
-        await checkSubscriptionStatus();
-
-        // Listen for subscription status changes
-        Purchases.addCustomerInfoUpdateListener((customerInfo) {
-          _updateSubscriptionStatus(customerInfo);
-        });
       }
+
+      // Listen for subscription status changes
+      Purchases.addCustomerInfoUpdateListener((customerInfo) {
+        _updateSubscriptionStatus(customerInfo);
+      });
+
+      // Initial check
+      await checkSubscriptionStatus();
     } catch (e) {
       debugPrint("Error initializing RevenueCat: $e");
     }

@@ -88,7 +88,7 @@ class HomeView extends GetView<HomeController> {
                                   },
                                 ),
                               ),
-                            const Spacer(),
+                            const Spacer(flex: 4),
 
                             Text(
                               "cut_share_save".tr,
@@ -99,7 +99,7 @@ class HomeView extends GetView<HomeController> {
                                 color: AppColors.white,
                               ),
                             ),
-                            const Spacer(),
+                            const Spacer(flex: 1),
                             // Affichage conditionnel selon la vidéo choisie
                             controller.isVideoLoading.value
                                 ? Center(
@@ -128,26 +128,20 @@ class HomeView extends GetView<HomeController> {
                                 )
                                 : controller.selectedVideo.value == null
                                 ? Center(
-                                  child: ElevatedButton.icon(
+                                  child: IconButton(
                                         onPressed: () {
                                           controller.pickVideo();
                                         },
-                                        style: ElevatedButton.styleFrom(
+                                        style: IconButton.styleFrom(
                                           backgroundColor: AppColors.white,
                                           foregroundColor: AppColors.primary,
                                           elevation: 10,
+                                          minimumSize: Size(60, 60),
                                         ),
-                                        label: Text(
-                                          'load_video'.tr,
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                        ),
+                                        tooltip: "Ajouter une vidéo",
                                         icon: const Icon(
-                                          CupertinoIcons.videocam,
+                                          CupertinoIcons.add,
                                           color: AppColors.primary,
-                                          size: 30,
                                         ),
                                       )
                                       .animate(
@@ -158,7 +152,7 @@ class HomeView extends GetView<HomeController> {
                                       )
                                       .scale(
                                         duration: const Duration(
-                                          milliseconds: 1800,
+                                          milliseconds: 1000,
                                         ),
                                         curve: Curves.easeInOut,
                                         begin: const Offset(1.0, 1.0),
@@ -167,7 +161,7 @@ class HomeView extends GetView<HomeController> {
                                       .then()
                                       .scale(
                                         duration: const Duration(
-                                          milliseconds: 1500,
+                                          milliseconds: 700,
                                         ),
                                         curve: Curves.easeInOut,
                                         begin: const Offset(1.1, 1.1),
@@ -229,7 +223,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                   ],
                                 ),
-                            const Spacer(),
+                            const Spacer(flex: 2),
                             SafeArea(
                               child: GestureDetector(
                                 onTap: () {
@@ -271,13 +265,23 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                     const SizedBox(height: 5),
 
-                                    Text(
-                                      "my_cutouts".tr,
-                                      style: theme.textTheme.titleLarge
-                                          ?.copyWith(
-                                            // fontWeight: FontWeight.w800,
-                                            color: AppColors.white,
-                                          ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.folder,
+                                          color: AppColors.white,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "my_cutouts".tr,
+                                          style: theme.textTheme.titleLarge
+                                              ?.copyWith(
+                                                // fontWeight: FontWeight.w800,
+                                                color: AppColors.white,
+                                              ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
