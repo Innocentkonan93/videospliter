@@ -37,7 +37,7 @@ class ThankYouView extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
               ),
-              child: const Text("Ok"),
+              child: Text("ok".tr),
             ),
           ],
         ),

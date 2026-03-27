@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
@@ -10,8 +11,11 @@ class PremiumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.theme;
     return Obx(() {
-      if (Get.isRegistered<RevenueCatService>() &&
-          Get.find<RevenueCatService>().isProUser.value) {
+      if (!FeatureManager.isProVersionAvailable) {
+        return const SizedBox.shrink();
+      }
+
+      if (FeatureManager.isProUser) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: ShapeDecoration(

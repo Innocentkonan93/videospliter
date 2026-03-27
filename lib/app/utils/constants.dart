@@ -25,11 +25,11 @@ Future<void> launchUri(Uri parse) async {
   await launchUrl(parse);
 }
 
-final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60];
+final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60, 90];
 
 var settingsGroups = [
   {
-    'groupName': 'purchases'.tr,
+    'groupName': 'purchases',
     'items': [
       {
         'title': 'restore_purchases',
@@ -42,7 +42,7 @@ var settingsGroups = [
     ],
   },
   {
-    'groupName': 'general'.tr,
+    'groupName': 'general',
     'items': [
       {
         'title': 'language',
@@ -66,7 +66,7 @@ var settingsGroups = [
     ],
   },
   {
-    'groupName': 'support_and_about'.tr,
+    'groupName': 'support_and_about',
     'items': [
       {
         'title': 'how_it_works',
@@ -145,4 +145,31 @@ var languages = [
   // {'code': 'ru', 'name': 'Русский', 'flag': '🇷🇺'},
   // {'code': 'tr', 'name': 'Türkçe', 'flag': '🇹🇷'},
   // {'code': 'zh', 'name': '中文', 'flag': '🇨🇳'},
+];
+
+var socialMedia = <Map<String, dynamic>>[
+  {
+    'name': 'Facebook',
+    'icon': 'hugeicons--facebook-01.svg',
+    'duration': 60.0,
+    'color': const Color(0xFF1877F2),
+  },
+  {
+    'name': 'Instagram',
+    'icon': 'hugeicons--instagram.svg',
+    'duration': 60.0,
+    'color': const Color(0xFFE1306C),
+  },
+  {
+    'name': 'Tiktok',
+    'icon': 'hugeicons--tiktok.svg',
+    'duration': 15.0,
+    'color': const Color(0xFF000000),
+  },
+  {
+    'name': 'Whatsapp',
+    'icon': 'hugeicons--whatsapp.svg',
+    'duration': 60.0,
+    'color': const Color(0xFF25D366),
+  },
 ];

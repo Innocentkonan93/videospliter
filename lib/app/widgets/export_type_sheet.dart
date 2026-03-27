@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 
 class ExportTypeSheet extends StatefulWidget {
@@ -17,9 +18,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
   @override
   void initState() {
     super.initState();
-    final isUserPro =
-        Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value;
+    final isUserPro = FeatureManager.isProUser;
 
     // Default to Pro if they are a pro user, otherwise Free
     isProSelected = isUserPro;
@@ -27,8 +26,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
 
   void _onExportPressed() {
     if (isProSelected) {
-      final revenueCatService = Get.find<RevenueCatService>();
-      if (revenueCatService.isProUser.value) {
+      if (FeatureManager.isProUser) {
         Get.back(result: true); // true = pro
       } else {
         // Option HD pour un utilisateur gratuit : proposer de regarder une pub
@@ -111,9 +109,8 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final isUserPro =
-        Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value;
+    final isUserPro = FeatureManager.isProUser;
+    final isProAvailable = FeatureManager.isProVersionAvailable;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -161,18 +158,20 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                   onTap: () => setState(() => isProSelected = false),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildExportOption(
-                  title: 'HD',
-                  isSelected: isProSelected,
-                  color: AppColors.orange,
-                  isProBadge: true,
-                  isProUser: isUserPro,
-                  onTap: () => setState(() => isProSelected = true),
+              if (isProAvailable) ...[
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildExportOption(
+                    title: 'HD',
+                    isSelected: isProSelected,
+                    color: AppColors.orange,
+                    isProBadge: true,
+                    isProUser: isUserPro,
+                    onTap: () => setState(() => isProSelected = true),
+                  ),
                 ),
-              ),
-              Spacer(),
+              ],
+              const Spacer(),
             ],
           ),
 

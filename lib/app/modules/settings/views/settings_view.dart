@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 import 'package:video_spliter/app/utils/constants.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/widgets/premium_card.dart';
 
 class SettingsView extends GetWidget<SettingsController> {
@@ -33,16 +34,24 @@ class SettingsView extends GetWidget<SettingsController> {
                     // Premium Card
                     PremiumCard(),
                     // Settings List
-                    ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: settingsGroups.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, groupIndex) {
-                        final group = settingsGroups[groupIndex];
-                        final groupName = group['groupName'] as String;
-                        final items =
-                            group['items'] as List<Map<String, dynamic>>;
+                    Obx(() {
+                      final filteredGroups = settingsGroups.where((group) {
+                        if (group['groupName'] == 'purchases') {
+                          return FeatureManager.isProVersionAvailable;
+                        }
+                        return true;
+                      }).toList();
+
+                      return ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: filteredGroups.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, groupIndex) {
+                          final group = filteredGroups[groupIndex];
+                          final groupKey = group['groupName'] as String;
+                          final items =
+                              group['items'] as List<Map<String, dynamic>>;
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +62,7 @@ class SettingsView extends GetWidget<SettingsController> {
                                 vertical: 4.0,
                               ),
                               child: Text(
-                                groupName,
+                                groupKey.tr,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primary,
@@ -120,7 +129,8 @@ class SettingsView extends GetWidget<SettingsController> {
                           ],
                         );
                       },
-                    ),
+                    );
+                  }),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.center,
                     //   children: [

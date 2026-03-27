@@ -17,16 +17,25 @@ import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
 
+import 'package:video_spliter/app/services/config_service.dart';
 import 'app/routes/app_pages.dart';
 
 bool isIntroductionViewed = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await LocalNotificationService().initializeNotification();
-  await AdMobService().init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await CacheHelper.init();
+
+  // Initialiser le service de configuration (Feature Flags)
+  // Requis pour savoir si on doit charger les pubs ou les fonctions pro
+  await Get.putAsync(() => ConfigService().init());
+
+  // Initialize RevenueCat service for subscriptions
+  await Get.putAsync(() => RevenueCatService().init());
+
+  await LocalNotificationService().initializeNotification();
+  await AdMobService().init();
 
   // Charger la langue sauvegardée depuis le cache
   try {
@@ -46,9 +55,6 @@ void main() async {
 
   // Initialiser le service de partage
   Get.put(SharingService());
-
-  // Initialize RevenueCat service for subscriptions
-  await Get.putAsync(() => RevenueCatService().init());
 
   final config = ClarityConfig(
     projectId: "s204qm61cv",

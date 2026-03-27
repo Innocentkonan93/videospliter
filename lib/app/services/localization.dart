@@ -146,10 +146,14 @@ class Localization extends Translations {
       'delete': 'Delete',
       'ok': 'Ok',
       'error_loading_video': '❌ Error loading video, please try again',
+      'import_video': 'Importing video...',
 
       // Time slicing
       'define_duration_excerpts': 'Define the duration of each video excerpt',
       'duration_defined': 'Duration defined: ',
+      'social_preset': 'Social Preset',
+      'custom': 'Custom',
+      'choose_format': 'Choose a format',
       'cut': 'Cut',
 
       // Notifications
@@ -279,7 +283,7 @@ class Localization extends Translations {
       'how_it_works': 'Comment ça marche ?',
       'contact_us': 'Contactez-nous',
       'report_issue': 'Signaler un problème',
-      'rate_app': 'Note sur l\'application',
+      'rate_app': 'Noter l\'application',
       'share_app': 'Partager l\'application',
       'about': 'À propos',
       'language': 'Langue',
@@ -351,10 +355,14 @@ class Localization extends Translations {
       'delete': 'Supprimer',
       'ok': 'Ok',
       'error_loading_video': '❌ Erreur lors du chargement des dossiers',
+      'import_video': 'Importation de la vidéo...',
 
       // Time slicing
       'define_duration_excerpts': 'Définir la durée de chaque extrait vidéo',
       'duration_defined': 'Durée définie : ',
+      'social_preset': 'Réseau social',
+      'custom': 'Personnalisé',
+      'choose_format': 'Choisir un format',
       'cut': 'Découper',
 
       // Notifications
@@ -557,11 +565,15 @@ class Localization extends Translations {
       'ok': 'Ok',
       'error_loading_video':
           '❌ Error al cargar el video, por favor inténtalo de nuevo',
+      'import_video': 'Importando video...',
 
       // Time slicing
       'define_duration_excerpts':
           'Define la duración de cada extracto de video',
       'duration_defined': 'Duración definida: ',
+      'social_preset': 'Red social',
+      'custom': 'Personalizado',
+      'choose_format': 'Elegir un formato',
       'cut': 'Cortar',
 
       // Notifications
@@ -763,10 +775,14 @@ class Localization extends Translations {
       'ok': 'Ok',
       'error_loading_video':
           '❌ Erro ao carregar o vídeo, por favor tente novamente',
+      'import_video': 'Importando vídeo...',
 
       // Time slicing
       'define_duration_excerpts': 'Defina a duração de cada trecho de vídeo',
       'duration_defined': 'Duração definida: ',
+      'social_preset': 'Rede social',
+      'custom': 'Personalizado',
+      'choose_format': 'Escolher um formato',
       'cut': 'Cortar',
 
       // Notifications
@@ -958,10 +974,12 @@ class Localization extends Translations {
       'delete': 'حذف',
       'ok': 'موافق',
       'error_loading_video': '❌ خطأ في تحميل الفيديو، يرجى المحاولة مرة أخرى',
+      'import_video': 'جاري استيراد الفيديو...',
 
       // Time slicing
       'define_duration_excerpts': 'حدد مدة كل مقتطف فيديو',
       'duration_defined': 'المدة المحددة: ',
+      'social_preset': 'شبكة اجتماعية',
       'cut': 'قص',
 
       // Notifications

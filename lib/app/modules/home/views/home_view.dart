@@ -119,7 +119,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                       ),
                                       Text(
-                                        "Chargement de la vidéo...",
+                                        "import_video".tr,
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(color: AppColors.white),
                                       ),

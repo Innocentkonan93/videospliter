@@ -25,6 +25,7 @@ import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
 import 'package:video_spliter/app/widgets/deletion_dialog.dart';
 import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
@@ -97,6 +98,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Dossier actuellement sélectionné pour les options
   final selectedFolder = "".obs;
 
+  /// Custom
+  final isCustom = true.obs;
+
+
+  /// select Social
+  final selectedSocial = "".obs;
+
   // ==================== MÉTHODES DE SÉLECTION DE FICHIERS ====================
 
   /// Permet à l'utilisateur de sélectionner une vidéo depuis le système de fichiers
@@ -115,9 +123,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
         // Vérification de la taille
         final sizeMb = videoFile.lengthSync() / (1024 * 1024);
-        final isPro =
-            Get.isRegistered<RevenueCatService>() &&
-            Get.find<RevenueCatService>().isProUser.value;
+        final isPro = FeatureManager.isProUser;
         final maxAllowedSize = isPro ? maxVideoSizeMb : maxVideoSizeMbFree;
 
         if (!VideoLogic.isFileSizeValid(sizeMb, maxAllowedSize)) {
@@ -147,7 +153,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
           // Vérification de la durée
           final maxAllowedDuration =
-              isPro ? maxVideoDurationSec : maxVideoDurationSecFree;
+              FeatureManager.isProUser
+                  ? maxVideoDurationSec
+                  : maxVideoDurationSecFree;
 
           if (!VideoLogic.isDurationValid(durationSec, maxAllowedDuration)) {
             if (!isPro && durationSec <= maxVideoDurationSec) {
@@ -223,9 +231,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (selectedVideo.value == null) return null;
     videoParts.clear();
 
-    final isPro =
-        Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value;
+    final isPro = FeatureManager.isProUser;
 
     final parts = await VideoService.splitBySSAsync(
       videoFile: selectedVideo.value!,
@@ -531,7 +537,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     successfulCuts.value = CacheHelper.getInteger(key: "successfulCuts");
 
     if (Get.isRegistered<RevenueCatService>()) {
-      ever(Get.find<RevenueCatService>().isProUser, (isPro) {
+      ever(FeatureManager.isProUserRx, (isPro) {
         if (isPro) {
           adMobService.disposeBannerAd();
           update();

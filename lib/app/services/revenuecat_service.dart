@@ -10,7 +10,8 @@ import 'package:video_spliter/app/widgets/premium_success_view.dart';
 class RevenueCatService extends GetxService {
   static const String _androidApiKey = "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV";
   static const String _iosApiKey = "appl_NycGQMwdBmSQQHlkJxhLwBKhxWC";
-  static const String _apiKey = "test_wkGiQsLnmkFBCIHmnhUtlKhiPEU";
+  static const String _sandboxApiKey = "test_wkGiQsLnmkFBCIHmnhUtlKhiPEU";
+  static const String _apiKey = "sk_coxTyvcPfTLMoOpBnrxQtVYRmpydO";
   static const String entitlementId = "Cutit Pro";
   static const String monthlyProduct = "cutit_monthly";
   static const String yearlyProduct = "cutit_yearly";

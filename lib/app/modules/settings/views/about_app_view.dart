@@ -13,9 +13,11 @@ class AboutAppView extends GetWidget<SettingsController> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(title: Text("about".tr)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(aboutApp.tr, style: theme.textTheme.titleMedium),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(aboutApp.tr, style: theme.textTheme.titleMedium),
+        ),
       ),
       bottomNavigationBar: SizedBox(
         height: 50,

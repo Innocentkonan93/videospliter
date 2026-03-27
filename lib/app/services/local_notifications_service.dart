@@ -50,7 +50,7 @@ class LocalNotificationService {
             actions: [
               CupertinoDialogAction(
                 isDefaultAction: true,
-                child: const Text('Ok'),
+                child: Text('ok'.tr),
                 onPressed: () async {
                   Navigator.of(context, rootNavigator: true).pop();
                 },

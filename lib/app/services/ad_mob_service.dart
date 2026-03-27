@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:get/get.dart';
-import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 
 class AdMobService {
   static final AdMobService _instance = AdMobService._internal();
@@ -108,8 +107,7 @@ class AdMobService {
 
   /// Bannière (Chargée une seule fois et gardée en mémoire)
   void loadBannerAd({Function()? onAdLoadedCallback}) {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       return;
     }
 
@@ -149,8 +147,7 @@ class AdMobService {
 
   /// Interstitiel (Préchargement en arrière-plan)
   void _preloadInterstitialAd() {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       return;
     }
 
@@ -195,8 +192,7 @@ class AdMobService {
 
   /// Appelé par le reste de l'app pour afficher la pub
   void showInterstitialAd({Function()? onAdClosed}) {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       if (onAdClosed != null) onAdClosed();
       return;
     }
@@ -240,8 +236,7 @@ class AdMobService {
 
   /// Rewarded Ad (Préchargement en arrière-plan)
   void _preloadRewardedAd() {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       return;
     }
 
@@ -287,8 +282,7 @@ class AdMobService {
     Function()? onAdClosed,
     Function()? onAdFailedToLoad,
   }) {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       onEarnedReward();
       if (onAdClosed != null) onAdClosed();
       return;
@@ -337,8 +331,7 @@ class AdMobService {
 
   /// App Open Ad (Préchargement)
   void _preloadAppOpenAd() {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       return;
     }
 
@@ -368,8 +361,7 @@ class AdMobService {
 
   /// Appelé lors de la reprise de l'application (Foreground)
   void showAppOpenAdIfAvailable({Function()? onAdClosed}) {
-    if (Get.isRegistered<RevenueCatService>() &&
-        Get.find<RevenueCatService>().isProUser.value) {
+    if (FeatureManager.isProUser) {
       if (onAdClosed != null) onAdClosed();
       return;
     }
