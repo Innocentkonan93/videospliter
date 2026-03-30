@@ -1234,9 +1234,9 @@ PODS:
     - SDWebImage
     - SwiftyGif
   - ffmpeg_kit_flutter_new (1.0.0):
-    - ffmpeg_kit_flutter_new/full-gpl-lts (= 1.0.0)
+    - ffmpeg_kit_flutter_new/full-gpl (= 1.0.0)
     - Flutter
-  - ffmpeg_kit_flutter_new/full-gpl-lts (1.0.0):
+  - ffmpeg_kit_flutter_new/full-gpl (1.0.0):
     - Flutter
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
@@ -1745,7 +1745,7 @@ SPEC CHECKSUMS:
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  ffmpeg_kit_flutter_new: 1be4ac1d0c080cd1d9a08c1b19ddadccd9f378e8
+  ffmpeg_kit_flutter_new: 57e1119b327bb2e13a091e0d73576739fb9f22f5
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
   firebase_analytics: bf93e20703c95030404d6ddbb1adf05bf5c3885b
