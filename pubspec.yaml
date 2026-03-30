@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A tool for video splitting"
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.0.6+33
+version: 1.1.0+34
 
 environment:
   sdk: ^3.7.0
@@ -13,7 +13,8 @@ dependencies:
   confetti: ^0.8.0
   cupertino_icons: ^1.0.8
   device_info_plus: ^11.5.0
-  ffmpeg_kit_16kb: ^1.0.4
+  # ffmpeg_kit_16kb: ^1.0.4
+  ffmpeg_kit_flutter_new: ^4.1.0
   file_picker: ^10.1.9
   firebase_analytics: ^11.4.6
   firebase_core: ^3.13.1
