@@ -8,6 +8,7 @@ import 'package:video_spliter/app/modules/settings/views/how_it_work_view.dart';
 import 'package:video_spliter/app/modules/settings/views/contact_us_view.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/widgets/language_selection_sheet.dart';
 
 const String appName = 'Cutit';
@@ -59,11 +60,22 @@ var settingsGroups = [
         },
       },
       {
+        'title': 'update_check',
+        'icon': HugeIcons.strokeRoundedDownload04,
+        'onTap': () {
+          Get.find<UpdateService>().checkForUpdates(showNoUpdateDialog: true);
+        },
+      },
+      {
         'title': 'rate_app',
         'icon': HugeIcons.strokeRoundedStar,
         'onTap': AppService.askForRating,
       },
-      {'title': 'share_app', 'icon': HugeIcons.strokeRoundedShare01, 'onTap': AppService.shareApp},
+      {
+        'title': 'share_app',
+        'icon': HugeIcons.strokeRoundedShare01,
+        'onTap': AppService.shareApp,
+      },
     ],
   },
   {

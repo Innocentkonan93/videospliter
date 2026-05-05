@@ -144,15 +144,15 @@ class SettingsView extends GetWidget<SettingsController> {
                         },
                       );
                     }),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       "${'version'.tr} ${controller.version.value}",
-                    //       style: theme.textTheme.labelMedium,
-                    //     ),
-                    //   ],
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Obx(() => Text(
+                            "${'version'.tr} ${controller.version.value}",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.grey,
+                            ),
+                          )),
+                    ),
                   ],
                 ),
               );

@@ -207,11 +207,18 @@ class Localization extends Translations {
       'update_mandatory_title': 'Update required',
       'update_optional_title': 'Update available',
       'update_button': 'Update now',
+      'update_check': 'Update check',
+      'app_up_to_date': 'Your app is up to date!',
+      'update_check_error': 'Failed to check for updates. Please try again.',
     },
     'fr': {
       // App name and general
       'app_name': 'Cutit',
       'folder_name': 'Cutit',
+      'update_check': 'Mise à jour',
+      'app_up_to_date': 'Votre application est à jour !',
+      'update_check_error':
+          'Impossible de vérifier les mises à jour. Veuillez réessayer.',
 
       // Introduction screens
       'skip': 'Passer',

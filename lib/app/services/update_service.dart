@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:versionarte/versionarte.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/widgets/app_update_dialog.dart';
 
 class UpdateService extends GetxService with WidgetsBindingObserver {
   /// Instance statique pour un accès facile
@@ -34,8 +35,41 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
     }
   }
 
+  static Future<bool> get isUpdateAvailable async {
+    try {
+      final result = await Versionarte.check(
+        versionarteProvider: RemoteConfigVersionarteProvider(
+          keyName: 'app_version',
+        ),
+      );
+
+      return result.status == VersionarteStatus.outdated ||
+          result.status == VersionarteStatus.forcedUpdate ||
+          result.status == VersionarteStatus.inactive;
+    } catch (e) {
+      debugPrint('Error checking for updates: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> get isForceUpdateAvailable async {
+    try {
+      final result = await Versionarte.check(
+        versionarteProvider: RemoteConfigVersionarteProvider(
+          keyName: 'app_version',
+        ),
+      );
+
+      return result.status == VersionarteStatus.outdated ||
+          result.status == VersionarteStatus.inactive;
+    } catch (e) {
+      debugPrint('Error checking for updates: $e');
+      return false;
+    }
+  }
+
   /// Vérifie si une mise à jour est nécessaire
-  Future<void> checkForUpdates() async {
+  Future<void> checkForUpdates({bool showNoUpdateDialog = false}) async {
     if (_isDialogShowing) return;
 
     try {
@@ -57,9 +91,30 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
           Get.context!,
           isMandatory,
         );
+      } else if (showNoUpdateDialog) {
+        Get.snackbar(
+          'update_check'.tr,
+          'app_up_to_date'.tr,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.primary,
+          colorText: AppColors.white,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 16,
+        );
       }
     } catch (e) {
       debugPrint('Error checking for updates: $e');
+      if (showNoUpdateDialog) {
+        Get.snackbar(
+          'error'.tr,
+          'update_check_error'.tr,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 16,
+        );
+      }
     }
   }
 
@@ -70,7 +125,6 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
     bool isMandatory,
   ) async {
     _isDialogShowing = true;
-    final theme = context.theme;
 
     await showDialog(
       context: context,
@@ -78,116 +132,9 @@ class UpdateService extends GetxService with WidgetsBindingObserver {
       builder: (context) {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-          child: Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  if (!isMandatory)
-                    Positioned(
-                      right: -8,
-                      top: -8,
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close, color: AppColors.grey),
-                      ),
-                    ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.rocket_launch_rounded,
-                          color: AppColors.primary,
-                          size: 40,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        isMandatory
-                            ? 'update_mandatory_title'.tr
-                            : 'update_optional_title'.tr,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        message ?? "",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.black.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 32),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          onPressed: () {
-                            Versionarte.launchDownloadUrl({
-                              TargetPlatform.android:
-                                  "https://play.google.com/store/apps/details?id=com.meetsum.cutIt",
-                              TargetPlatform.iOS:
-                                  "https://apps.apple.com/fr/app/cutit-couper-diviser-vidéo/id6747193487",
-                            });
-                          },
-                          child: Text(
-                            'update_button'.tr,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (!isMandatory) ...[
-                        const SizedBox(height: 12),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text(
-                            'later'.tr,
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: AppColors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          child: AppUpdateDialog(
+            message: message ?? "",
+            isMandatory: isMandatory,
           ),
         );
       },
