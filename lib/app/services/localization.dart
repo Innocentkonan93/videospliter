@@ -204,6 +204,9 @@ class Localization extends Translations {
       'unlock': 'Unlock',
       'error': 'Error',
       'ad_load_error': 'Unable to load the video ad. Please try again later.',
+      'update_mandatory_title': 'Update required',
+      'update_optional_title': 'Update available',
+      'update_button': 'Update now',
     },
     'fr': {
       // App name and general
@@ -414,6 +417,9 @@ class Localization extends Translations {
       'error': 'Erreur',
       'ad_load_error':
           'Impossible de charger la vidéo publicitaire. Veuillez réessayer plus tard.',
+      'update_mandatory_title': 'Mise à jour obligatoire',
+      'update_optional_title': 'Mise à jour disponible',
+      'update_button': 'Mettre à jour maintenant',
     },
     'es': {
       // App name and general

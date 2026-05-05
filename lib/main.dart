@@ -14,6 +14,7 @@ import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/localization.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
 
@@ -33,6 +34,9 @@ void main() async {
 
   // Initialize RevenueCat service for subscriptions
   await Get.putAsync(() => RevenueCatService().init());
+
+  // Initialize Update service
+  await Get.putAsync(() => UpdateService().init());
 
   await LocalNotificationService().initializeNotification();
   await AdMobService().init();
@@ -55,7 +59,6 @@ void main() async {
 
   // Initialiser le service de partage
   Get.put(SharingService());
-
   final config = ClarityConfig(
     projectId: "s204qm61cv",
     logLevel: LogLevel.None,
@@ -76,6 +79,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      UpdateService.to.checkForUpdates();
       AppService().handleRatingRequestOnLaunch();
     });
     setState(() {});
