@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
@@ -107,7 +107,11 @@ class FolderItem extends GetWidget<HomeController> {
                                 onTap: () async {
                                   controller.showFolderOptions(folderName);
                                 },
-                                child: Icon(CupertinoIcons.ellipsis_circle),
+                                child: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedMoreHorizontalCircle01,
+                                  color: AppColors.black,
+                                  size: 20,
+                                ),
                               ),
                             ],
                           ),

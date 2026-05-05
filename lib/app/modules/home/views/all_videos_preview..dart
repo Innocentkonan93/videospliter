@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/video_player_view.dart';
 import 'package:video_spliter/app/services/video_service.dart';
@@ -134,8 +135,8 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                                 color: Colors.white.withValues(alpha: 0.1),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.close,
+                              child: const HugeIcon(
+                                icon: HugeIcons.strokeRoundedCancel01,
                                 color: Colors.white,
                                 size: 20,
                               ),
@@ -180,7 +181,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildSideActionButton(
-                  icon: Icons.share_rounded,
+                  icon: HugeIcons.strokeRoundedShare01,
                   label: 'share'.tr,
                   isPrimary: false,
                   onTap: () {
@@ -189,7 +190,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                 ),
                 const SizedBox(height: 16),
                 _buildSideActionButton(
-                  icon: Icons.save_alt_rounded,
+                  icon: HugeIcons.strokeRoundedDownload01,
                   label: 'export'.tr,
                   isPrimary: true,
                   onTap: () {
@@ -205,7 +206,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
   }
 
   Widget _buildSideActionButton({
-    required IconData icon,
+    required List<List<dynamic>> icon,
     required String label,
     required VoidCallback onTap,
     bool isPrimary = false,
@@ -231,7 +232,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                 ),
               ],
             ),
-            child: Icon(icon, color: Colors.white, size: 28),
+            child: HugeIcon(icon: icon, color: Colors.white, size: 28),
           ),
           const SizedBox(height: 4),
           Text(

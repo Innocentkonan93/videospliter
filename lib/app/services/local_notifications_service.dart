@@ -30,7 +30,7 @@ class LocalNotificationService {
       iOS: iosInitializationSettings,
     );
 
-    _localNotificationService.initialize(settings);
+    _localNotificationService.initialize(settings: settings);
   }
 
   void onDidReceiveLocalNotification(
@@ -96,7 +96,12 @@ class LocalNotificationService {
     required String body,
   }) async {
     final details = await _notificationDetails();
-    await _localNotificationService.show(id, title, body, details);
+    await _localNotificationService.show(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: details,
+    );
   }
 
   //? [SHOW NOTIFICATION WITH PAYLOAD]
@@ -109,10 +114,10 @@ class LocalNotificationService {
   }) async {
     final details = await _notificationDetails();
     await _localNotificationService.show(
-      id,
-      title,
-      body,
-      details,
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: details,
       payload: payload,
     );
   }

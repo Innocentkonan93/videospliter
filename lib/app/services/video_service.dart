@@ -261,7 +261,7 @@ class VideoService {
     } catch (e) {
       if (Get.isDialogOpen ?? false) Get.back();
       showSnackBar('${'error_sharing_videos'.tr} $e', isError: true);
-      print(e);
+      // print(e);
     }
   }
 

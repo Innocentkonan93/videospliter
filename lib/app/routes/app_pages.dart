@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:video_spliter/app/modules/introduction/introduction_middleware.dart';
 
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
@@ -24,6 +25,7 @@ class AppPages {
       name: _Paths.INTRODUCTION,
       page: () => const IntroductionView(),
       binding: IntroductionBinding(),
+      middlewares: [IntroductionMiddleware()],
     ),
     GetPage(
       name: _Paths.SETTINGS,

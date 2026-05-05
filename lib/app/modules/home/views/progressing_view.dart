@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
@@ -172,8 +173,8 @@ class _ProcessingViewState extends State<ProcessingView> {
                       circularStrokeCap: CircularStrokeCap.round,
                       center:
                           controller.progress.value == 1.0
-                              ? Icon(
-                                Icons.check_rounded,
+                              ? const HugeIcon(
+                                icon: HugeIcons.strokeRoundedCheckmarkCircle01,
                                 color: AppColors.green,
                                 size: 80,
                               )

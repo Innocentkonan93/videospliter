@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 
@@ -27,7 +27,11 @@ class FolderOptions extends GetWidget<HomeController> {
                       onDone();
                       controller.update();
                     },
-                    icon: Icon(CupertinoIcons.pencil),
+                    icon: const HugeIcon(
+                      icon: HugeIcons.strokeRoundedPencilEdit01,
+                      color: AppColors.white,
+                      size: 20,
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white,
@@ -44,7 +48,11 @@ class FolderOptions extends GetWidget<HomeController> {
                       onDone();
                       controller.update();
                     },
-                    icon: Icon(CupertinoIcons.trash),
+                    icon: const HugeIcon(
+                      icon: HugeIcons.strokeRoundedDelete01,
+                      color: AppColors.white,
+                      size: 20,
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
                       foregroundColor: AppColors.white,

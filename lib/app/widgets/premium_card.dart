@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/services/feature_manager.dart';
@@ -38,8 +39,8 @@ class PremiumCard extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.workspace_premium_rounded,
+                  child: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedChampion,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -69,8 +70,8 @@ class PremiumCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Icon(
-                  Icons.check_circle_rounded,
+                const HugeIcon(
+                  icon: HugeIcons.strokeRoundedCheckmarkCircle01,
                   color: Colors.white,
                   size: 24,
                 ),
@@ -113,8 +114,8 @@ class PremiumCard extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.star_rounded,
+                  child: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedStar,
                     color: Colors.white,
                     size: 28,
                   ),
@@ -151,8 +152,8 @@ class PremiumCard extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
+                  child: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
                     color: Colors.white,
                     size: 16,
                   ),

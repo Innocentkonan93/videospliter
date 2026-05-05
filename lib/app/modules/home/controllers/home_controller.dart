@@ -115,7 +115,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       selectedFolder.value = "";
       await requestPermissions();
 
-      final result = await FilePicker.platform.pickFiles(type: FileType.video);
+      final result = await FilePicker.pickFiles(type: FileType.video);
 
       if (result != null && result.files.single.path != null) {
         final videoFile = File(result.files.single.path!);
@@ -128,7 +128,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (!VideoLogic.isFileSizeValid(sizeMb, maxAllowedSize)) {
           if (!isPro && sizeMb <= maxVideoSizeMb) {
             // Dans ce cas, l'utilisateur a dépassé la limite gratuite, mais la vidéo est valide en Pro
-            Get.find<RevenueCatService>().presentPaywall();
+            if (FeatureManager.isProVersionAvailable) {
+              Get.find<RevenueCatService>().presentPaywall();
+            } else {
+              showSnackBar(
+                "La vidéo est trop lourde. Essayez avec une vidéo !",
+                isError: true,
+              );
+            }
           } else {
             showSnackBar(
               "La vidéo est trop lourde. Essayez avec une vidéo !",

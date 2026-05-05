@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/introduction/views/starting_view.dart';
 import 'package:video_spliter/app/utils/constants.dart';
@@ -17,9 +17,6 @@ class IntroductionView extends GetWidget<IntroductionController> {
     final height = size.height;
     return GetBuilder<IntroductionController>(
       builder: (controller) {
-        if (controller.isLoading.value) {
-          return StartingView();
-        }
         return Scaffold(
           body: Container(
             decoration: BoxDecoration(
@@ -193,8 +190,8 @@ class IntroductionView extends GetWidget<IntroductionController> {
                     },
                     shape: CircleBorder(),
                     backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.arrow_right_alt_rounded,
+                    child: const HugeIcon(
+                      icon: HugeIcons.strokeRoundedArrowRight01,
                       color: AppColors.black,
                     ),
                   )

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 
@@ -19,7 +19,7 @@ class DeletionDialog extends GetView<HomeController> {
           CircleAvatar(
             radius: 20,
             backgroundColor: AppColors.red,
-            child: Icon(CupertinoIcons.trash, color: AppColors.white),
+            child: const HugeIcon(icon: HugeIcons.strokeRoundedDelete01, color: AppColors.white),
           ),
           SizedBox(height: 10),
           Text(

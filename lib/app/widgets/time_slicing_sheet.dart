@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 
@@ -63,28 +63,30 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                   color:
                                       controller.isCustom.value
                                           ? AppColors.primary
-                                          : AppColors.grey.withValues(
-                                            alpha: .6,
-                                          ),
+                                          : const Color.fromARGB(
+                                            255,
+                                            219,
+                                            219,
+                                            219,
+                                          ).withValues(alpha: .26),
                                   shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color:
-                                        controller.isCustom.value
-                                            ? AppColors.orange
-                                            : Colors.transparent,
-                                    width: 2,
-                                  ),
+                                  // border: Border.all(
+                                  //   color:
+                                  //       controller.isCustom.value
+                                  //           ? AppColors.orange
+                                  //           : Colors.transparent,
+                                  //   width: 2,
+                                  // ),
                                 ),
-                                child: SvgPicture.asset(
-                                  'assets/icons/hugeicons--abacus.svg',
-                                  width: 35,
-                                  height: 35,
-                                  colorFilter: ColorFilter.mode(
-                                    controller.isCustom.value
-                                        ? AppColors.white
-                                        : AppColors.white.withValues(alpha: .7),
-                                    BlendMode.srcIn,
-                                  ),
+                                child: HugeIcon(
+                                  icon: HugeIcons.strokeRoundedAbacus,
+                                  size: 35,
+                                  color:
+                                      controller.isCustom.value
+                                          ? AppColors.white
+                                          : AppColors.black.withValues(
+                                            alpha: .7,
+                                          ),
                                 ),
                               ),
                             ),
@@ -125,32 +127,32 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                         controller.selectedSocial.value ==
                                                 e['name']
                                             ? e['color']
-                                            : AppColors.grey.withValues(
-                                              alpha: .6,
-                                            ),
+                                            : const Color.fromARGB(
+                                              255,
+                                              219,
+                                              219,
+                                              219,
+                                            ).withValues(alpha: .26),
                                     shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color:
-                                          controller.selectedSocial.value ==
-                                                  e['name']
-                                              ? AppColors.orange
-                                              : Colors.transparent,
-                                      width: 2,
-                                    ),
+                                    // border: Border.all(
+                                    //   color:
+                                    //       controller.selectedSocial.value ==
+                                    //               e['name']
+                                    //           ? AppColors.orange
+                                    //           : Colors.transparent,
+                                    //   width: 2,
+                                    // ),
                                   ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/${e['icon']}',
-                                    width: 35,
-                                    height: 35,
-                                    colorFilter: ColorFilter.mode(
-                                      controller.selectedSocial.value ==
-                                              e['name']
-                                          ? AppColors.white
-                                          : AppColors.white.withValues(
-                                            alpha: .7,
-                                          ),
-                                      BlendMode.srcIn,
-                                    ),
+                                  child: HugeIcon(
+                                    icon: e['icon'],
+                                    size: 35,
+                                    color:
+                                        controller.selectedSocial.value ==
+                                                e['name']
+                                            ? AppColors.white
+                                            : AppColors.black.withValues(
+                                              alpha: .7,
+                                            ),
                                   ),
                                 ),
                               ),
@@ -196,6 +198,10 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                             ),
                                             child: ChoiceChip(
                                               label: Text("${duration}s"),
+                                              side: BorderSide(
+                                                width: 0,
+                                                color: Colors.transparent,
+                                              ),
                                               checkmarkColor: Colors.white,
                                               selected:
                                                   controller.sliceDuration.value
@@ -245,7 +251,7 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 12),
+                                  const SizedBox(height: 8),
                                   Row(
                                     children: [
                                       Text(
@@ -261,8 +267,10 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                           label:
                                               '${controller.sliceDuration.value.toInt()}s',
                                           thumbColor: AppColors.orange,
+                                          year2023: false,
                                           padding: EdgeInsets.zero,
                                           activeColor: AppColors.orange,
+                                          // secondaryTrackValue: 20,
                                           value: controller.sliceDuration.value,
                                           onChanged: (value) {
                                             controller.sliceDuration.value =

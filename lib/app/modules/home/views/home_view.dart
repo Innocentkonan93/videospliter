@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
@@ -24,7 +24,6 @@ class HomeView extends GetView<HomeController> {
     final size = MediaQuery.sizeOf(context);
     final height = size.height;
     final width = size.width;
-    Get.put(SettingsController());
     return GetBuilder<HomeController>(
       builder: (controller) {
         return Scaffold(
@@ -65,27 +64,13 @@ class HomeView extends GetView<HomeController> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (controller.banner != null)
+                            if (controller.banner != null && controller.isBannerLoaded)
                               SafeArea(
-                                child: FutureBuilder(
-                                  future: controller.banner?.load(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        controller.banner != null) {
-                                      return Container(
-                                        alignment: Alignment.center,
-                                        width:
-                                            controller.banner!.size.width
-                                                .toDouble(),
-                                        height:
-                                            controller.banner!.size.height
-                                                .toDouble(),
-                                        child: AdWidget(ad: controller.banner!),
-                                      );
-                                    }
-                                    return const SizedBox();
-                                  },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: controller.banner!.size.width.toDouble(),
+                                  height: controller.banner!.size.height.toDouble(),
+                                  child: AdWidget(ad: controller.banner!),
                                 ),
                               ),
                             const Spacer(flex: 4),
@@ -139,8 +124,8 @@ class HomeView extends GetView<HomeController> {
                                           minimumSize: Size(60, 60),
                                         ),
                                         tooltip: "Ajouter une vidéo",
-                                        icon: const Icon(
-                                          CupertinoIcons.add,
+                                        icon: const HugeIcon(
+                                          icon: HugeIcons.strokeRoundedAdd01,
                                           color: AppColors.primary,
                                         ),
                                       )
@@ -191,8 +176,8 @@ class HomeView extends GetView<HomeController> {
 
                                     const SizedBox(height: 16),
                                     ElevatedButton.icon(
-                                      icon: const Icon(
-                                        Icons.cut,
+                                      icon: const HugeIcon(
+                                        icon: HugeIcons.strokeRoundedScissor,
                                         color: AppColors.primary,
                                         size: 24,
                                       ),
@@ -208,6 +193,7 @@ class HomeView extends GetView<HomeController> {
                                             await showModalBottomSheet(
                                               context: context,
                                               showDragHandle: true,
+                                              isScrollControlled: true,
                                               enableDrag: false,
                                               builder: (context) {
                                                 return const TimeSlicingSheet();
@@ -235,9 +221,10 @@ class HomeView extends GetView<HomeController> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(
-                                          Icons
-                                              .keyboard_double_arrow_down_rounded,
+                                    const HugeIcon(
+                                          icon:
+                                              HugeIcons
+                                                  .strokeRoundedArrowDownDouble,
                                           color: AppColors.white,
                                         )
                                         .animate(
@@ -268,9 +255,10 @@ class HomeView extends GetView<HomeController> {
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          CupertinoIcons.folder,
+                                        HugeIcon(
+                                          icon: HugeIcons.strokeRoundedFolder01,
                                           color: AppColors.white,
+                                          size: 24,
                                         ),
                                         SizedBox(width: 5),
                                         Text(
@@ -309,7 +297,11 @@ class HomeView extends GetView<HomeController> {
             // backgroundColor: Colors.transparent,
             elevation: 0,
             mini: true,
-            child: Icon(Icons.settings_rounded, color: AppColors.primary),
+            child: HugeIcon(
+              icon: HugeIcons.strokeRoundedSettings02,
+              color: AppColors.primary,
+              size: 24,
+            ),
           ),
         );
       },

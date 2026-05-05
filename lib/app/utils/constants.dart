@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_spliter/app/modules/settings/views/about_app_view.dart';
 import 'package:video_spliter/app/modules/settings/views/feedbacks_view.dart';
@@ -17,15 +18,15 @@ const String selectedLanguageKey = 'selected_language_key';
 // Limites pour les vidéos uploadées
 const double maxVideoSizeMb = 1536.0; // 1.5 Go (Pro)
 const double maxVideoDurationSec = 3600.0; // 1 Heure (Pro)
-const double maxVideoSizeMbFree = 500.0; // 500 Mo (Free)
-const double maxVideoDurationSecFree = 1200.0; // 20 Minutes (Free)
+const double maxVideoSizeMbFree = 150.0; // 150 Mo (Free)
+const double maxVideoDurationSecFree = 600.0; // 10 Minutes (Free)
 const double maxVideoSizeMbForCompress = 100.0; // 100 Mo
 
 Future<void> launchUri(Uri parse) async {
   await launchUrl(parse);
 }
 
-final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60, 90];
+final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60];
 
 var settingsGroups = [
   {
@@ -33,7 +34,7 @@ var settingsGroups = [
     'items': [
       {
         'title': 'restore_purchases',
-        'icon': Icons.restore,
+        'icon': HugeIcons.strokeRoundedArchiveRestore,
         'onTap': () async {
           final revenueCatService = Get.find<RevenueCatService>();
           await revenueCatService.restorePurchases();
@@ -46,7 +47,7 @@ var settingsGroups = [
     'items': [
       {
         'title': 'language',
-        'icon': Icons.language,
+        'icon': HugeIcons.strokeRoundedLanguageSkill,
         'onTap': () {
           showModalBottomSheet(
             context: Get.context!,
@@ -59,10 +60,10 @@ var settingsGroups = [
       },
       {
         'title': 'rate_app',
-        'icon': Icons.star,
+        'icon': HugeIcons.strokeRoundedStar,
         'onTap': AppService.askForRating,
       },
-      {'title': 'share_app', 'icon': Icons.share, 'onTap': AppService.shareApp},
+      {'title': 'share_app', 'icon': HugeIcons.strokeRoundedShare01, 'onTap': AppService.shareApp},
     ],
   },
   {
@@ -70,28 +71,28 @@ var settingsGroups = [
     'items': [
       {
         'title': 'how_it_works',
-        'icon': Icons.help,
+        'icon': HugeIcons.strokeRoundedHelpCircle,
         'onTap': () {
           Get.to(() => const HowItWorkView());
         },
       },
       {
         'title': 'contact_us',
-        'icon': Icons.mail,
+        'icon': HugeIcons.strokeRoundedMail01,
         'onTap': () {
           Get.to(() => const ContactUsView());
         },
       },
       {
         'title': 'report_issue',
-        'icon': Icons.bug_report,
+        'icon': HugeIcons.strokeRoundedBug01,
         'onTap': () {
           Get.to(() => const FeedbacksView());
         },
       },
       {
         'title': 'terms_of_use',
-        'icon': Icons.description,
+        'icon': HugeIcons.strokeRoundedFile01,
         'onTap': () {
           final url = 'https://cutitapp.net/terms';
           launchUri(Uri.parse(url));
@@ -99,7 +100,7 @@ var settingsGroups = [
       },
       {
         'title': 'privacy_policy',
-        'icon': Icons.privacy_tip,
+        'icon': HugeIcons.strokeRoundedSecurityCheck,
         'onTap': () {
           final url = 'https://cutitapp.net/privacy-policy';
           launchUri(Uri.parse(url));
@@ -107,7 +108,7 @@ var settingsGroups = [
       },
       {
         'title': 'about',
-        'icon': Icons.info,
+        'icon': HugeIcons.strokeRoundedInformationCircle,
         'onTap': () {
           Get.to(() => const AboutAppView());
         },
@@ -150,25 +151,25 @@ var languages = [
 var socialMedia = <Map<String, dynamic>>[
   {
     'name': 'Facebook',
-    'icon': 'hugeicons--facebook-01.svg',
+    'icon': HugeIcons.strokeRoundedFacebook01,
     'duration': 60.0,
     'color': const Color(0xFF1877F2),
   },
   {
     'name': 'Instagram',
-    'icon': 'hugeicons--instagram.svg',
+    'icon': HugeIcons.strokeRoundedInstagram,
     'duration': 60.0,
     'color': const Color(0xFFE1306C),
   },
   {
     'name': 'Tiktok',
-    'icon': 'hugeicons--tiktok.svg',
+    'icon': HugeIcons.strokeRoundedTiktok,
     'duration': 15.0,
     'color': const Color(0xFF000000),
   },
   {
     'name': 'Whatsapp',
-    'icon': 'hugeicons--whatsapp.svg',
+    'icon': HugeIcons.strokeRoundedWhatsapp,
     'duration': 60.0,
     'color': const Color(0xFF25D366),
   },

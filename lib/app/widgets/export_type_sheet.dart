@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/services/feature_manager.dart';
@@ -85,8 +86,8 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                     },
                   );
                 },
-                icon: const Icon(
-                  Icons.play_circle_fill,
+                icon: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedPlayCircle,
                   color: Colors.white,
                   size: 20,
                 ),
@@ -113,98 +114,128 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
     final isProAvailable = FeatureManager.isProVersionAvailable;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 32),
+      decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 50,
-            height: 5,
+            width: 40,
+            height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.3),
+              color: Colors.grey.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          const SizedBox(height: 20),
-          Text(
-            'export_type'.tr,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'choose_export_quality'.tr,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-            textAlign: TextAlign.center,
-          ),
           const SizedBox(height: 24),
+          HugeIcon(
+            icon: HugeIcons.strokeRoundedDownload04,
+            color: AppColors.primary.withValues(alpha: 0.8),
+            size: 32,
+          ),
+          const SizedBox(height: 16),
+          // Text(
+          //   'export_type'.tr,
+          //   style: theme.textTheme.headlineSmall?.copyWith(
+          //     fontWeight: FontWeight.w900,
+          //     color: AppColors.black,
+          //     letterSpacing: -0.5,
+          //   ),
+          // ),
+          // const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'choose_export_quality'.tr,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.grey[600],
+                height: 1.4,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 32),
 
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Spacer(),
-              Expanded(
-                child: _buildExportOption(
-                  title: 'Normal',
-                  isSelected: !isProSelected,
-                  color: Colors.blueGrey,
-                  onTap: () => setState(() => isProSelected = false),
-                ),
+              _buildExportOption(
+                title: 'Normal',
+                subtitle: '480p • SD',
+                icon: HugeIcons.strokeRoundedVideo02,
+                isSelected: !isProSelected,
+                color: Colors.blueGrey,
+                onTap: () => setState(() => isProSelected = false),
               ),
               if (isProAvailable) ...[
                 const SizedBox(width: 16),
-                Expanded(
-                  child: _buildExportOption(
-                    title: 'HD',
-                    isSelected: isProSelected,
-                    color: AppColors.orange,
-                    isProBadge: true,
-                    isProUser: isUserPro,
-                    onTap: () => setState(() => isProSelected = true),
-                  ),
+                _buildExportOption(
+                  title: 'HD',
+                  subtitle: '1080p • Full HD',
+                  icon: HugeIcons.strokeRoundedAiVideo,
+                  isSelected: isProSelected,
+                  color: AppColors.orange,
+                  isProBadge: true,
+                  isProUser: isUserPro,
+                  onTap: () => setState(() => isProSelected = true),
                 ),
               ],
-              const Spacer(),
             ],
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 40),
 
           // Export Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _onExportPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.orange,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedSuperellipseBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side:
-                      isProSelected
-                          ? const BorderSide(color: AppColors.orange, width: 2)
-                          : BorderSide.none,
-                ),
-                elevation: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.orange.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              child: Text(
-                'export'.tr,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              child: ElevatedButton(
+                onPressed: _onExportPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.orange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  shape: RoundedSuperellipseBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'export'.tr,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const HugeIcon(
+                      icon: HugeIcons.strokeRoundedArrowRight01,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );
@@ -212,6 +243,8 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
 
   Widget _buildExportOption({
     required String title,
+    required String subtitle,
+    required List<List<dynamic>> icon,
     required bool isSelected,
     required Color color,
     VoidCallback? onTap,
@@ -222,72 +255,136 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
 
     return GestureDetector(
       onTap: onTap,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            width: double.infinity,
-            decoration: ShapeDecoration(
-              color:
-                  isSelected
-                      ? color.withValues(alpha: 0.1)
-                      : Colors.transparent,
-              shape: RoundedSuperellipseBorder(
-                borderRadius: BorderRadius.circular(15),
-                side: BorderSide(
-                  color:
-                      isSelected ? color : Colors.grey.withValues(alpha: 0.4),
-                  width: isSelected ? 2 : 1.5,
-                ),
-              ),
-            ),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: isSelected ? color : Colors.grey[700],
-              ),
+      child: AnimatedContainer(
+        width: 150,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: const EdgeInsets.all(16),
+        decoration: ShapeDecoration(
+          color: isSelected ? color.withValues(alpha: 0.08) : theme.cardColor,
+          shape: RoundedSuperellipseBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: BorderSide(
+              color: isSelected ? color : Colors.grey.withValues(alpha: 0.2),
+              width: isSelected ? 2.5 : 1,
             ),
           ),
-          if (isProBadge)
-            Positioned(
-              top: -10,
-              right: -5,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  gradient:
-                      isProUser
-                          ? null
-                          : const LinearGradient(
-                            colors: [Color(0xFF8A2387), Color(0xFFE94057)],
-                          ),
-                  color: isProUser ? AppColors.green : null,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
+          shadows:
+              isSelected
+                  ? [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: color.withValues(alpha: 0.15),
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
                     ),
-                  ],
+                  ]
+                  : [],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color:
+                        isSelected
+                            ? color.withValues(alpha: 0.15)
+                            : Colors.grey.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: HugeIcon(
+                    icon: icon,
+                    color: isSelected ? color : Colors.grey[500]!,
+                    size: 28,
+                  ),
                 ),
-                child:
-                    isProUser
-                        ? const Icon(Icons.check, color: Colors.white, size: 14)
-                        : const Text(
-                          "PRO",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-              ),
+                const SizedBox(height: 16),
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: isSelected ? color : Colors.grey[800],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color:
+                        isSelected
+                            ? color.withValues(alpha: 0.7)
+                            : Colors.grey[500],
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-        ],
+            if (isProBadge)
+              Positioned(
+                top: -24,
+                right: -8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient:
+                        isProUser
+                            ? const LinearGradient(
+                              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+                            )
+                            : const LinearGradient(
+                              colors: [Color(0xFFE94057), AppColors.primary],
+                            ),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isProUser) ...[
+                        const Icon(Icons.check, color: Colors.white, size: 12),
+                        const SizedBox(width: 4),
+                      ],
+                      Text(
+                        isProUser ? "ACTIVE" : "PRO",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (isSelected)
+              Positioned(
+                top: -8,
+                left: -8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.check_circle, color: color, size: 20),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

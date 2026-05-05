@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
@@ -85,8 +86,8 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
                     controller.clearAll();
                     controller.update();
                   },
-                  icon: const Icon(
-                    Icons.delete,
+                  icon: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedDelete01,
                     color: AppColors.red,
                     size: 15,
                   ),
@@ -104,13 +105,13 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
                   onPressed: _togglePlayPause,
                   icon: Visibility(
                     visible: _controller.value.isPlaying,
-                    replacement: const Icon(
-                      Icons.play_circle_filled,
+                    replacement: const HugeIcon(
+                      icon: HugeIcons.strokeRoundedPlayCircle,
                       color: AppColors.white,
                       size: 45,
                     ),
-                    child: Icon(
-                      Icons.pause_circle_filled,
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedPauseCircle,
                       color: AppColors.white.withValues(alpha: .15),
                       size: 45,
                     ),

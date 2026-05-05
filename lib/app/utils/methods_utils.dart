@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
-import 'package:path/path.dart' as p;
 
 void showSnackBar(String message, {bool? isError = false}) {
   ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
@@ -13,8 +13,10 @@ void showSnackBar(String message, {bool? isError = false}) {
     SnackBar(
       content: Row(
         children: [
-          Icon(
-            isError == true ? Icons.error : Icons.check_circle_rounded,
+          HugeIcon(
+            icon: isError == true
+                ? HugeIcons.strokeRoundedAlertCircle
+                : HugeIcons.strokeRoundedCheckmarkCircle01,
             color: AppColors.white,
           ),
           const SizedBox(width: 8),

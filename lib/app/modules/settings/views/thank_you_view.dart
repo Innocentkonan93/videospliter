@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
 class ThankYouView extends StatelessWidget {
@@ -14,8 +15,8 @@ class ThankYouView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.check_circle_rounded,
+            const HugeIcon(
+              icon: HugeIcons.strokeRoundedCheckmarkCircle01,
               size: 100,
               color: Colors.green,
             ),

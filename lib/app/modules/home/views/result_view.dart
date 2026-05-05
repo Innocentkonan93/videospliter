@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
@@ -54,7 +55,10 @@ class _ResultViewState extends State<ResultView> {
                   controller.selectedFolder.value = "";
                   controller.update();
                 },
-                icon: const Icon(Icons.close, color: AppColors.black),
+                icon: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedCancel01,
+                  color: AppColors.black,
+                ),
               ),
               child: BackButton(
                 color: AppColors.black,
@@ -80,8 +84,8 @@ class _ResultViewState extends State<ResultView> {
                   controller.selectAllVideoParts(widget.parts);
                   controller.update();
                 },
-                icon: Icon(
-                  Icons.checklist_rtl_rounded,
+                icon: HugeIcon(
+                  icon: HugeIcons.strokeRoundedCheckList,
                   color:
                       controller.selectedVideoParts.length !=
                               widget.parts.length
@@ -187,8 +191,8 @@ class _ResultViewState extends State<ResultView> {
                                 color: Colors.white.withValues(alpha: 0.3),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.play_arrow_rounded,
+                              child: const HugeIcon(
+                                icon: HugeIcons.strokeRoundedPlay,
                                 color: Colors.white,
                                 size: 32,
                               ),
@@ -247,8 +251,8 @@ class _ResultViewState extends State<ResultView> {
                               padding: const EdgeInsets.all(4),
                               child:
                                   isSelected
-                                      ? const Icon(
-                                        Icons.check,
+                                      ? const HugeIcon(
+                                        icon: HugeIcons.strokeRoundedTick01,
                                         color: Colors.white,
                                         size: 16,
                                       )
@@ -294,7 +298,10 @@ class _ResultViewState extends State<ResultView> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    icon: const Icon(Icons.share),
+                    icon: const HugeIcon(
+                      icon: HugeIcons.strokeRoundedShare01,
+                      color: Colors.white,
+                    ),
                     label: Text('share'.tr),
                   ),
                 ),
@@ -317,7 +324,10 @@ class _ResultViewState extends State<ResultView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      icon: const Icon(Icons.save),
+                      icon: const HugeIcon(
+                        icon: HugeIcons.strokeRoundedFloppyDisk,
+                        color: Colors.white,
+                      ),
                       label: Text('save'.tr),
                     ),
                   ),
@@ -344,7 +354,10 @@ class _ResultViewState extends State<ResultView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      icon: const Icon(Icons.download_rounded),
+                      icon: const HugeIcon(
+                        icon: HugeIcons.strokeRoundedDownload01,
+                        color: Colors.white,
+                      ),
                       label: Text('export'.tr),
                     ),
                   ),

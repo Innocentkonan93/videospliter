@@ -35,25 +35,8 @@ class IntroductionController extends GetxController {
     }
   }
 
-  Future<void> getIntroResult() async {
-    isLoading.value = true;
-    update();
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    isIntroductionViewed = await CacheHelper.getBool(key: introductionKey);
-
-    if (isIntroductionViewed == true) {
-      Get.offAllNamed(Routes.HOME);
-    }
-
-    isLoading.value = false;
-    update();
-  }
-
   @override
-  void onInit() async {
-    getIntroResult();
+  void onInit() {
     super.onInit();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
@@ -49,7 +50,10 @@ class ContactUsView extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: _launchEmail,
-                icon: const Icon(Icons.email_outlined),
+                icon: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedMail01,
+                  color: AppColors.white,
+                ),
                 label: Text('send_email'.tr),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

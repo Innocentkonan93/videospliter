@@ -13,7 +13,6 @@ class CacheHelper {
   // }
 
   static Future<String> getString({required String key}) async {
-    sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(key) ?? '';
   }
 
@@ -22,7 +21,6 @@ class CacheHelper {
   }
 
   static Future<bool> getBool({required String key}) async {
-    final sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getBool(key) ?? false;
   }
 
@@ -30,7 +28,7 @@ class CacheHelper {
     required String key,
     required dynamic value,
   }) async {
-    print("data saved $key: $value");
+    // print("data saved $key: $value");
     if (value is String) {
       return await sharedPreferences.setString(key, value);
     } else if (value is bool) {

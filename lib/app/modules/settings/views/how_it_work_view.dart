@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
 class HowItWorkView extends StatelessWidget {
@@ -25,12 +26,12 @@ class HowItWorkView extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildStep("step1_title".tr, "step1_desc".tr, Icons.video_library),
-            _buildStep("step2_title".tr, "step2_desc".tr, Icons.timer),
-            _buildStep("step3_title".tr, "step3_desc".tr, Icons.cut),
-            _buildStep("step4_title".tr, "step4_desc".tr, Icons.save),
+            _buildStep("step1_title".tr, "step1_desc".tr, HugeIcons.strokeRoundedVideo01),
+            _buildStep("step2_title".tr, "step2_desc".tr, HugeIcons.strokeRoundedTimer01),
+            _buildStep("step3_title".tr, "step3_desc".tr, HugeIcons.strokeRoundedScissor),
+            _buildStep("step4_title".tr, "step4_desc".tr, HugeIcons.strokeRoundedFloppyDisk),
             // social sharing
-            _buildStep("step5_title".tr, "step5_desc".tr, Icons.share),
+            _buildStep("step5_title".tr, "step5_desc".tr, HugeIcons.strokeRoundedShare01),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.all(16),
@@ -60,7 +61,7 @@ class HowItWorkView extends StatelessWidget {
     );
   }
 
-  Widget _buildStep(String title, String description, IconData icon) {
+  Widget _buildStep(String title, String description, List<List<dynamic>> icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
@@ -72,7 +73,7 @@ class HowItWorkView extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 24),
+            child: HugeIcon(icon: icon, color: AppColors.primary, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(

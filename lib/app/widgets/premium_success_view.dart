@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:confetti/confetti.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
@@ -53,8 +54,8 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Premium Icon
-              Icon(
-                Icons.workspace_premium_rounded,
+              const HugeIcon(
+                icon: HugeIcons.strokeRoundedChampion,
                 color: Colors.amber,
                 size: 100,
               ),

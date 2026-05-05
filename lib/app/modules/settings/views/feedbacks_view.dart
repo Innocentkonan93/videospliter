@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
@@ -127,8 +128,9 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                             color: Colors.white,
                                             shape: BoxShape.circle,
                                           ),
-                                          child: const Icon(
-                                            Icons.close,
+                                          child: const HugeIcon(
+                                            icon:
+                                                HugeIcons.strokeRoundedCancel01,
                                             size: 18,
                                           ),
                                         ),
@@ -150,7 +152,10 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                     () => controller.pickImage(
                                       ImageSource.camera,
                                     ),
-                                icon: const Icon(Icons.camera_alt),
+                                icon: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedCamera01,
+                                  color: AppColors.primary,
+                                ),
                                 label: Text("camera".tr),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary.withValues(
@@ -166,7 +171,10 @@ class FeedbacksView extends GetWidget<SettingsController> {
                                     () => controller.pickImage(
                                       ImageSource.gallery,
                                     ),
-                                icon: const Icon(Icons.photo_library),
+                                icon: const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedImage01,
+                                  color: AppColors.primary,
+                                ),
                                 label: Text("gallery".tr),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary.withValues(

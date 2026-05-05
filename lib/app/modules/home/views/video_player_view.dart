@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/services/video_service.dart';
@@ -186,10 +187,10 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                                       ),
                                     ),
                                     IconButton.filledTonal(
-                                      icon: Icon(
-                                        _controller.value.isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
+                                      icon: HugeIcon(
+                                        icon: _controller.value.isPlaying
+                                            ? HugeIcons.strokeRoundedPause
+                                            : HugeIcons.strokeRoundedPlay,
                                         size: 40,
                                         color: AppColors.primary,
                                       ),
@@ -199,8 +200,8 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                                     // because parent likely handles sharing all.
                                     if (widget.showAppBar)
                                       IconButton.filled(
-                                        icon: const Icon(
-                                          Icons.share,
+                                        icon: const HugeIcon(
+                                          icon: HugeIcons.strokeRoundedShare01,
                                           color: Colors.white,
                                         ),
                                         onPressed: () {
@@ -238,14 +239,13 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.close),
-          color: AppColors.white,
+          icon: const HugeIcon(icon: HugeIcons.strokeRoundedCancel01, color: AppColors.white),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: AppColors.white),
+            icon: const HugeIcon(icon: HugeIcons.strokeRoundedMoreVertical, color: AppColors.white),
             onSelected: (String value) {
               // Handle menu item tap actions here
               // e.g. if (value == 'share') { ... }
@@ -256,7 +256,7 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                     value: 'share',
                     child: Row(
                       children: [
-                        const Icon(Icons.share, color: AppColors.primary),
+                        const HugeIcon(icon: HugeIcons.strokeRoundedShare01, color: AppColors.primary),
                         const SizedBox(width: 8),
                         Text('share'.tr),
                       ],
@@ -266,7 +266,7 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                     value: 'save',
                     child: Row(
                       children: [
-                        const Icon(Icons.save_alt, color: AppColors.primary),
+                        const HugeIcon(icon: HugeIcons.strokeRoundedDownload01, color: AppColors.primary),
                         const SizedBox(width: 8),
                         Text('save'.tr),
                       ],
@@ -276,8 +276,8 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                     value: 'details',
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline,
+                        const HugeIcon(
+                          icon: HugeIcons.strokeRoundedInformationCircle,
                           color: AppColors.primary,
                         ),
                         const SizedBox(width: 8),

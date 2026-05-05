@@ -10,8 +10,6 @@ import 'package:video_spliter/app/widgets/premium_success_view.dart';
 class RevenueCatService extends GetxService {
   static const String _androidApiKey = "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV";
   static const String _iosApiKey = "appl_NycGQMwdBmSQQHlkJxhLwBKhxWC";
-  static const String _sandboxApiKey = "test_wkGiQsLnmkFBCIHmnhUtlKhiPEU";
-  static const String _apiKey = "sk_coxTyvcPfTLMoOpBnrxQtVYRmpydO";
   static const String entitlementId = "Cutit Pro";
   static const String monthlyProduct = "cutit_monthly";
   static const String yearlyProduct = "cutit_yearly";
@@ -22,22 +20,19 @@ class RevenueCatService extends GetxService {
     try {
       if (kDebugMode) {
         await Purchases.setLogLevel(LogLevel.debug);
-      }
-
-      PurchasesConfiguration? configuration;
-
-      if (kDebugMode) {
-        configuration = PurchasesConfiguration(_apiKey);
       } else {
-        if (Platform.isAndroid) {
-          configuration = PurchasesConfiguration(_androidApiKey);
-        } else if (Platform.isIOS || Platform.isMacOS) {
-          configuration = PurchasesConfiguration(_iosApiKey);
-        }
+        await Purchases.setLogLevel(LogLevel.error);
       }
 
-      if (configuration != null) {
-        await Purchases.configure(configuration);
+      String apiKey = "";
+      if (Platform.isAndroid) {
+        apiKey = _androidApiKey;
+      } else if (Platform.isIOS || Platform.isMacOS) {
+        apiKey = _iosApiKey;
+      }
+
+      if (apiKey.isNotEmpty) {
+        await Purchases.configure(PurchasesConfiguration(apiKey));
       }
 
       // Listen for subscription status changes

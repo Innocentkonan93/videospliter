@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
 class FolderNameDialog extends StatelessWidget {
@@ -21,7 +21,7 @@ class FolderNameDialog extends StatelessWidget {
           CircleAvatar(
             radius: 20,
             backgroundColor: AppColors.primary,
-            child: Icon(CupertinoIcons.folder, color: AppColors.white),
+            child: const HugeIcon(icon: HugeIcons.strokeRoundedFolder01, color: AppColors.white),
           ),
           SizedBox(height: 10),
           Text(

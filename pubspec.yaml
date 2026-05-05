@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A tool for video splitting"
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.1.0+34
+version: 1.1.2+38
 
 environment:
   sdk: ^3.7.0
@@ -9,50 +9,51 @@ environment:
 dependencies:
   animated_digit: ^3.2.3
   clarity_flutter: ^1.0.0
-  cloud_firestore: ^5.6.9
+  cloud_firestore: ^6.3.0
   confetti: ^0.8.0
   cupertino_icons: ^1.0.8
-  device_info_plus: ^11.5.0
-  # ffmpeg_kit_16kb: ^1.0.4
+  device_info_plus: ^12.4.0
   ffmpeg_kit_flutter_new: ^4.1.0
-  file_picker: ^10.1.9
-  firebase_analytics: ^11.4.6
-  firebase_core: ^3.13.1
+  file_picker: ^11.0.2
+  firebase_analytics: ^12.3.0
+  firebase_core: ^4.7.0
   firebase_crashlytics: any
-  firebase_messaging: ^15.2.6
-  firebase_remote_config: ^5.5.0
-  firebase_storage: ^12.4.7
+  firebase_messaging: ^16.2.0
+  firebase_remote_config: ^6.4.0
+  firebase_storage: ^13.3.0
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
-  flutter_local_notifications: ^18.0.0
+  flutter_local_notifications: ^21.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_sharing_intent: ^1.1.1
+  flutter_sharing_intent: ^2.0.4
   flutter_svg: ^2.2.4
   gal: ^2.3.2
   get: ^4.7.2
-  google_fonts: ^6.3.3
-  google_mobile_ads: ^6.0.0
-  image_picker: ^1.1.2
+  google_fonts: ^8.1.0
+  google_mobile_ads: ^8.0.0
+  hugeicons: ^1.1.6
+  image_picker: ^1.2.2
   in_app_review: ^2.0.10
   intl: ^0.20.2
-  lottie: ^3.3.1
-  package_info_plus: ^8.3.0
+  lottie: ^3.3.3
+  package_info_plus: ^9.0.1
   path: ^1.8.3
   path_provider: ^2.0.13
   percent_indicator: ^4.2.5
-  permission_handler: ^11.3.1
-  purchases_flutter: ^9.12.3
-  purchases_ui_flutter: ^9.12.3
-  share_plus: ^11.0.0
-  shared_preferences: ^2.5.3
+  permission_handler: ^12.0.1
+  purchases_flutter: ^10.0.1
+  purchases_ui_flutter: ^10.0.1
+  share_plus: ^12.0.2
+  shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
+  versionarte: ^2.1.1
   video_compress: ^3.1.4
-  video_player: ^2.9.5
+  video_player: ^2.11.1
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   rxdart: ^0.28.0

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 
@@ -46,7 +48,10 @@ class LanguageSelectionSheet extends GetWidget<SettingsController> {
                           },
                           trailing:
                               isSelected
-                                  ? const Icon(Icons.check)
+                                  ? const HugeIcon(
+                                      icon: HugeIcons.strokeRoundedTick01,
+                                      color: AppColors.primary,
+                                    )
                                   : const SizedBox.shrink(),
                         );
                       }).toList(),

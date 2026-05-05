@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
@@ -88,7 +89,10 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
           appBar: AppBar(
             title: Text('my_cutouts'.tr),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const HugeIcon(
+                icon: HugeIcons.strokeRoundedArrowLeft01,
+                color: AppColors.black,
+              ),
               onPressed: () {
                 controller.pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
