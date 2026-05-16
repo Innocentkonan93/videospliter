@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
-// import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
-// import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
-// import 'package:ffmpeg_kit_16kb/return_code.dart';
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_flutter_new/return_code.dart';
+import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_16kb/return_code.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -167,10 +167,9 @@ class VideoService {
             final logs = await session.getAllLogsAsString();
             log(logs.toString());
             final logsLines = logs?.split('\n') ?? [];
-            final lastLogs =
-                logsLines.length > 20
-                    ? logsLines.sublist(logsLines.length - 20).join('\n')
-                    : logs;
+            final lastLogs = logsLines.length > 20
+                ? logsLines.sublist(logsLines.length - 20).join('\n')
+                : logs;
             segCompleter.completeError(
               Exception('Erreur FFmpeg sur le segment ${index + 1}\n$lastLogs'),
             );
@@ -232,8 +231,9 @@ class VideoService {
 
     try {
       final adMobService = AdMobService();
-      final filesToProcess =
-          videoParts.where((file) => file.existsSync()).toList();
+      final filesToProcess = videoParts
+          .where((file) => file.existsSync())
+          .toList();
 
       if (filesToProcess.isEmpty) {
         Get.back();
@@ -241,16 +241,18 @@ class VideoService {
         return;
       }
 
-      List<XFile> filesToShare =
-          filesToProcess.map((file) => XFile(file.path)).toList();
+      List<XFile> filesToShare = filesToProcess
+          .map((file) => XFile(file.path))
+          .toList();
 
       Get.back(); // Ferme le loading avant d'ouvrir le menu natif de partage
 
       await SharePlus.instance.share(
         ShareParams(
           files: filesToShare,
-          sharePositionOrigin:
-              box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+          sharePositionOrigin: box != null
+              ? box.localToGlobal(Offset.zero) & box.size
+              : null,
         ),
       );
 
@@ -299,10 +301,9 @@ class VideoService {
         try {
           final info = await VideoCompress.compressVideo(
             video.path,
-            quality:
-                exportType
-                    ? VideoQuality.HighestQuality
-                    : VideoQuality.MediumQuality,
+            quality: exportType
+                ? VideoQuality.HighestQuality
+                : VideoQuality.MediumQuality,
             deleteOrigin: false,
             includeAudio: true,
           );

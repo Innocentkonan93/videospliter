@@ -15,6 +15,8 @@ class RevenueCatService extends GetxService {
   static const String yearlyProduct = "cutit_yearly";
 
   final isProUser = false.obs;
+  final isYearlySubscription = false.obs;
+  final isMonthlySubscription = false.obs;
 
   Future<RevenueCatService> init() async {
     try {
@@ -61,19 +63,30 @@ class RevenueCatService extends GetxService {
 
   /// Updates the reactive state based on CustomerInfo
   void _updateSubscriptionStatus(CustomerInfo customerInfo) {
-    if (customerInfo.entitlements.all[entitlementId] != null &&
-        customerInfo.entitlements.all[entitlementId]!.isActive) {
+    final entitlement = customerInfo.entitlements.all[entitlementId];
+    if (entitlement != null && entitlement.isActive) {
       isProUser.value = true;
-      debugPrint("User has active '\$entitlementId' entitlement.");
+      isMonthlySubscription.value =
+          entitlement.productIdentifier == monthlyProduct;
+      isYearlySubscription.value =
+          entitlement.productIdentifier == yearlyProduct;
+      debugPrint(
+        "User has active '$entitlementId' entitlement (${entitlement.productIdentifier}).",
+      );
     } else {
       isProUser.value = false;
-      debugPrint("User does NOT have active '\$entitlementId' entitlement.");
+      isMonthlySubscription.value = false;
+      isYearlySubscription.value = false;
+      debugPrint("User does NOT have active '$entitlementId' entitlement.");
     }
   }
 
   /// Present the full paywall
-  Future<void> presentPaywall() async {
+  Future<void> presentPaywall({String? placement}) async {
     try {
+      // Log analytics for paywall impression
+      // AnalyticsService.logPaywallImpression(placement: placement);
+
       final paywallResult = await RevenueCatUI.presentPaywallIfNeeded(
         entitlementId,
       );
@@ -89,7 +102,7 @@ class RevenueCatService extends GetxService {
   }
 
   /// Present the paywall only if the user doesn't have the entitlement
-  Future<void> presentPaywallIfNeeded() async {
+  Future<void> presentPaywallIfNeeded({String? placement}) async {
     try {
       final paywallResult = await RevenueCatUI.presentPaywallIfNeeded(
         entitlementId,

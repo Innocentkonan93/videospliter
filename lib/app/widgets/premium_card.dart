@@ -23,8 +23,15 @@ class PremiumCard extends StatelessWidget {
             shape: RoundedSuperellipseBorder(
               borderRadius: BorderRadius.circular(25),
             ),
-            gradient: const LinearGradient(
-              colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+            gradient: LinearGradient(
+              colors:
+                  Get.find<RevenueCatService>().isMonthlySubscription.value
+                      ? [
+                        AppColors.orange,
+                        const Color(0xFFE94057),
+                        AppColors.primary,
+                      ]
+                      : [const Color(0xFF11998E), const Color(0xFF38EF7D)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -115,7 +122,7 @@ class PremiumCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: const HugeIcon(
-                    icon: HugeIcons.strokeRoundedStar,
+                    icon: HugeIcons.strokeRoundedChampion,
                     color: Colors.white,
                     size: 28,
                   ),

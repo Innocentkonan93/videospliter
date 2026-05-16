@@ -8,6 +8,8 @@ import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/responsive.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
+import 'package:video_spliter/app/widgets/premium_banner.dart';
 import '../controllers/home_controller.dart';
 
 class ResultView extends StatefulWidget {
@@ -95,176 +97,210 @@ class _ResultViewState extends State<ResultView> {
               ),
             ],
           ),
-          body: GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: widget.parts.length,
-            itemBuilder: (context, index) {
-              final file = widget.parts[index];
-              final playerController = controller.videoControllers[file];
-              final isSelected = controller.selectedVideoParts.contains(file);
-
-              return GestureDetector(
-                onLongPress: () {
-                  controller.canSelectVideo.value = true;
-                  controller.selectVideoPart(file);
-                  controller.update();
-                },
-                onTap: () {
-                  if (controller.canSelectVideo.value) {
-                    controller.selectVideoPart(file);
-                  } else {
-                    Get.to(
-                      () => AllVideosPreview(
-                        parts: widget.parts,
-                        currentIndex: index,
-                      ),
-                    );
-                  }
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border:
-                        isSelected
-                            ? Border.all(color: AppColors.primary, width: 3)
-                            : null,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+          body: Column(
+            children: [
+              Obx(
+                () =>
+                    FeatureManager.shouldShowProContent
+                        ? const PremiumBanner(placement: 'result_view')
+                        : const SizedBox.shrink(),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+                    childAspectRatio: 0.8,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Stack(
-                      children: [
-                        // Video Thumbnail/Preview
-                        Positioned.fill(
-                          child:
-                              playerController != null &&
-                                      playerController.value.isInitialized
-                                  ? FittedBox(
-                                    fit: BoxFit.cover,
-                                    child: SizedBox(
-                                      width: playerController.value.size.width,
-                                      height:
-                                          playerController.value.size.height,
-                                      child: VideoPlayer(playerController),
-                                    ),
+                  itemCount: widget.parts.length,
+                  itemBuilder: (context, index) {
+                    final file = widget.parts[index];
+                    final playerController = controller.videoControllers[file];
+                    final isSelected = controller.selectedVideoParts.contains(
+                      file,
+                    );
+
+                    return GestureDetector(
+                      onLongPress: () {
+                        controller.canSelectVideo.value = true;
+                        controller.selectVideoPart(file);
+                        controller.update();
+                      },
+                      onTap: () {
+                        if (controller.canSelectVideo.value) {
+                          controller.selectVideoPart(file);
+                        } else {
+                          Get.to(
+                            () => AllVideosPreview(
+                              parts: widget.parts,
+                              currentIndex: index,
+                            ),
+                          );
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border:
+                              isSelected
+                                  ? Border.all(
+                                    color: AppColors.primary,
+                                    width: 3,
                                   )
-                                  : const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                        ),
-                        // Gradient Overlay
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.transparent,
-                                  Colors.black.withValues(alpha: 0.7),
-                                ],
-                              ),
+                                  : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
+                          ],
                         ),
-                        // Play Icon
-                        if (!controller.canSelectVideo.value)
-                          Center(
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.3),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const HugeIcon(
-                                icon: HugeIcons.strokeRoundedPlay,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                            ),
-                          ),
-                        // Part Number
-                        Positioned(
-                          bottom: 8,
-                          left: 10,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Stack(
                             children: [
-                              Text(
-                                "Partie ${index + 1}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                              // Video Thumbnail/Preview
+                              Positioned.fill(
+                                child:
+                                    playerController != null &&
+                                            playerController.value.isInitialized
+                                        ? FittedBox(
+                                          fit: BoxFit.cover,
+                                          child: SizedBox(
+                                            width:
+                                                playerController
+                                                    .value
+                                                    .size
+                                                    .width,
+                                            height:
+                                                playerController
+                                                    .value
+                                                    .size
+                                                    .height,
+                                            child: VideoPlayer(
+                                              playerController,
+                                            ),
+                                          ),
+                                        )
+                                        : const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                              ),
+                              // Gradient Overlay
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Colors.black.withValues(alpha: 0.7),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              if (playerController != null &&
-                                  playerController.value.isInitialized)
-                                Text(
-                                  formatDuration(
-                                    playerController.value.duration,
+                              // Play Icon
+                              if (!controller.canSelectVideo.value)
+                                Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const HugeIcon(
+                                      icon: HugeIcons.strokeRoundedPlay,
+                                      color: Colors.white,
+                                      size: 32,
+                                    ),
                                   ),
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 12,
+                                ),
+                              // Part Number
+                              Positioned(
+                                bottom: 8,
+                                left: 10,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Partie ${index + 1}",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    if (playerController != null &&
+                                        playerController.value.isInitialized)
+                                      Text(
+                                        formatDuration(
+                                          playerController.value.duration,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              // Selection Indicator
+                              if (controller.canSelectVideo.value)
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          isSelected
+                                              ? AppColors.primary
+                                              : Colors.white.withValues(
+                                                alpha: 0.5,
+                                              ),
+                                      shape: BoxShape.circle,
+                                      border:
+                                          isSelected
+                                              ? null
+                                              : Border.all(
+                                                color: Colors.white,
+                                                width: 2,
+                                              ),
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child:
+                                        isSelected
+                                            ? const HugeIcon(
+                                              icon:
+                                                  HugeIcons.strokeRoundedTick01,
+                                              color: Colors.white,
+                                              size: 16,
+                                            )
+                                            : const SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                            ),
                                   ),
                                 ),
                             ],
                           ),
                         ),
-                        // Selection Indicator
-                        if (controller.canSelectVideo.value)
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              decoration: BoxDecoration(
-                                color:
-                                    isSelected
-                                        ? AppColors.primary
-                                        : Colors.white.withValues(alpha: 0.5),
-                                shape: BoxShape.circle,
-                                border:
-                                    isSelected
-                                        ? null
-                                        : Border.all(
-                                          color: Colors.white,
-                                          width: 2,
-                                        ),
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child:
-                                  isSelected
-                                      ? const HugeIcon(
-                                        icon: HugeIcons.strokeRoundedTick01,
-                                        color: Colors.white,
-                                        size: 16,
-                                      )
-                                      : const SizedBox(width: 16, height: 16),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           ),
           bottomNavigationBar: BottomAppBar(
             elevation: 20,
