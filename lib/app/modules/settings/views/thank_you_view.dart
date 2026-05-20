@@ -22,13 +22,13 @@ class ThankYouView extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              "Merci pour votre rapport !",
+              "thank_you_report".tr,
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            const Text(
-              "Nous apprécions votre aide pour améliorer l'application.",
+            Text(
+              "appreciate_help".tr,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),

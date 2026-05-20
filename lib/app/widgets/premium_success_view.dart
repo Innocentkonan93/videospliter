@@ -63,7 +63,7 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
 
               // Success Message
               Text(
-                'Félicitations !'.tr,
+                'congratulations'.tr,
                 style: context.theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -73,8 +73,7 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Text(
-                  'Vous avez débloqué Cutit Pro. Profitez d\'une expérience sans publicité et sans limite de temps et taille !'
-                      .tr,
+                  'premium_unlocked_desc'.tr,
                   textAlign: TextAlign.center,
                   style: context.theme.textTheme.bodyLarge?.copyWith(
                     color: Colors.grey[800],
@@ -99,7 +98,7 @@ class _PremiumSuccessViewState extends State<PremiumSuccessView> {
                   ),
                 ),
                 child: Text(
-                  'Continuer'.tr,
+                  'continue_label'.tr,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
