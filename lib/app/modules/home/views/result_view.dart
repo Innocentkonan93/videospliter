@@ -233,7 +233,7 @@ class _ResultViewState extends State<ResultView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Partie ${index + 1}",
+                                      "${'segment'.tr} ${index + 1}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
