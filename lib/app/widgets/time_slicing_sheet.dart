@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
-import 'package:video_spliter/app/services/feature_manager.dart';
-import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 
 import '../modules/home/controllers/home_controller.dart';
@@ -55,59 +53,34 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                           children: [
                             InkWell(
                               onTap: () {
-                                if (FeatureManager.isProUser) {
-                                  controller.isCustom.value = true;
-                                  controller.selectedSocial.value = "";
-                                } else {
-                                  Get.find<RevenueCatService>().presentPaywall(placement: 'custom_slicing');
-                                }
+                                controller.isCustom.value = true;
+                                controller.selectedSocial.value = "";
                               },
                               borderRadius: BorderRadius.circular(60),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          controller.isCustom.value
-                                              ? AppColors.primary
-                                              : const Color.fromARGB(
-                                                255,
-                                                219,
-                                                219,
-                                                219,
-                                              ).withValues(alpha: .26),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: HugeIcon(
-                                      icon: HugeIcons.strokeRoundedAbacus,
-                                      size: 35,
-                                      color:
-                                          controller.isCustom.value
-                                              ? AppColors.white
-                                              : AppColors.black.withValues(
-                                                alpha: .7,
-                                              ),
-                                    ),
-                                  ),
-                                  if (!FeatureManager.isProUser)
-                                    Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.amber,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Icon(
-                                          Icons.lock,
-                                          size: 12,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                ],
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color:
+                                      controller.isCustom.value
+                                          ? AppColors.primary
+                                          : const Color.fromARGB(
+                                            255,
+                                            219,
+                                            219,
+                                            219,
+                                          ).withValues(alpha: .26),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: HugeIcon(
+                                  icon: HugeIcons.strokeRoundedAbacus,
+                                  size: 35,
+                                  color:
+                                      controller.isCustom.value
+                                          ? AppColors.white
+                                          : AppColors.black.withValues(
+                                            alpha: .7,
+                                          ),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 8),
