@@ -75,44 +75,59 @@ class _ProcessingViewState extends State<ProcessingView> {
         // Funnel post-succès : Inviter à passer Pro si l'utilisateur est gratuit
         if (FeatureManager.shouldShowProContent) {
           Future.delayed(const Duration(milliseconds: 1500), () {
-            Get.dialog(
-              AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                title: Text("cut_done_title".tr),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const HugeIcon(
-                      icon: HugeIcons.strokeRoundedChampion,
-                      color: Colors.amber,
-                      size: 60,
+            showGeneralDialog(
+              context: Get.context!,
+              barrierDismissible: true,
+              barrierLabel: '',
+              transitionDuration: const Duration(milliseconds: 400),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  title: Text("cut_done_title".tr),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const HugeIcon(
+                        icon: HugeIcons.strokeRoundedChampion,
+                        color: Colors.amber,
+                        size: 60,
+                      ),
+                      const SizedBox(height: 16),
+                      Text("pro_success_cta".tr, textAlign: TextAlign.center),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text("later".tr),
                     ),
-                    const SizedBox(height: 16),
-                    Text("pro_success_cta".tr, textAlign: TextAlign.center),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.find<RevenueCatService>().presentPaywall(
+                          placement: 'post_processing',
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                      ),
+                      child: Text("premium_title".tr),
+                    ),
                   ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text("later".tr),
+                );
+              },
+              transitionBuilder: (context, animation, secondaryAnimation, child) {
+                return Transform.scale(
+                  scale: Curves.easeOutBack.transform(animation.value),
+                  child: Opacity(
+                    opacity: animation.value,
+                    child: child,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.find<RevenueCatService>().presentPaywall(
-                        placement: 'post_processing',
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                    ),
-                    child: Text("premium_title".tr),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           });
         }

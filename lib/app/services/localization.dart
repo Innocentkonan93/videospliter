@@ -212,9 +212,11 @@ class Localization extends Translations {
       'update_check_error': 'Failed to check for updates. Please try again.',
       'remove_ads_watermark': 'Remove ads & watermark',
       'unlock_pro_features_now': 'Unlock Pro features now',
-      'pro_success_cta': 'Unlock ultra-fast export, HD quality, and remove watermarks/ads forever!',
+      'pro_success_cta':
+          'Unlock ultra-fast export, HD quality, and remove watermarks/ads forever!',
       'congratulations': 'Congratulations!',
-      'premium_unlocked_desc': 'You have unlocked Cutit Pro. Enjoy an ad-free experience without time or size limits!',
+      'premium_unlocked_desc':
+          'You have unlocked Cutit Pro. Enjoy an ad-free experience without time or size limits!',
       'continue_label': 'Continue',
       'support_cutit': 'Support Cutit',
       'hello_support': 'Hello Support Team,\n\n',
@@ -442,9 +444,11 @@ class Localization extends Translations {
       'update_button': 'Mettre à jour maintenant',
       'remove_ads_watermark': 'Retirer les pubs & le filigrane',
       'unlock_pro_features_now': 'Débloquer les fonctionnalités Pro maintenant',
-      'pro_success_cta': "Débloquez l'export ultra-rapide en HD, et supprimez le filigrane/pubs à tout jamais !",
+      'pro_success_cta':
+          "Débloquez l'export ultra-rapide en HD, et supprimez le filigrane/pubs à tout jamais !",
       'congratulations': 'Félicitations !',
-      'premium_unlocked_desc': "Vous avez débloqué Cutit Pro. Profitez d'une expérience sans publicité et sans limite de temps et taille !",
+      'premium_unlocked_desc':
+          "Vous avez débloqué Cutit Pro. Profitez d'une expérience sans publicité et sans limite de temps et taille !",
       'continue_label': 'Continuer',
       'support_cutit': 'Support Cutit',
       'hello_support': "Bonjour l'équipe Support,\n\n",
@@ -452,7 +456,8 @@ class Localization extends Translations {
       'no_video_to_save': 'Aucune vidéo à sauvegarder',
       'info': 'Info',
       'already_pro': 'Vous êtes déjà un utilisateur Pro !',
-      'only_mobile': 'Cette fonctionnalité est uniquement disponible sur les appareils mobiles.',
+      'only_mobile':
+          'Cette fonctionnalité est uniquement disponible sur les appareils mobiles.',
     },
     'es': {
       // App name and general
@@ -666,9 +671,11 @@ class Localization extends Translations {
           'No se pudo cargar el anuncio de video. Por favor, inténtalo de nuevo más tarde.',
       'remove_ads_watermark': 'Quitar anuncios y marca de agua',
       'unlock_pro_features_now': 'Desbloquear funciones Pro ahora',
-      'pro_success_cta': '¡Desbloquea exportación ultra rápida en HD y elimina marcas de agua/anuncios para siempre!',
+      'pro_success_cta':
+          '¡Desbloquea exportación ultra rápida en HD y elimina marcas de agua/anuncios para siempre!',
       'congratulations': '¡Felicitaciones!',
-      'premium_unlocked_desc': 'Has desbloqueado Cutit Pro. ¡Disfruta de una experiencia sin anuncios y sin límites de tiempo o tamaño!',
+      'premium_unlocked_desc':
+          'Has desbloqueado Cutit Pro. ¡Disfruta de una experiencia sin anuncios y sin límites de tiempo o tamaño!',
       'continue_label': 'Continuar',
       'support_cutit': 'Soporte Cutit',
       'hello_support': 'Hola equipo de soporte,\n\n',
@@ -676,13 +683,15 @@ class Localization extends Translations {
       'no_video_to_save': 'No hay video para guardar',
       'info': 'Información',
       'already_pro': '¡Ya eres un usuario Pro!',
-      'only_mobile': 'Esta función solo está disponible en dispositivos móviles.',
+      'only_mobile':
+          'Esta función solo está disponible en dispositivos móviles.',
       'update_mandatory_title': 'Actualización obligatoria',
       'update_optional_title': 'Actualización disponible',
       'update_button': 'Actualizar ahora',
       'update_check': 'Buscar actualizaciones',
       'app_up_to_date': '¡Tu aplicación está actualizada!',
-      'update_check_error': 'Error al buscar actualizaciones. Por favor, inténtalo de nuevo.',
+      'update_check_error':
+          'Error al buscar actualizaciones. Por favor, inténtalo de nuevo.',
     },
     'pt': {
       // App name and general
@@ -894,9 +903,11 @@ class Localization extends Translations {
           'Não foi possível carregar o anúncio em vídeo. Por favor, tente novamente mais tarde.',
       'remove_ads_watermark': 'Remover anúncios e marca d\'água',
       'unlock_pro_features_now': 'Desbloquear recursos Pro agora',
-      'pro_success_cta': "Desbloqueie exportação ultra rápida em HD e remova marcas d'água/anúncios para sempre!",
+      'pro_success_cta':
+          "Desbloqueie exportação ultra rápida em HD e remova marcas d'água/anúncios para sempre!",
       'congratulations': 'Parabéns!',
-      'premium_unlocked_desc': 'Você desbloqueou o Cutit Pro. Desfrute de uma experiência sem anúncios e sem limites de tempo ou tamanho!',
+      'premium_unlocked_desc':
+          'Você desbloqueou o Cutit Pro. Desfrute de uma experiência sem anúncios e sem limites de tempo ou tamanho!',
       'continue_label': 'Continuar',
       'support_cutit': 'Suporte Cutit',
       'hello_support': 'Olá equipe de suporte,\n\n',
@@ -904,13 +915,15 @@ class Localization extends Translations {
       'no_video_to_save': 'Nenhum vídeo para salvar',
       'info': 'Informação',
       'already_pro': 'Você já é um usuário Pro!',
-      'only_mobile': 'Esta função está disponível apenas em dispositivos móveis.',
+      'only_mobile':
+          'Esta função está disponível apenas em dispositivos móveis.',
       'update_mandatory_title': 'Atualização obrigatória',
       'update_optional_title': 'Atualização disponível',
       'update_button': 'Atualizar agora',
       'update_check': 'Verificar atualizações',
       'app_up_to_date': 'Seu aplicativo está atualizado!',
-      'update_check_error': 'Falha ao verificar atualizações. Por favor, tente novamente.',
+      'update_check_error':
+          'Falha ao verificar atualizações. Por favor, tente novamente.',
       'later': 'Mais tarde',
     },
     'ar': {
@@ -1111,9 +1124,11 @@ class Localization extends Translations {
           'تعذر تحميل إعلان الفيديو. يرجى المحاولة مرة أخرى لاحقًا.',
       'remove_ads_watermark': 'إزالة الإعلانات والعلامة المائية',
       'unlock_pro_features_now': 'افتح ميزات Pro الآن',
-      'pro_success_cta': 'افتح التصدير فائق السرعة وجودة HD وأزل العلامات المائية/الإعلانات إلى الأبد!',
+      'pro_success_cta':
+          'افتح التصدير فائق السرعة وجودة HD وأزل العلامات المائية/الإعلانات إلى الأبد!',
       'congratulations': 'تهانينا!',
-      'premium_unlocked_desc': 'لقد قمت بفتح Cutit Pro. استمتع بتجربة خالية من الإعلانات وبدون حدود للوقت أو الحجم!',
+      'premium_unlocked_desc':
+          'لقد قمت بفتح Cutit Pro. استمتع بتجربة خالية من الإعلانات وبدون حدود للوقت أو الحجم!',
       'continue_label': 'متابعة',
       'support_cutit': 'دعم Cutit',
       'hello_support': 'مرحباً فريق الدعم،\n\n',
@@ -1127,7 +1142,8 @@ class Localization extends Translations {
       'update_button': 'تحديث الآن',
       'update_check': 'التحقق من وجود تحديثات',
       'app_up_to_date': 'تطبيقك محدث بالكامل!',
-      'update_check_error': 'فشل التحقق من وجود تحديثات. يرجى المحاولة مرة أخرى.',
+      'update_check_error':
+          'فشل التحقق من وجود تحديثات. يرجى المحاولة مرة أخرى.',
       'choose_format': 'اختر التنسيق',
       'custom': 'مخصص',
     },
