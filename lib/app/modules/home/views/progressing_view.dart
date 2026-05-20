@@ -119,13 +119,15 @@ class _ProcessingViewState extends State<ProcessingView> {
                   ],
                 );
               },
-              transitionBuilder: (context, animation, secondaryAnimation, child) {
+              transitionBuilder: (
+                context,
+                animation,
+                secondaryAnimation,
+                child,
+              ) {
                 return Transform.scale(
                   scale: Curves.easeOutBack.transform(animation.value),
-                  child: Opacity(
-                    opacity: animation.value,
-                    child: child,
-                  ),
+                  child: Opacity(opacity: animation.value, child: child),
                 );
               },
             );

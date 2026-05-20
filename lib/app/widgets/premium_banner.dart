@@ -13,14 +13,16 @@ class PremiumBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         gradient: const LinearGradient(
           colors: [AppColors.orange, AppColors.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        shape: RoundedSuperellipseBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        shadows: [
           BoxShadow(
             color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 10,
@@ -31,7 +33,10 @@ class PremiumBanner extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => Get.find<RevenueCatService>().presentPaywall(placement: placement),
+          onTap:
+              () => Get.find<RevenueCatService>().presentPaywall(
+                placement: placement,
+              ),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
