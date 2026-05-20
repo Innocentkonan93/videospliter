@@ -210,6 +210,8 @@ class Localization extends Translations {
       'update_check': 'Update check',
       'app_up_to_date': 'Your app is up to date!',
       'update_check_error': 'Failed to check for updates. Please try again.',
+      'remove_ads_watermark': 'Remove ads & watermark',
+      'unlock_pro_features_now': 'Unlock Pro features now',
     },
     'fr': {
       // App name and general
@@ -427,6 +429,8 @@ class Localization extends Translations {
       'update_mandatory_title': 'Mise à jour obligatoire',
       'update_optional_title': 'Mise à jour disponible',
       'update_button': 'Mettre à jour maintenant',
+      'remove_ads_watermark': 'Retirer les pubs & le filigrane',
+      'unlock_pro_features_now': 'Débloquer les fonctionnalités Pro maintenant',
     },
     'es': {
       // App name and general
@@ -638,6 +642,8 @@ class Localization extends Translations {
       'error': 'Error',
       'ad_load_error':
           'No se pudo cargar el anuncio de video. Por favor, inténtalo de nuevo más tarde.',
+      'remove_ads_watermark': 'Quitar anuncios y marca de agua',
+      'unlock_pro_features_now': 'Desbloquear funciones Pro ahora',
     },
     'pt': {
       // App name and general
@@ -847,6 +853,8 @@ class Localization extends Translations {
       'error': 'Erro',
       'ad_load_error':
           'Não foi possível carregar o anúncio em vídeo. Por favor, tente novamente mais tarde.',
+      'remove_ads_watermark': 'Remover anúncios e marca d\'água',
+      'unlock_pro_features_now': 'Desbloquear recursos Pro agora',
     },
     'ar': {
       // App name and general
@@ -1044,6 +1052,8 @@ class Localization extends Translations {
       'error': 'خطأ',
       'ad_load_error':
           'تعذر تحميل إعلان الفيديو. يرجى المحاولة مرة أخرى لاحقًا.',
+      'remove_ads_watermark': 'إزالة الإعلانات والعلامة المائية',
+      'unlock_pro_features_now': 'افتح ميزات Pro الآن',
     },
   };
 }
