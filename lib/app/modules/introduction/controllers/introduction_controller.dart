@@ -16,7 +16,7 @@ class IntroductionController extends GetxController {
   void requestNotifications() async {
     final status = await Permission.notification.request();
     if (status.isGranted) {
-      await FirebaseNotificationService().initFirebaseNotifications();
+      await FirebaseNotificationService.to.initFirebaseNotifications();
       completedIntro();
     } else {
       // showSnackBar(

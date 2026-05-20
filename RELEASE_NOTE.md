@@ -1,3 +1,14 @@
+## Nouveautés de cette version (1.1.4+42)
+
+**Date : 20 Mai 2026**
+
+### Améliorations
+- **Stabilité des Notifications Push (FCM)** : Correction d'un problème de désynchronisation des notifications lors du renouvellement automatique du jeton de l'appareil.
+- **Ciblage Multilingue & Plateforme** : Optimisation des abonnements automatiques aux notifications selon la langue sélectionnée par l'utilisateur et l'OS (Android / iOS).
+- **Analytics Améliorés** : Suivi plus précis des préférences de langue dans la console d'analyse pour un support utilisateur plus personnalisé.
+
+------
+
 ## Nouveautés de cette version (1.1.0+34)
 
 **Date : 30 Mars 2026**

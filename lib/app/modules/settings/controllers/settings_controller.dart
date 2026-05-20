@@ -11,6 +11,8 @@ import 'package:video_spliter/app/services/feedback_service.dart';
 import 'package:video_spliter/app/services/firebase_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
+import 'package:video_spliter/app/services/analytics_service.dart';
+import 'package:video_spliter/app/services/firebase_notification_service.dart';
 
 class SettingsController extends GetxController {
   final firebaseService = FirebaseService();
@@ -38,11 +40,24 @@ class SettingsController extends GetxController {
   final selectedLanguage = ''.obs;
 
   Future<void> selectLanguage(String language) async {
+    final oldLanguage = selectedLanguage.value;
     Get.updateLocale(Locale(language));
     // isFrench.value = language == 'fr';
     selectedLanguage.value = language;
     // Sauvegarder la langue sélectionnée dans le cache
     await CacheHelper.saveData(key: selectedLanguageKey, value: language);
+
+    // Mettre à jour les topics FCM de l'utilisateur
+    if (Get.isRegistered<FirebaseNotificationService>()) {
+      FirebaseNotificationService.to.syncTopics();
+    }
+
+    // Enregistrer le changement de langue dans Google Analytics (met également à jour la user property)
+    AnalyticsService.languageChanged(
+      fromLanguage: oldLanguage.isNotEmpty ? oldLanguage : 'unknown',
+      toLanguage: language,
+    );
+
     update();
   }
 

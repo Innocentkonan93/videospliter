@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:video_spliter/app/widgets/premium_success_view.dart';
+import 'package:video_spliter/app/services/firebase_notification_service.dart';
 
 class RevenueCatService extends GetxService {
   static const String _androidApiKey = "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV";
@@ -78,6 +79,10 @@ class RevenueCatService extends GetxService {
       isMonthlySubscription.value = false;
       isYearlySubscription.value = false;
       debugPrint("User does NOT have active '$entitlementId' entitlement.");
+    }
+
+    if (Get.isRegistered<FirebaseNotificationService>()) {
+      FirebaseNotificationService.to.syncTopics();
     }
   }
 

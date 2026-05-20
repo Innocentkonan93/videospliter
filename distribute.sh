@@ -25,7 +25,7 @@ ANDROID_GROUP_NAME="Android"
 IOS_GROUP_NAME="iOS"
 
 # Notes de version
-RELEASE_NOTES="🚀 Nouvelle version pilote de CutIt. Merci pour vos retours !"
+RELEASE_NOTES="🚀 CutIt v1.1.4+42 : Optimisation de la stabilité des notifications FCM (langue/plateforme) et suivi Analytics amélioré."
 
 echo "📤 Distribution APK Android..."
 firebase appdistribution:distribute "$ANDROID_APK_PATH" \

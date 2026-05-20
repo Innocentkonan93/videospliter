@@ -14,6 +14,7 @@ import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/localization.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
+import 'package:video_spliter/app/services/firebase_notification_service.dart';
 import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
@@ -34,6 +35,9 @@ void main() async {
 
   // Initialize RevenueCat service for subscriptions
   await Get.putAsync(() => RevenueCatService().init());
+
+  // Initialize Firebase Cloud Messaging notifications
+  await Get.putAsync(() => FirebaseNotificationService().init());
 
   // Initialize Update service
   await Get.putAsync(() => UpdateService().init());

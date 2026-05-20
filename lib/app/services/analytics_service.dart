@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,15 @@ class AnalyticsService {
 
     // Enregistrer le début de session
     await prefs.setString(_sessionStartKey, now.toIso8601String());
+
+    // Déterminer la langue et la plateforme courantes au démarrage pour analytics
+    final String savedLanguage = prefs.getString('selected_language_key') ?? '';
+    final String currentLanguage = savedLanguage.isNotEmpty
+        ? savedLanguage
+        : (WidgetsBinding.instance.platformDispatcher.locale.languageCode);
+    final String currentPlatform = Platform.isAndroid ? 'android' : 'ios';
+
+    await setUserProperties(language: currentLanguage, platform: currentPlatform);
 
     await appOpen();
   }
