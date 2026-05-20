@@ -71,18 +71,24 @@ class _ProcessingViewState extends State<ProcessingView> {
         await Future.delayed(const Duration(seconds: 1));
         vibrate();
         Get.off(() => ResultView(parts: controller.videoParts));
-        
+
         // Funnel post-succès : Inviter à passer Pro si l'utilisateur est gratuit
         if (FeatureManager.shouldShowProContent) {
           Future.delayed(const Duration(milliseconds: 1500), () {
             Get.dialog(
               AlertDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 title: Text("cut_done_title".tr),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const HugeIcon(icon: HugeIcons.strokeRoundedChampion, color: Colors.amber, size: 60),
+                    const HugeIcon(
+                      icon: HugeIcons.strokeRoundedChampion,
+                      color: Colors.amber,
+                      size: 60,
+                    ),
                     const SizedBox(height: 16),
                     Text("pro_success_cta".tr, textAlign: TextAlign.center),
                   ],
@@ -95,9 +101,14 @@ class _ProcessingViewState extends State<ProcessingView> {
                   ElevatedButton(
                     onPressed: () {
                       Get.back();
-                      Get.find<RevenueCatService>().presentPaywall(placement: 'post_processing');
+                      Get.find<RevenueCatService>().presentPaywall(
+                        placement: 'post_processing',
+                      );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                    ),
                     child: Text("premium_title".tr),
                   ),
                 ],
@@ -105,7 +116,7 @@ class _ProcessingViewState extends State<ProcessingView> {
             );
           });
         }
-        
+
         controller.onSplitDone();
         if (controller.isAppInBackground.value) {
           LocalNotificationService().showNotification(

@@ -212,6 +212,7 @@ class Localization extends Translations {
       'update_check_error': 'Failed to check for updates. Please try again.',
       'remove_ads_watermark': 'Remove ads & watermark',
       'unlock_pro_features_now': 'Unlock Pro features now',
+      'pro_success_cta': 'Unlock ultra-fast export, HD quality, and remove watermarks/ads forever!',
     },
     'fr': {
       // App name and general
@@ -431,6 +432,7 @@ class Localization extends Translations {
       'update_button': 'Mettre à jour maintenant',
       'remove_ads_watermark': 'Retirer les pubs & le filigrane',
       'unlock_pro_features_now': 'Débloquer les fonctionnalités Pro maintenant',
+      'pro_success_cta': "Débloquez l'export ultra-rapide en HD, et supprimez le filigrane/pubs à tout jamais !",
     },
     'es': {
       // App name and general
@@ -644,6 +646,7 @@ class Localization extends Translations {
           'No se pudo cargar el anuncio de video. Por favor, inténtalo de nuevo más tarde.',
       'remove_ads_watermark': 'Quitar anuncios y marca de agua',
       'unlock_pro_features_now': 'Desbloquear funciones Pro ahora',
+      'pro_success_cta': '¡Desbloquea exportación ultra rápida en HD y elimina marcas de agua/anuncios para siempre!',
     },
     'pt': {
       // App name and general
@@ -855,6 +858,7 @@ class Localization extends Translations {
           'Não foi possível carregar o anúncio em vídeo. Por favor, tente novamente mais tarde.',
       'remove_ads_watermark': 'Remover anúncios e marca d\'água',
       'unlock_pro_features_now': 'Desbloquear recursos Pro agora',
+      'pro_success_cta': "Desbloqueie exportação ultra rápida em HD e remova marcas d'água/anúncios para sempre!",
     },
     'ar': {
       // App name and general
@@ -1054,6 +1058,7 @@ class Localization extends Translations {
           'تعذر تحميل إعلان الفيديو. يرجى المحاولة مرة أخرى لاحقًا.',
       'remove_ads_watermark': 'إزالة الإعلانات والعلامة المائية',
       'unlock_pro_features_now': 'افتح ميزات Pro الآن',
+      'pro_success_cta': 'افتح التصدير فائق السرعة وجودة HD وأزل العلامات المائية/الإعلانات إلى الأبد!',
     },
   };
 }
