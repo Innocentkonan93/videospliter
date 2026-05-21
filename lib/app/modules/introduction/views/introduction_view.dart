@@ -39,7 +39,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
+                  // horizontal: 24.0,
                   vertical: 16.0,
                 ),
                 child: Column(
@@ -68,7 +68,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                               if (imagePath.isNotEmpty)
                                 Center(
                                   child: Container(
-                                        height: height * 0.40,
+                                        height: height * 0.50,
                                         width: double.infinity,
                                         decoration: BoxDecoration(
                                           // color: Colors.white,
@@ -101,33 +101,45 @@ class IntroductionView extends GetWidget<IntroductionController> {
 
                               const Spacer(flex: 2),
 
-                              // Titre en bas de l'illustration
-                              Text(
-                                    title,
-                                    style: theme.textTheme.headlineMedium
-                                        ?.copyWith(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.2,
-                                        ),
-                                  )
-                                  .animate()
-                                  .fadeIn(duration: 400.ms, delay: 200.ms)
-                                  .slideX(begin: -0.05, end: 0),
-                              const SizedBox(height: 12),
-
-                              // Description
-                              Text(
-                                description,
-                                style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.black.withValues(alpha: 0.6),
-                                  height: 1.4,
+                              Padding(
+                                padding: EdgeInsetsGeometry.symmetric(
+                                  horizontal: 20,
                                 ),
-                              ).animate().fadeIn(
-                                duration: 400.ms,
-                                delay: 300.ms,
-                              ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Titre en bas de l'illustration
+                                    Text(
+                                          title,
+                                          style: theme.textTheme.headlineMedium
+                                              ?.copyWith(
+                                                color: AppColors.black,
+                                                fontWeight: FontWeight.w800,
+                                                height: 1.2,
+                                              ),
+                                        )
+                                        .animate()
+                                        .fadeIn(duration: 400.ms, delay: 200.ms)
+                                        .slideX(begin: -0.05, end: 0),
+                                    const SizedBox(height: 12),
 
+                                    // Description
+                                    Text(
+                                      description,
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(
+                                            color: AppColors.black.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            height: 1.4,
+                                          ),
+                                    ).animate().fadeIn(
+                                      duration: 400.ms,
+                                      delay: 300.ms,
+                                    ),
+                                  ],
+                                ),
+                              ),
                               const Spacer(),
                             ],
                           );
@@ -137,7 +149,12 @@ class IntroductionView extends GetWidget<IntroductionController> {
 
                     // Zone inférieure avec les boutons d'actions
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0, top: 16.0),
+                      padding: const EdgeInsets.only(
+                        bottom: 8.0,
+                        top: 16.0,
+                        left: 20,
+                        right: 20,
+                      ),
                       child:
                           isLastPage
                               ? Column(

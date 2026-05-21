@@ -13,8 +13,8 @@ dependencies:
   confetti: ^0.8.0
   cupertino_icons: ^1.0.8
   device_info_plus: ^11.0.0
-  ffmpeg_kit_flutter_new: ^4.1.0
-  # ffmpeg_kit_16kb: ^1.0.4
+  # ffmpeg_kit_flutter_new: ^4.1.0
+  ffmpeg_kit_16kb: ^1.0.4
   file_picker: ^11.0.2
   firebase_analytics: ^12.3.0
   firebase_core: ^4.7.0

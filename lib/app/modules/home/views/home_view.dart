@@ -28,6 +28,7 @@ class HomeView extends GetView<HomeController> {
       builder: (controller) {
         return Scaffold(
           body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             controller: controller.pageController,
             // padEnds: true,

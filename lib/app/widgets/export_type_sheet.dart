@@ -43,8 +43,8 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
       context: context,
       builder:
           (ctx) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+            shape: RoundedSuperellipseBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
             title: Text(
               'export_hd_title'.tr,

@@ -138,7 +138,7 @@ var introductions = <Map<String, dynamic>>[
   {
     "title": "intro_title_2".tr,
     "description": "intro_desc_2".tr,
-    "image_path": "image2.png",
+    "image_path": "image0.png",
   },
   {
     "title": "intro_title_3".tr,

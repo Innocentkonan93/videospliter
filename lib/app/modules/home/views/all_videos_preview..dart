@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
@@ -23,6 +25,7 @@ class AllVideosPreview extends StatefulWidget {
 class _AllVideosPreviewState extends State<AllVideosPreview> {
   late PageController controller;
   int currentPage = 0;
+  final ValueNotifier<double> _currentVideoProgress = ValueNotifier<double>(0.0);
 
   @override
   void initState() {
@@ -32,174 +35,272 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    _currentVideoProgress.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
           // 1. Content (Video List)
-          Dismissible(
-            key: const Key('all_videos_preview_dismiss'),
-            direction: DismissDirection.vertical,
-            onDismissed: (_) => Get.back(),
-            child: PageView.builder(
-              controller: controller,
-              itemCount: widget.parts.length,
-              onPageChanged: (index) {
-                setState(() {
-                  currentPage = index;
-                });
+          PageView.builder(
+            controller: controller,
+            itemCount: widget.parts.length,
+            onPageChanged: (index) {
+              setState(() {
+                currentPage = index;
+              });
+              _currentVideoProgress.value = 0.0;
+            },
+            itemBuilder: (context, index) {
+              return VideoPreviewView(
+                videoFile: widget.parts[index],
+                isPlaying: index == currentPage,
+                onProgress: (progress) {
+                  if (index == currentPage) {
+                    _currentVideoProgress.value = progress;
+                  }
+                },
+              );
+            },
+          ),
+
+          // 2. Touch Navigation Zones (Left / Right edge zones for story-style navigation)
+          Positioned(
+            left: 0,
+            top: 100,
+            bottom: 210,
+            width: MediaQuery.of(context).size.width * 0.25,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (currentPage > 0) {
+                  controller.animateToPage(
+                    currentPage - 1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
               },
-              itemBuilder: (context, index) {
-                return VideoPreviewView(
-                  videoFile: widget.parts[index],
-                  showAppBar: false,
-                  showTopInfo: false,
-                );
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 100,
+            bottom: 210,
+            width: MediaQuery.of(context).size.width * 0.25,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (currentPage < widget.parts.length - 1) {
+                  controller.animateToPage(
+                    currentPage + 1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
               },
             ),
           ),
 
-          // 2. Top Navigation Bar (Story Style)
+          // 3. Top Navigation Bar (Story Style)
           Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.8),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-              child: SafeArea(
-                bottom: false,
-                child: Column(
-                  children: [
-                    // Progress Indicators
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 12,
-                      ),
-                      child: Row(
-                        children: List.generate(widget.parts.length, (index) {
-                          return Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 2,
-                              ),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                height: 3,
-                                decoration: BoxDecoration(
-                                  color:
-                                      index < currentPage
-                                          ? Colors.white
-                                          : index == currentPage
-                                          ? Theme.of(context).primaryColor
-                                          : Colors.white.withValues(alpha: 0.3),
-                                  borderRadius: BorderRadius.circular(1.5),
-                                  boxShadow: [
-                                    if (index == currentPage)
-                                      BoxShadow(
-                                        color: Theme.of(
-                                          context,
-                                        ).primaryColor.withValues(alpha: 0.5),
-                                        blurRadius: 4,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.8),
+                        Colors.transparent,
+                      ],
                     ),
-
-                    // Toolbar
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          // Close Button
-                          GestureDetector(
-                            onTap: () => Get.back(),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const HugeIcon(
-                                icon: HugeIcons.strokeRoundedCancel01,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
+                  ),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        // Progress Indicators
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 12,
                           ),
-                          const SizedBox(width: 12),
-                          // Title / Counter
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            children: List.generate(widget.parts.length, (
+                              index,
+                            ) {
+                              return Expanded(
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    controller.animateToPage(
+                                      index,
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                      vertical: 2,
+                                    ),
+                                    child: Container(
+                                      height: 3,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        boxShadow: [
+                                          if (index == currentPage)
+                                            BoxShadow(
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withValues(alpha: 0.4),
+                                              blurRadius: 4,
+                                            ),
+                                        ],
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
+                                      child: index < currentPage
+                                          ? Container(color: Colors.white)
+                                          : index > currentPage
+                                              ? Container(
+                                                  color: Colors.white.withValues(
+                                                    alpha: 0.3,
+                                                  ),
+                                                )
+                                              : ValueListenableBuilder<double>(
+                                                  valueListenable:
+                                                      _currentVideoProgress,
+                                                  builder:
+                                                      (context, progress, child) {
+                                                    return Stack(
+                                                      children: [
+                                                        Container(
+                                                          color: Colors.white
+                                                              .withValues(
+                                                            alpha: 0.3,
+                                                          ),
+                                                        ),
+                                                        FractionallySizedBox(
+                                                          alignment:
+                                                              Alignment.centerLeft,
+                                                          widthFactor: progress,
+                                                          child: Container(
+                                                            color: Theme.of(
+                                                              context,
+                                                            ).primaryColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+
+                        // Toolbar
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
                             children: [
-                              Text(
-                                "preview".tr,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                              // Close Button
+                              GestureDetector(
+                                onTap: () => Get.back(),
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const HugeIcon(
+                                    icon: HugeIcons.strokeRoundedCancel01,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
-                              Text(
-                                "${"segment".tr} ${currentPage + 1} / ${widget.parts.length}",
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                  fontSize: 12,
-                                ),
+                              const SizedBox(width: 12),
+                              // Title / Counter
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "preview".tr,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${"segment".tr} ${currentPage + 1} / ${widget.parts.length}",
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.7,
+                                      ),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 400.ms)
+              .slideY(begin: -0.2, end: 0, duration: 400.ms),
+
+          // 5. Side Actions (TikTok Style) - Avoids Overlap with Bottom Controls and Timeline
+          Positioned(
+                right: 16,
+                bottom:
+                    150, // Adjusted to sit right above the horizontal timeline (height 80, bottom 120 -> ends at 200)
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildSideActionButton(
+                      icon: HugeIcons.strokeRoundedShare01,
+                      label: 'share'.tr,
+                      isPrimary: false,
+                      onTap: () {
+                        VideoService.shareVideos([widget.parts[currentPage]]);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    _buildSideActionButton(
+                      icon: HugeIcons.strokeRoundedDownload01,
+                      label: 'export'.tr,
+                      isPrimary: true,
+                      onTap: () {
+                        VideoService.saveVideos([widget.parts[currentPage]]);
+                      },
                     ),
                   ],
                 ),
-              ),
-            ),
-          ),
-
-          // 3. Side Actions (TikTok Style) - Avoids Overlap with Bottom Controls
-          Positioned(
-            right: 16,
-            bottom: 120, // Positioned above the seek bar area
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildSideActionButton(
-                  icon: HugeIcons.strokeRoundedShare01,
-                  label: 'share'.tr,
-                  isPrimary: false,
-                  onTap: () {
-                    VideoService.shareVideos([widget.parts[currentPage]]);
-                  },
-                ),
-                const SizedBox(height: 16),
-                _buildSideActionButton(
-                  icon: HugeIcons.strokeRoundedDownload01,
-                  label: 'export'.tr,
-                  isPrimary: true,
-                  onTap: () {
-                    VideoService.saveVideos([widget.parts[currentPage]]);
-                  },
-                ),
-              ],
-            ),
-          ),
+              )
+              .animate()
+              .fadeIn(duration: 450.ms)
+              .slideX(begin: 0.2, end: 0, duration: 450.ms),
         ],
       ),
     );

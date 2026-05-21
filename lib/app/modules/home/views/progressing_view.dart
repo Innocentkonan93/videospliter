@@ -82,8 +82,8 @@ class _ProcessingViewState extends State<ProcessingView> {
               transitionDuration: const Duration(milliseconds: 400),
               pageBuilder: (context, animation, secondaryAnimation) {
                 return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  shape: RoundedSuperellipseBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   title: Text("cut_done_title".tr),
                   content: Column(

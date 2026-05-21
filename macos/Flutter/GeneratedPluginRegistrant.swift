@@ -8,7 +8,7 @@ import Foundation
 import cloud_firestore
 import connectivity_plus
 import device_info_plus
-import ffmpeg_kit_flutter_new
+import ffmpeg_kit_16kb
 import file_picker
 import file_selector_macos
 import firebase_analytics

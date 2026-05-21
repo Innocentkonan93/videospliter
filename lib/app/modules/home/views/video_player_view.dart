@@ -1,20 +1,19 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
-import 'package:video_spliter/app/services/video_service.dart';
 
 class VideoPreviewView extends StatefulWidget {
   final File videoFile;
-  final bool showAppBar;
-  final bool showTopInfo;
+  final bool isPlaying;
+  final ValueChanged<double>? onProgress;
+
   const VideoPreviewView({
     super.key,
     required this.videoFile,
-    this.showAppBar = true,
-    this.showTopInfo = true,
+    this.isPlaying = false,
+    this.onProgress,
   });
 
   @override
@@ -36,11 +35,38 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
           isReady = true;
           _calculateFileSize();
         });
+        if (widget.isPlaying) {
+          _controller.play();
+        }
       });
 
     _controller.addListener(() {
-      setState(() {}); // Update progress bar
+      if (mounted) {
+        setState(() {}); // Update progress bar
+        if (widget.onProgress != null && _controller.value.isInitialized) {
+          final duration = _controller.value.duration;
+          final position = _controller.value.position;
+          if (duration.inMilliseconds > 0) {
+            final progress = position.inMilliseconds / duration.inMilliseconds;
+            widget.onProgress!(progress.clamp(0.0, 1.0));
+          }
+        }
+      }
     });
+  }
+
+  @override
+  void didUpdateWidget(VideoPreviewView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isPlaying != oldWidget.isPlaying) {
+      if (isReady) {
+        if (widget.isPlaying) {
+          _controller.play();
+        } else {
+          _controller.pause();
+        }
+      }
+    }
   }
 
   void _calculateFileSize() {
@@ -88,7 +114,8 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
   Widget build(BuildContext context) {
     // If showAppBar is false, we probably want a transparent scaffold or just the body
     // But VideoPlayer needs a black background usually
-    Widget content = SafeArea(
+
+    return SafeArea(
       child: Column(
         children: [
           Expanded(
@@ -121,103 +148,50 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                         ),
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           // Top info bar (Only if AppBar is hidden, otherwise it might be redundant, but let's keep it for file size info)
                           // Actually, if we use this in a list, we might want to hide the file size if it's too cluttered.
                           // For now, keep it.
                           // Top info bar
-                          if (widget.showTopInfo)
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${'duration'.tr}: ${_formatDuration(_controller.value.duration)}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  Text(
-                                    '${'size'.tr}: $fileSize',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            )
-                          else
-                            const SizedBox(height: 56),
+                          // if (widget.showTopInfo)
 
-                          // Bottom controls
-                          Column(
-                            children: [
-                              // Progress bar
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: VideoProgressIndicator(
-                                  _controller,
-                                  allowScrubbing: true,
-                                  colors: VideoProgressColors(
-                                    playedColor: AppColors.primary,
-                                    bufferedColor: Colors.white.withValues(
-                                      alpha: 0.5,
-                                    ),
-                                    backgroundColor: Colors.white.withValues(
-                                      alpha: 0.2,
-                                    ),
+                          // Bottom controls (minimalist)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 24.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _formatDuration(_controller.value.position),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                              ),
-
-                              // Play/Pause and time
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      _formatDuration(
-                                        _controller.value.position,
-                                      ),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    IconButton.filledTonal(
-                                      icon: HugeIcon(
-                                        icon: _controller.value.isPlaying
+                                IconButton.filledTonal(
+                                  icon: HugeIcon(
+                                    icon:
+                                        _controller.value.isPlaying
                                             ? HugeIcons.strokeRoundedPause
                                             : HugeIcons.strokeRoundedPlay,
-                                        size: 40,
-                                        color: AppColors.primary,
-                                      ),
-                                      onPressed: _togglePlayback,
-                                    ),
-                                    // Hide Share button here if we are in "Embedded" mode (showAppBar = false)
-                                    // because parent likely handles sharing all.
-                                    if (widget.showAppBar)
-                                      IconButton.filled(
-                                        icon: const HugeIcon(
-                                          icon: HugeIcons.strokeRoundedShare01,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          VideoService.shareVideos([
-                                            widget.videoFile,
-                                          ]);
-                                        },
-                                      )
-                                    else
-                                      const SizedBox(
-                                        width: 48,
-                                      ), // Spacer to balance
-                                  ],
+                                    size: 40,
+                                    color: AppColors.primary,
+                                  ),
+                                  onPressed: _togglePlayback,
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  '$fileSize',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -228,68 +202,6 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
           ),
         ],
       ),
-    );
-
-    if (!widget.showAppBar) {
-      return Scaffold(backgroundColor: Colors.black, body: content);
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const HugeIcon(icon: HugeIcons.strokeRoundedCancel01, color: AppColors.white),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          PopupMenuButton<String>(
-            icon: const HugeIcon(icon: HugeIcons.strokeRoundedMoreVertical, color: AppColors.white),
-            onSelected: (String value) {
-              // Handle menu item tap actions here
-              // e.g. if (value == 'share') { ... }
-            },
-            itemBuilder:
-                (BuildContext context) => <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        const HugeIcon(icon: HugeIcons.strokeRoundedShare01, color: AppColors.primary),
-                        const SizedBox(width: 8),
-                        Text('share'.tr),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'save',
-                    child: Row(
-                      children: [
-                        const HugeIcon(icon: HugeIcons.strokeRoundedDownload01, color: AppColors.primary),
-                        const SizedBox(width: 8),
-                        Text('save'.tr),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'details',
-                    child: Row(
-                      children: [
-                        const HugeIcon(
-                          icon: HugeIcons.strokeRoundedInformationCircle,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(width: 8),
-                        Text('details'.tr),
-                      ],
-                    ),
-                  ),
-                ],
-          ),
-        ],
-      ),
-      body: content,
     );
   }
 }
