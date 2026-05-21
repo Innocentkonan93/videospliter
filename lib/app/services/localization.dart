@@ -23,6 +23,14 @@ class Localization extends Translations {
       'permission_denied_to_receive_notifications':
           'Permission denied to receive notifications',
       'allow': 'Allow',
+      'intro_title_1': 'No account. Zero setup.',
+      'intro_desc_1': 'Open the app, select your video, and start splitting immediately. Your privacy is 100% respected.',
+      'intro_title_2': 'Fast & Precise Splitting',
+      'intro_desc_2': 'Cut your videos into 15s, 30s, 60s, or custom durations with no quality loss.',
+      'intro_title_3': 'Save & Share Instantly',
+      'intro_desc_3': 'Save clips directly to your gallery or share them in one click to all your social platforms.',
+      'intro_title_4': 'Stay Notified',
+      'intro_desc_4': 'Enable notifications to know exactly when your video is fully processed, even in the background.',
 
       // Home screen
       'cut_share_save': 'Cut, share and save your videos in a few clicks',
@@ -251,6 +259,14 @@ class Localization extends Translations {
       'permission_denied_to_receive_notifications':
           'Autorisation refusée pour recevoir les notifications',
       'allow': 'Autoriser',
+      'intro_title_1': 'Pas de compte. Zéro config.',
+      'intro_desc_1': 'Ouvrez l\'app, sélectionnez votre vidéo et commencez à découper immédiatement. Votre vie privée est 100% respectée.',
+      'intro_title_2': 'Découpe Rapide & Précise',
+      'intro_desc_2': 'Découpez vos vidéos en segments de 15s, 30s, 60s ou personnalisés sans perte de qualité.',
+      'intro_title_3': 'Enregistrez & Partagez',
+      'intro_desc_3': 'Enregistrez vos clips directement dans votre galerie ou partagez-les en un clic sur tous vos réseaux.',
+      'intro_title_4': 'Restez Informé',
+      'intro_desc_4': 'Autorisez les notifications pour savoir exactement quand votre export est terminé, même en arrière-plan.',
 
       // Home screen
       'cut_share_save':
@@ -479,6 +495,14 @@ class Localization extends Translations {
       'permission_denied_to_receive_notifications':
           'Permiso denegado para recibir notificaciones',
       'allow': 'Permitir',
+      'intro_title_1': 'Sin cuenta. Cero configuración.',
+      'intro_desc_1': 'Abre la aplicación, selecciona tu video y comienza a cortar de inmediato. Tu privacidad está 100% respetada.',
+      'intro_title_2': 'Corte rápido y preciso',
+      'intro_desc_2': 'Corta tus videos en segmentos de 15s, 30s, 60s o personalizados sin pérdida de calidad.',
+      'intro_title_3': 'Guarda y comparte al instante',
+      'intro_desc_3': 'Guarda clips directamente en tu galería o compártelos con un clic en todas tus redes sociales.',
+      'intro_title_4': 'Mantente notificado',
+      'intro_desc_4': 'Activa las notificaciones para saber exactamente cuándo se ha procesado tu video, incluso en segundo plano.',
 
       // Home screen
       'cut_share_save': 'Corta, comparte y guarda tus videos en unos clics',
@@ -712,6 +736,14 @@ class Localization extends Translations {
       'permission_denied_to_receive_notifications':
           'Permissão negada para receber notificações',
       'allow': 'Permitir',
+      'intro_title_1': 'Sem conta. Zero configuração.',
+      'intro_desc_1': 'Abra o aplicativo, selecione seu vídeo e comece a cortar imediatamente. Sua privacidade é 100% respeitada.',
+      'intro_title_2': 'Corte rápido e preciso',
+      'intro_desc_2': 'Corte seus vídeos em segmentos de 15s, 30s, 60s ou personalizados sem perda de qualidade.',
+      'intro_title_3': 'Salve e compartilhe instantaneamente',
+      'intro_desc_3': 'Salve clipes diretamente na sua galeria ou compartilhe-os com um clique em todas as suas redes sociais.',
+      'intro_title_4': 'Mantenha-se notificado',
+      'intro_desc_4': 'Ative as notificações para saber exatamente quando seu vídeo foi totalmente processado, mesmo em segundo plano.',
 
       // Home screen
       'cut_share_save':
@@ -945,6 +977,14 @@ class Localization extends Translations {
       'permission_denied_to_receive_notifications':
           'تم رفض الإذن بتلقي الإشعارات',
       'allow': 'السماح',
+      'intro_title_1': 'بدون حساب. صفر إعداد.',
+      'intro_desc_1': 'افتح التطبيق، اختر مقطع الفيديو الخاص بك، وابدأ بالقص على الفور. خصوصيتك محترمة بنسبة 100%.',
+      'intro_title_2': 'قص سريع ودقيق',
+      'intro_desc_2': 'قص مقاطع الفيديو الخاصة بك إلى مقاطع مدتها 15 أو 30 أو 60 ثانية أو مدد مخصصة دون أي فقدان للجودة.',
+      'intro_title_3': 'احفظ وشارك على الفور',
+      'intro_desc_3': 'احفظ المقاطع مباشرة في معرض الصور الخاص بك أو شاركها بنقرة واحدة على جميع منصات التواصل الاجتماعي الخاصة بك.',
+      'intro_title_4': 'ابق على اطلاع',
+      'intro_desc_4': 'اسمح بالإشعارات لمعرفة متى يتم معالجة الفيديو الخاص بك بالكامل، حتى في الخلفية.',
 
       // Home screen
       'cut_share_save': 'اقطع وشارك واحفظ مقاطع الفيديو الخاصة بك في بضع نقرات',

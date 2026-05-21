@@ -111,10 +111,12 @@ class AdMobService {
       return;
     }
 
-    // Si la bannière est déjà chargée, on notifie juste
-    if (_bannerAd != null && _isBannerAdLoaded) {
-      if (onAdLoadedCallback != null) onAdLoadedCallback();
-      return;
+    // Libérer l'ancienne bannière si elle existe pour éviter les fuites de mémoire 
+    // et les exceptions JNI sur une Activité Android recréée ou obsolète
+    if (_bannerAd != null) {
+      _bannerAd!.dispose();
+      _bannerAd = null;
+      _isBannerAdLoaded = false;
     }
 
     _bannerAd = BannerAd(

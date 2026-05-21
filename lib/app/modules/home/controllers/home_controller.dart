@@ -557,6 +557,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void onClose() {
     WidgetsBinding.instance.removeObserver(this);
+    adMobService.disposeBannerAd();
     super.onClose();
   }
 

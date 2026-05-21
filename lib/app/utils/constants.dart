@@ -130,18 +130,25 @@ var settingsGroups = [
 ];
 
 var introductions = <Map<String, dynamic>>[
-  {"title": "", "description": "welcome_cutit".tr, "image_path": "cut.png"},
-
-  {"title": "", "description": "choose_video".tr, "image_path": "upload.png"},
-
-  {"title": "", "description": "define_duration".tr, "image_path": "timer.png"},
-
-  {"title": "", "description": "share_moments".tr, "image_path": "sharing.png"},
-
   {
-    "title": "",
-    "description": "allow_notifications".tr,
-    "image_path": "bell.png",
+    "title": "intro_title_1".tr,
+    "description": "intro_desc_1".tr,
+    "image_path": "image1.png",
+  },
+  {
+    "title": "intro_title_2".tr,
+    "description": "intro_desc_2".tr,
+    "image_path": "image2.png",
+  },
+  {
+    "title": "intro_title_3".tr,
+    "description": "intro_desc_3".tr,
+    "image_path": "image3.png",
+  },
+  {
+    "title": "intro_title_4".tr,
+    "description": "intro_desc_4".tr,
+    "image_path": "image4.png",
   },
 ];
 var aboutApp = "about_cutit".tr;

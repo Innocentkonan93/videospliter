@@ -7,7 +7,7 @@
 ### Informations Générales
 
 - **Nom de l'application**: Cutit
-- **Version**: 1.0.3+30
+- **Version**: 1.1.4+42
 - **Framework**: Flutter SDK 3.7.0+
 - **Plateformes supportées**: Android, iOS
 - **Architecture**: GetX (gestion d'état et navigation)
@@ -66,15 +66,20 @@ lib/
 │   │   ├── ad_mob_service.dart           # Gestion des publicités AdMob
 │   │   ├── analytics_service.dart        # Analytics Firebase
 │   │   ├── app_service.dart              # Services généraux (notation, partage)
-│   │   ├── bot_service.dart              # Service bot (si applicable)
+│   │   ├── bot_service.dart              # Service bot
+│   │   ├── config_service.dart           # Service de configuration (Remote Config & Feature Flags)
+│   │   ├── feature_manager.dart          # Manager d'accès aux fonctionnalités (Pro / Free)
+│   │   ├── feedback_service.dart         # Service d'envoi de retours à Firestore
 │   │   ├── file_service.dart             # Gestion des fichiers/dossiers
-│   │   ├── firebase_notification_service.dart  # Notifications Firebase
+│   │   ├── firebase_notification_service.dart  # Notifications Firebase FCM
 │   │   ├── firebase_service.dart         # Service Firebase principal
 │   │   ├── local_notifications_service.dart    # Notifications locales
 │   │   ├── localization.dart             # Internationalisation (i18n)
+│   │   ├── revenuecat_service.dart       # Achats In-App & Abonnements Pro (RevenueCat)
 │   │   ├── save_segments_service.dart    # Sauvegarde des segments
 │   │   ├── sharing_service.dart          # Réception de vidéos partagées
-│   │   └── video_service.dart            # Traitement vidéo (FFmpeg)
+│   │   ├── update_service.dart           # Service de mise à jour de l'app (Versionarte)
+│   │   └── video_service.dart            # Traitement vidéo (FFmpeg, compression)
 │   │
 │   ├── utils/                     # Utilitaires
 │   │   ├── constants.dart        # Constantes de l'application
@@ -82,14 +87,19 @@ lib/
 │   │   └── responsive.dart       # Responsive design
 │   │
 │   └── widgets/                   # Widgets réutilisables
+│       ├── app_update_dialog.dart        # Fenêtre de mise à jour forcée/facultative
 │       ├── custom_video_player_view.dart
 │       ├── deletion_dialog.dart
+│       ├── export_type_sheet.dart        # Feuille de choix de qualité d'export
 │       ├── folder_item.dart
 │       ├── folder_name_dialog.dart
 │       ├── folder_options.dart
 │       ├── language_selection_sheet.dart
+│       ├── pre_rating_dialog.dart        # Dialogue avant notation
+│       ├── premium_banner.dart           # Bannière publicitaire Premium
 │       ├── premium_card.dart
-│       └── time_slicing_sheet.dart
+│       ├── premium_success_view.dart     # Écran d'achat Pro réussi
+│       └── time_slicing_sheet.dart       # Feuille de découpage (presets sociaux & custom)
 │
 ├── firebase_options.dart          # Configuration Firebase
 └── main.dart                      # Point d'entrée de l'application
@@ -112,845 +122,243 @@ L'application utilise **GetX** comme solution complète pour:
 
 #### Méthodes de Découpe
 
-L'application propose **trois méthodes** de découpage vidéo:
+L'application propose principalement la méthode suivante pour la production :
 
-1. **`splitVideo()`** - Méthode basique (non utilisée en production)
+- **`splitBySSAsync()`** - Découpe asynchrone (méthode principale)
+  - Découpe asynchrone avec `FFmpegKit.executeAsync()`.
+  - Progression fine via callbacks `onStatistics` liée au `HomeController`.
+  - Nettoyage automatique : ignore les micro-segments inférieurs à 1 seconde.
+  - Crop automatique (`crop='floor(in_w/2)*2:floor(in_h/2)*2'`) pour éviter les dimensions impaires.
+  - Codec : MPEG4 pour la vidéo (`-c:v mpeg4`, qualité `-qscale:v 5`), AAC pour l'audio (128k bitrate).
+  - Format de sortie : MP4.
 
-   - Utilise `-c copy` pour une copie rapide sans ré-encodage
-   - Moins fiable pour certaines vidéos
-
-2. **`splitBySS()`** - Découpe synchrone séquentielle
-
-   - Découpe séquentielle segment par segment
-   - Utilise `-ss` (seek start) et `-t` (duration)
-   - Ré-encodage avec codec MPEG4 et qualité élevée (`-qscale:v 2`)
-   - Gère la progression via le contrôleur
-
-3. **`splitBySSAsync()`** - Découpe asynchrone (méthode principale)
-   - Découpe asynchrone avec `FFmpegKit.executeAsync()`
-   - Progression fine via callbacks `onStatistics`
-   - Utilise `-movflags +faststart` pour lecture rapide
-   - Crop automatique pour éviter dimensions impaires
-   - Codec: MPEG4 pour vidéo, AAC pour audio (128k)
+#### Filigrane (Watermark) & Export Pro/Gratuit
+- **Mode Gratuit (`!isPro`)** :
+  - Un filigrane (`assets/logo/watermark.png`) est chargé à partir des assets, converti en bytes bruts (`watermark_temp.raw`) et superposé en bas à gauche de la vidéo via le filtre complexe FFmpeg :
+    `[0:v]crop='floor(in_w/2)*2:floor(in_h/2)*2'[base];[1:v]scale=120:-2[wm];[base][wm]overlay=15:H-h-15`.
+- **Mode Pro (`isPro`)** :
+  - Aucun filigrane n'est appliqué sur les segments exportés.
 
 #### Paramètres de Découpe
-
-- **Durées prédéfinies**: 3, 5, 10, 15, 30, 60 secondes (configurable)
-- **Durée par défaut**: 30 secondes
-- **Qualité vidéo**: `-qscale:v 2` (haute qualité, 1-31 échelle)
-- **Audio**: AAC 128k bitrate
-- **Format de sortie**: MP4
+Dans `TimeSlicingSheet`, l'utilisateur dispose de deux modes de sélection de durée :
+1. **Mode Custom** :
+   - Choix de durées prédéfinies : 3, 5, 10, 15, 30, 60 secondes.
+   - Curseur de sélection (Slider) pour définir précisément une durée personnalisée entre 1s et 60s.
+2. **Presets Réseaux Sociaux (Social Presets)** :
+   - Une barre rapide permet de sélectionner les formats officiels :
+     - **Facebook** : 60 secondes.
+     - **Instagram** : 60 secondes.
+     - **Tiktok** : 15 secondes.
+     - **Whatsapp** : 60 secondes.
 
 #### Flux de Découpe
 
 ```
-1. Sélection vidéo (FilePicker ou partage)
-2. Analyse de la durée totale (FFprobe)
-3. Calcul du nombre de segments
-4. Découpe asynchrone avec progression
-5. Génération des fichiers temporaires
-6. Affichage des résultats
-7. Sélection et sauvegarde/partage
+1. Sélection vidéo (FilePicker ou partage d'intent)
+2. Analyse de la taille et de la durée totale (vérification des limites Pro/Free)
+3. Choix de la durée (TimeSlicingSheet - custom ou presets réseaux sociaux)
+4. Lancement du découpage asynchrone dans ProcessingView
+5. Superposition facultative du filigrane si l'utilisateur est gratuit
+6. Fin du découpage et redirection vers la grille des segments (ResultView)
+7. Option de partage ou de sauvegarde galerie
 ```
 
 ### 2. Gestion des Fichiers et Dossiers
 
 #### Structure de Sauvegarde
 
-**Android**:
+L'enregistrement dans la galerie utilise le package **`gal`** pour une compatibilité native et simplifiée sur Android et iOS.
 
-- Chemin: `/storage/emulated/0/Android/data/com.meetsum.cutIt/files/Cutit/{folderName}/`
-- Utilise `getExternalStorageDirectory()`
+**Android**:
+- Dossier temporaire : `{ExternalStorage}/Android/data/com.meetsum.cutIt/files/`
+- Dossier permanent dans la galerie : Géré via `Gal.putVideo()`
 
 **iOS**:
-
-- Chemin: `{ApplicationDocumentsDirectory}/Cutit/{folderName}/`
-- Utilise `getApplicationDocumentsDirectory()`
+- Dossier temporaire : `{ApplicationDocumentsDirectory}/`
+- Dossier permanent dans la galerie : Géré via `Gal.putVideo()` après demande de permission `Permission.photos`
 
 #### Opérations sur les Dossiers
 
-- **Création**: Automatique lors de la sauvegarde
-- **Renommage**: Via `FileService.renameFolder()`
-- **Suppression**: Via `FileService.deleteFolders()` avec confirmation
-- **Nommage**: `{baseFolderName}-{timestamp}` (ex: `MyVideos-1698765432`)
+- **Création**: Automatique lors de la sauvegarde.
+- **Renommage**: Via `FileService.renameFolder()`.
+- **Suppression**: Via `FileService.deleteFolders()` avec le widget `DeletionDialog`.
+- **Nommage**: `{baseFolderName}-{timestamp}`.
 
 ### 3. Partage de Vidéos
 
 #### Réception de Vidéos Partagées
 
-L'application supporte la réception de vidéos depuis d'autres applications:
+L'application supporte le partage de vidéos depuis d'autres applications :
 
 1. **Via Intent Android / Share Extension iOS**
-
-   - Utilise `flutter_sharing_intent` pour Android
-   - Extension iOS `CutitShareExtension` pour iOS
-   - Stream en temps réel avec `getMediaStream()`
+   - Utilise `flutter_sharing_intent` pour Android.
+   - Extension iOS `CutitShareExtension` pour iOS.
+   - Stream en temps réel avec `getMediaStream()`.
 
 2. **Gestion des États**
-   - Application en mémoire: Stream actif
-   - Application lancée via partage: `getInitialSharing()`
+   - Application en mémoire : Stream actif.
+   - Application lancée via partage : `getInitialSharing()`.
+   - Écoute continue via `SharingService` sur iOS pour intercepter les fichiers temporaires dans le App Group (`group.com.meetsum.cutit`).
 
 #### Partage de Segments
 
-- Partage multiple de fichiers via `share_plus`
-- Format: Liste de `XFile`
-- Analytics: Suivi du nombre de segments partagés
-- Publicité: Affichage d'une publicité interstitielle après partage
+- Partage multiple de fichiers via `share_plus` sous forme de liste de `XFile`.
+- Analytics : Suivi des statistiques de partage via `AnalyticsService.videoShared`.
+- Publicités : Une publicité interstitielle est déclenchée après l'action de partage (uniquement pour les utilisateurs gratuits).
 
 ### 4. Internationalisation (i18n)
 
 #### Langues Supportées
 
+##### Actives
 - 🇫🇷 **Français** (`fr`)
 - 🇺🇸 **English** (`en`)
 - 🇪🇸 **Español** (`es`)
 - 🇵🇹 **Português** (`pt`)
 - 🇸🇦 **العربية** (`ar`)
 
+##### Planifiées (Commentées dans le code)
+- 🇩🇪 **Deutsch** (`de`)
+- 🇮🇹 **Italiano** (`it`)
+- 🇳🇱 **Nederlands** (`nl`)
+- 🇷🇺 **Русский** (`ru`)
+- 🇹🇷 **Türkçe** (`tr`)
+- 🇨🇳 **中文** (`zh`)
+
 #### Système de Traductions
 
-- Utilise `GetX Translations` avec classe `Localization`
-- Plus de 100 clés de traduction
-- Sauvegarde de la langue sélectionnée dans le cache
-- Changement de langue en temps réel
+- Utilise `GetX Translations` avec la classe `Localization`.
+- Sauvegarde de la langue sélectionnée dans le cache local `CacheHelper` sous la clé `selected_language_key`.
 
-#### Clés de Traduction Principales
+---
 
-- Écrans d'introduction
-- Messages d'erreur et de succès
-- Paramètres et options
-- Guides et instructions
-- Formulaires de contact
+## 🔒 Monétisation et Abonnements Pro (RevenueCat)
 
-### 5. Système de Notations (In-App Review)
+L'application intègre un modèle Freemium robuste basé sur **RevenueCat**.
 
-#### Stratégie de Notation
+### Entitlement et Produits
+- **Entitlement ID** : `Cutit Pro`
+- **Produits configurés** :
+  - `cutit_monthly` : Abonnement mensuel
+  - `cutit_yearly` : Abonnement annuel
 
-L'application utilise une stratégie intelligente pour demander des notations:
+### API Keys
+- Android : `goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV`
+- iOS : `appl_NycGQMwdBmSQQHlkJxhLwBKhxWC`
 
-**Conditions d'Affichage**:
+### Fonctionnalités Premium (Pro)
+L'accès Premium débloque les avantages suivants :
+1. **Pas de filigrane** : Suppression du logo Cutit en bas des vidéos découpées.
+2. **Export HD (1080p Full HD)** : Possibilité d'exporter les vidéos avec `VideoQuality.HighestQuality`.
+3. **Sans publicité** : Suppression totale de la bannière AdMob et des publicités interstitielles/App Open.
+4. **Limites de taille accrues** :
+   - Taille maximale de vidéo : **1.5 Go** (vs 150 Mo pour les utilisateurs gratuits).
+   - Durée maximale de vidéo : **1 heure** (vs 10 minutes pour les utilisateurs gratuits).
 
-- Seuil de lancements: 5 lancements minimum (optionnel selon le contexte)
-- Durée minimale d'installation: 7 jours (optionnel selon le contexte)
-- Cooldown entre demandes: 30 jours
+### Intégration UI / Paywall
+- Le paywall RevenueCat est présenté via `RevenueCatUI.presentPaywallIfNeeded` ou `presentPaywall`.
+- En cas de succès d'achat, l'utilisateur est redirigé vers le widget `PremiumSuccessView`.
+- Une option "Restauration des achats" est disponible dans les paramètres pour restaurer les droits sur un nouvel appareil.
 
-**Moment d'Affichage**:
+### Alternative pour les utilisateurs gratuits : Export HD via Publicité Récompensée (Rewarded Ad)
+Les utilisateurs n'ayant pas d'abonnement Pro actif peuvent temporairement déverrouiller l'export HD (1080p) pour leur découpage en cours en regardant une publicité vidéo récompensée (`AdMobService.showRewardedAd`).
 
-1. **Au lancement**: Après 5 lancements et 7 jours d'utilisation
-2. **Après découpage**: Ignore les seuils pour prompt rapide
-3. **Après partage**: Ignore les seuils pour prompt rapide
-4. **Manuel**: Via les paramètres
+---
 
-**Gestion**:
+## 📢 Publicités (Google AdMob)
 
-- Désactivation permanente après réponse de l'utilisateur
-- Utilise `InAppReview` pour affichage natif
-- Fallback vers page de l'App Store/Play Store si indisponible
+Les publicités sont affichées uniquement pour les utilisateurs non Premium.
 
-### 6. Publicités (AdMob)
+### Types de Publicités
+1. **Bannière (Banner Ad)** : Affichage persistant en haut ou en bas de l'écran d'accueil (`HomeView`). Détruite/disposée dès que l'utilisateur passe Pro.
+2. **Interstitielle (Interstitial Ad)** : Affichage plein écran déclenché après sauvegarde en galerie ou partage de segments.
+3. **Récompensée (Rewarded Ad)** : Utilisée pour déverrouiller l'export HD gratuitement.
+4. **App Open Ad** : Affichée au retour de l'application au premier plan si l'absence dépasse 30 secondes (avec un cooldown de 1 minute).
 
-#### Types de Publicités
+---
 
-1. **Bannière (Banner Ad)**
+## 📊 Analytics & Retours Utilisateurs (Firebase)
 
-   - Affichage permanent en bas de l'écran principal
-   - Taille adaptative
-   - Rechargement automatique
+### Firebase Analytics
+Le service `AnalyticsService` suit plusieurs événements clés pour optimiser le produit :
+- **`video_imported`** : Suivi du fichier vidéo source (taille, durée, source d'importation).
+- **`export_started` / `export_success` / `export_failed`** : Suivi de la performance de découpe.
+- **`video_shared`** : Enregistrement du nombre de segments partagés.
 
-2. **Interstitielle (Interstitial Ad)**
+### Retours Utilisateurs (FeedbackService)
+L'application intègre un module de feedback qui enregistre les retours directement dans **Firebase Firestore** (collection `feedbacks`).
+- **Types de Feedback** :
+  - `manual` : Remonté manuellement par l'utilisateur depuis l'écran `FeedbacksView` pour soumettre des avis ou des rapports de bugs.
+  - `automatic` : Remontées automatiques d'erreurs techniques ou d'échecs de découpe.
+- **Métadonnées collectées** :
+  - Informations de l'appareil (modèle, OS, version SDK via `device_info_plus`).
+  - Informations de l'application (version, build via `package_info_plus`).
+  - Métadonnées de la vidéo concernée (taille, durée, chemin, etc.).
+  - Logs et détails de l'erreur rencontrée.
 
-   - Affichage après sauvegarde de segments
-   - Affichage après partage de vidéos
-   - Affichage après retour en avant-plan (>30 secondes)
+---
 
-3. **Récompensée (Rewarded Ad)**
-   - Affichage tous les 5 découpages réussis
-   - Réinitialisation du compteur après visionnage
+## 🔄 Système de Mises à jour (UpdateService)
 
-#### Stratégie d'Affichage
-
-- **Après actions positives**: Sauvegarde, partage
-- **Gestion du cycle de vie**: Publicité après retour en avant-plan
-- **Cooldown**: 3 minutes entre interstitielles
-- **Analytics**: Suivi des impressions et interactions
-
-### 7. Analytics (Firebase Analytics)
-
-#### Événements Suivis
-
-1. **Import de Vidéo**
-
-   - Durée de la vidéo (secondes)
-   - Taille du fichier (MB)
-   - Source (file_picker, share, etc.)
-
-2. **Export/Sauvegarde**
-
-   - Nombre de segments
-   - Temps d'export (secondes)
-   - Taille totale (MB)
-   - Format d'export
-   - Statut (succès/échec)
-
-3. **Partage**
-
-   - Nombre de segments partagés
-
-4. **Erreurs**
-   - Raison de l'échec
-   - Contexte de l'erreur
-
-### 8. Notifications
-
-#### Types de Notifications
-
-1. **Notifications Locales**
-
-   - Notification après découpage terminé
-   - Utilise `flutter_local_notifications`
-
-2. **Notifications Firebase (Push)**
-   - Notifications à distance
-   - Gestion des tokens FCM
-   - Intégration avec Firebase Cloud Messaging
-
-### 9. Permissions
-
-#### Permissions Requises
-
-**Android**:
-
-- `Permission.storage` - Accès au stockage
-
-**iOS**:
-
-- `Permission.photos` - Accès à la photothèque
-
-#### Gestion
-
-- Demande automatique avant sélection de fichier
-- Vérification du statut
-- Messages d'erreur si refusé
+L'application intègre un gestionnaire de mise à jour basé sur le package **`versionarte`** lié à **Firebase Remote Config** (clé `app_version`).
+- L'application vérifie la présence de mises à jour au démarrage de l'application et au retour au premier plan (`AppLifecycleState.resumed`).
+- **Types de mises à jour** :
+  - **Mise à jour facultative** : Propose à l'utilisateur de mettre à jour, mais lui permet de continuer à utiliser l'application.
+  - **Mise à jour forcée** : Bloque l'accès à l'application avec un écran flouté et affiche la boîte de dialogue `AppUpdateDialog` non fermable, redirigeant vers le store respectif.
 
 ---
 
 ## 🔧 Services Détaillés
 
-### VideoService
+### `ConfigService`
+- **Responsabilité** : Chargement et synchronisation de Firebase Remote Config.
+- **Variables** : `isProVersionEnabled` (permet d'activer/désactiver globalement les options payantes et les paywalls).
 
-**Responsabilité**: Traitement vidéo avec FFmpeg
+### `RevenueCatService`
+- **Responsabilité** : Initialisation du SDK Purchases, écoute des changements d'abonnements, gestion des achats et restaurations.
 
-**Méthodes principales**:
+### `FeatureManager`
+- **Responsabilité** : Centralise les règles d'accès au contenu Pro. Utilise de façon combinée le statut réactif de `RevenueCatService` et le feature flag de `ConfigService`.
 
-- `splitVideo()` - Découpe basique
-- `splitBySS()` - Découpe synchrone
-- `splitBySSAsync()` - Découpe asynchrone (production)
-- `shareVideos()` - Partage de segments
+### `FeedbackService`
+- **Responsabilité** : Envoi de documents structurés à Firestore pour centraliser les rapports de bugs et feedbacks utilisateur.
 
-**Dépendances**:
+### `UpdateService`
+- **Responsabilité** : Vérification asynchrone des versions locales vs distantes via Versionarte.
 
-- `ffmpeg_kit_flutter_new` - FFmpeg
-- `path_provider` - Dossiers temporaires
-
-### HomeController
-
-**Responsabilité**: Orchestration principale de l'application
-
-**Propriétés observables**:
-
-- `selectedVideo` - Vidéo sélectionnée
-- `videoParts` - Segments générés
-- `selectedVideoParts` - Segments sélectionnés
-- `progress` - Progression du découpage (0.0 - 1.0)
-- `sliceDuration` - Durée des segments
-- `currentPage` - Page actuelle
-
-**Méthodes principales**:
-
-- `pickVideo()` - Sélection de vidéo
-- `splitVideoIsolate()` - Lancement du découpage
-- `saveSegments()` - Sauvegarde des segments
-- `initSharingListener()` - Écoute des partages
-- `initVideoControllers()` - Gestion des lecteurs vidéo
-
-**Cycle de vie**:
-
-- `onInit()` - Initialisation (publicités, listeners)
-- `onClose()` - Nettoyage (dispose controllers)
-- `didChangeAppLifecycleState()` - Gestion avant-plan/arrière-plan
-
-### SaveSegmentsService
-
-**Responsabilité**: Sauvegarde des segments sur le disque
-
-**Fonctionnalités**:
-
-- Création de dossiers avec nom personnalisé
-- Copie des fichiers depuis le dossier temporaire
-- Analytics: Suivi du temps d'export
-- Gestion d'erreurs avec messages traduits
-
-### FileService
-
-**Responsabilité**: Opérations sur les dossiers
-
-**Méthodes**:
-
-- `deleteFolders()` - Suppression récursive
-- `renameFolder()` - Renommage de dossiers
-
-### AdMobService
-
-**Responsabilité**: Gestion des publicités Google AdMob
-
-**Fonctionnalités**:
-
-- Chargement de bannières, interstitielles, récompensées
-- Gestion du cycle de vie des publicités
-- Callbacks pour événements publicitaires
-
-### AnalyticsService
-
-**Responsabilité**: Suivi analytique Firebase
-
-**Méthodes principales**:
-
-- `initialize()` - Initialisation
-- `videoImported()` - Suivi import
-- `exportStarted()` / `exportSuccess()` / `exportFailed()` - Suivi export
-- `videoShared()` - Suivi partage
-
-### AppService
-
-**Responsabilité**: Services généraux de l'application
-
-**Fonctionnalités**:
-
-- Gestion des notations in-app
-- Partage de l'application (lien App Store/Play Store)
-- Stratégie de timing pour les demandes de notation
-
-### SharingService
-
-**Responsabilité**: Réception de vidéos partagées (iOS Extension)
-
-**Fonctionnalités**:
-
-- Écoute via MethodChannel iOS
-- Gestion des UserDefaults partagés (App Group)
-- Timer périodique pour vérification (2 secondes)
-
-### Localization
-
-**Responsabilité**: Internationalisation
-
-**Structure**:
-
-- Classe `Translations` de GetX
-- Map par langue (`en`, `fr`, `es`, `pt`, `ar`)
-- Plus de 100 clés de traduction
+### `VideoService`
+- **Responsabilité** : Traitement de découpage avec FFmpeg, compression vidéo standard ou HD, et encapsulation des fonctions de partage/sauvegarde de fichiers.
 
 ---
 
-## 🎨 Interface Utilisateur
+## 📦 Dépendances Principales (pubspec.yaml)
 
-### Thème et Design
-
-#### Couleurs Principales
-
-```dart
-- Primary: #4A25CC (Violet)
-- Secondary: #A492E5 (Violet clair)
-- Background: #F5F6FA (Gris très clair)
-- White: #FFFFFF
-- Black: #000000
-- Grey: #A7A7A7
-- Red: #BE332E
-- Green: #367562
-- Orange: #E09215
-```
-
-#### Typographie
-
-- **Police principale**: Poppins (via Google Fonts)
-- **Police secondaire**: Jost (pour labels)
-- **Material Design 3**: Activé (`useMaterial3: true`)
-
-#### Composants UI
-
-- **Cards**: Fond sombre (#302929)
-- **Inputs**: Fond gris clair avec bordures arrondies
-- **AppBar**: Centré, fond blanc
-- **Boutons**: Style Material avec couleurs primaires
-
-### Navigation
-
-#### Routes Principales
-
-1. `/introduction` - Écran d'introduction (route initiale)
-2. `/home` - Écran principal (découpe vidéo)
-3. `/settings` - Paramètres
-
-#### Navigation Interne (HomeView)
-
-Utilise `PageController` avec 3 pages:
-
-1. **Page 0**: Sélection de vidéo
-2. **Page 1**: Mes découpages (segments sauvegardés)
-3. **Page 2+**: Résultats et prévisualisation
-
-### Écrans Principaux
-
-#### 1. IntroductionView
-
-- Carousel d'introduction avec 5 pages
-- Images: cut.png, upload.png, timer.png, sharing.png, bell.png
-- Boutons "Skip" et "Later"
-- Animation avec `flutter_animate`
-
-#### 2. HomeView
-
-- **Page 0**: Sélection de vidéo
-  - Bouton "Charger une vidéo"
-  - Affichage de la vidéo sélectionnée
-  - Paramétrage de la durée
-  - Bouton "Découper"
-- **Page 1**: Mes découpages
-  - Liste des dossiers sauvegardés
-  - Prévisualisation des segments
-  - Options de dossier (renommer, supprimer)
-- **Page 2+**: Résultats
-  - Grille de prévisualisation des segments
-  - Sélection multiple
-  - Boutons "Partager" et "Enregistrer"
-
-#### 3. SettingsView
-
-- Liste d'options:
-  - Comment ça marche?
-  - Contactez-nous
-  - Signaler un problème
-  - Noter l'application
-  - Partager l'application
-  - Langue
-  - Politique de confidentialité
-  - À propos
-
-#### 4. ProgressingView
-
-- Indicateur de progression (pourcentage)
-- Messages motivants pendant le découpage
-- Animation Lottie
+- **`get: ^4.7.2`** : Gestion d'état et navigation.
+- **`ffmpeg_kit_flutter_new: ^4.1.0`** : Traitement vidéo haute performance.
+- **`video_player: ^2.11.1`** : Lecteur vidéo natif.
+- **`video_compress: ^3.1.4`** : Compression des exports vidéos.
+- **`purchases_flutter: ^10.0.1` / `purchases_ui_flutter: ^10.0.1`** : Achats In-App & Paywalls RevenueCat.
+- **`google_mobile_ads: ^8.0.0`** : Intégration publicitaire AdMob.
+- **`cloud_firestore: ^6.3.0`** : Base de données des retours utilisateur.
+- **`versionarte: any`** : Vérification des versions de l'application.
+- **`gal: ^2.3.2`** : Sauvegarde efficace dans la galerie.
+- **`permission_handler: ^12.0.1`** : Gestion des droits système.
+- **`flutter_sharing_intent: ^2.0.4`** : Réception de vidéos partagées.
+- **`device_info_plus: ^11.0.0`** / **`package_info_plus: ^8.1.0`** : Collecte d'informations d'environnement.
+- **`hugeicons: ^1.1.6`** : Pack d'icônes vectorielles.
 
 ---
 
-## 📦 Dépendances Principales
+## 📝 Notes Techniques et Limitations
 
-### Core Flutter
-
-- `flutter`: SDK Flutter
-- `cupertino_icons`: Icônes iOS
-
-### Gestion d'État et Navigation
-
-- `get: ^4.7.2` - GetX (état, navigation, dépendances)
-
-### Traitement Vidéo
-
-- `ffmpeg_kit_flutter_new: ^1.2.1` - FFmpeg Kit
-- `video_player: ^2.9.5` - Lecteur vidéo
-- `file_picker: ^10.1.9` - Sélection de fichiers
-
-### Firebase
-
-- `firebase_core: ^3.13.1` - Core Firebase
-- `firebase_analytics: ^11.4.6` - Analytics
-- `firebase_crashlytics: any` - Crashlytics
-- `firebase_messaging: ^15.2.6` - Cloud Messaging
-- `firebase_storage: ^12.4.7` - Storage (optionnel)
-
-### Publicités
-
-- `google_mobile_ads: ^6.0.0` - AdMob
-
-### Partage et Communication
-
-- `share_plus: ^11.0.0` - Partage système
-- `flutter_sharing_intent: ^1.1.1` - Réception de partages
-- `url_launcher: ^6.3.2` - Ouverture d'URLs
-
-### Permissions et Stockage
-
-- `permission_handler: ^11.3.1` - Permissions
-- `path_provider: ^2.0.13` - Dossiers système
-- `shared_preferences: ^2.5.3` - Stockage local
-
-### Notifications
-
-- `flutter_local_notifications: ^18.0.0` - Notifications locales
-
-### UI/UX
-
-- `flutter_animate: ^4.5.2` - Animations
-- `lottie: ^3.3.1` - Animations Lottie
-- `google_fonts: ^6.3.3` - Polices Google
-- `percent_indicator: ^4.2.5` - Indicateurs de progression
-- `animated_digit: ^3.2.3` - Chiffres animés
-
-### Utilitaires
-
-- `intl: ^0.20.2` - Internationalisation
-- `package_info_plus: ^8.3.0` - Infos de l'app
-- `in_app_review: ^2.0.10` - Notation in-app
-- `image_picker: ^1.1.2` - Sélection d'images
-- `path: ^1.8.3` - Manipulation de chemins
-
-### Analytics Externe
-
-- `clarity_flutter: ^1.0.0` - Microsoft Clarity
+1. **Plateforme** : Android et iOS uniquement. FFmpeg n'est pas configuré pour le Web ou Desktop dans ce projet.
+2. **Gestion Mémoire** : Pour éviter les fuites de mémoire, toutes les instances de `VideoPlayerController` créées pour les segments de prévisualisation dans `HomeController` sont stockées dans une map et systématiquement disposées via `disposeVideoControllers()` lors du nettoyage.
+3. **Nettoyage automatique** : Les fragments générés par FFmpeg d'une durée inférieure à 1 seconde sont exclus automatiquement pour éviter les vidéos corrompues ou illisibles.
 
 ---
 
-## 🔐 Configuration et Sécurité
-
-### Firebase Configuration
-
-#### Fichiers Requis
-
-**Android**:
-
-- `android/app/google-services.json`
-- Téléchargé depuis Firebase Console
-
-**iOS**:
-
-- `ios/Runner/GoogleService-Info.plist`
-- Téléchargé depuis Firebase Console
-
-#### Initialisation
-
-```dart
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform
-);
-```
-
-### AdMob Configuration
-
-#### IDs Publicitaires
-
-Les IDs AdMob doivent être configurés dans `AdMobService`:
-
-- Banner Ad Unit ID
-- Interstitial Ad Unit ID
-- Rewarded Ad Unit ID
-
-**Note**: Les IDs de test sont utilisés en développement.
-
-### Permissions (Android)
-
-#### android/app/src/main/AndroidManifest.xml
-
-```xml
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.INTERNET"/>
-```
-
-### Permissions (iOS)
-
-#### ios/Runner/Info.plist
-
-```xml
-<key>NSPhotoLibraryUsageDescription</key>
-<string>Accès à la photothèque pour sélectionner des vidéos</string>
-```
-
-### Extension iOS (Share Extension)
-
-L'application inclut une extension iOS pour recevoir des vidéos partagées:
-
-- **Target**: `CutitShareExtension`
-- **App Group**: `group.com.meetsum.cutit`
-- **Method Channel**: `com.meetsum.cutit/sharing`
+**Documentation générée pour**: Cutit v1.1.4+42
+**Dernière mise à jour**: Mai 2026
 
 ---
-
-## 🚀 Déploiement
-
-### Build Android
-
-#### APK de Développement
-
-```bash
-flutter build apk --debug
-```
-
-#### APK de Production
-
-```bash
-flutter build apk --release
-```
-
-#### App Bundle (Play Store)
-
-```bash
-flutter build appbundle --release
-```
-
-#### Configuration de Signature
-
-Fichier: `android/key.properties`
-
-```properties
-storePassword=your_store_password
-keyPassword=your_key_password
-keyAlias=your_key_alias
-storeFile=path/to/upload-keystore.jks
-```
-
-### Build iOS
-
-#### Configuration Requise
-
-- Xcode installé
-- Certificats de développement/distribution
-- Provisioning profiles
-
-#### Build
-
-```bash
-flutter build ios --release
-```
-
-#### Archive dans Xcode
-
-1. Ouvrir `ios/Runner.xcworkspace`
-2. Product > Archive
-3. Distribuer l'App
-
-### Versioning
-
-La version est définie dans `pubspec.yaml`:
-
-```yaml
-version: 1.0.3+30
-```
-
-- `1.0.3` = Version (semver)
-- `30` = Build number (incrementé à chaque build)
-
----
-
-## 📊 Flux d'Utilisation Typique
-
-### Scénario 1: Découpage depuis la Galerie
-
-```
-1. Utilisateur lance l'application
-   → Écran d'introduction (si première fois)
-
-2. Utilisateur sélectionne "Charger une vidéo"
-   → Demande de permission (si nécessaire)
-   → FilePicker s'ouvre
-
-3. Utilisateur choisit une vidéo
-   → Vidéo affichée dans HomeView
-   → Durée configurable (défaut: 30s)
-
-4. Utilisateur appuie sur "Découper"
-   → ProgressingView affichée
-   → Découpage asynchrone avec FFmpeg
-   → Progression affichée en temps réel
-
-5. Découpage terminé
-   → ResultView avec grille de segments
-   → Sélection possible des segments
-
-6. Utilisateur appuie sur "Enregistrer"
-   → Dialogue pour nommer le dossier
-   → Sauvegarde des segments
-   → Publicité interstitielle
-   → Retour à "Mes découpages"
-```
-
-### Scénario 2: Partage depuis une Autre Application
-
-```
-1. Utilisateur partage une vidéo depuis la galerie/autre app
-   → Extension iOS / Intent Android intercepte
-
-2. Application Cutit s'ouvre (ou passe au premier plan)
-   → Vidéo automatiquement chargée
-   → HomeController.handleSharedVideo()
-
-3. Suite identique au scénario 1 à partir de l'étape 3
-```
-
-### Scénario 3: Partage de Segments
-
-```
-1. Utilisateur dans "Mes découpages"
-   → Sélectionne un dossier
-   → Aperçu des segments
-
-2. Utilisateur sélectionne des segments (ou tous)
-   → Bouton "Partager" activé
-
-3. Utilisateur appuie sur "Partager"
-   → ShareSheet système s'ouvre
-   → Utilisateur choisit l'application de destination
-
-4. Partage réussi
-   → Analytics enregistré
-   → Publicité interstitielle
-   → Demande de notation (conditionnelle)
-```
-
----
-
-## 🐛 Dépannage et Problèmes Courants
-
-### Problème: Erreur FFmpeg
-
-**Symptômes**: Échec du découpage, message d'erreur FFmpeg
-
-**Solutions**:
-
-1. Vérifier que la plateforme est supportée (Android/iOS uniquement)
-2. Vérifier les logs FFmpeg via `session.getAllLogsAsString()`
-3. Vérifier le format de la vidéo source
-4. Vérifier l'espace de stockage disponible
-
-### Problème: Vidéo non lisible après découpage
-
-**Symptômes**: Segments générés mais non lisibles
-
-**Solutions**:
-
-1. Vérifier le codec utilisé (mpeg4)
-2. Vérifier les dimensions (crop pour éviter impaires)
-3. Vérifier les flags `-movflags +faststart`
-4. Tester avec une autre vidéo source
-
-### Problème: Permissions refusées
-
-**Symptômes**: Impossible de sélectionner des vidéos
-
-**Solutions**:
-
-1. Vérifier les permissions dans les paramètres système
-2. Redémarrer l'application après accord
-3. Vérifier les déclarations dans AndroidManifest.xml / Info.plist
-
-### Problème: Publicités non affichées
-
-**Symptômes**: Pas de publicités ou erreurs AdMob
-
-**Solutions**:
-
-1. Vérifier la configuration AdMob (IDs)
-2. Vérifier la connectivité réseau
-3. Utiliser les IDs de test en développement
-4. Vérifier les logs AdMob
-
-### Problème: Partage iOS ne fonctionne pas
-
-**Symptômes**: Extension iOS ne reçoit pas les vidéos
-
-**Solutions**:
-
-1. Vérifier l'App Group configuré
-2. Vérifier le Method Channel
-3. Vérifier les UserDefaults partagés
-4. Vérifier les logs du SharingService
-
----
-
-## 🔄 Maintenance et Évolutions Futures
-
-### Points d'Attention
-
-1. **Performance Vidéo**
-
-   - Optimisation FFmpeg pour vidéos très longues
-   - Gestion mémoire pour gros fichiers
-   - Compression optionnelle
-
-2. **Qualité Vidéo**
-
-   - Support de codecs supplémentaires (H.264, H.265)
-   - Options de qualité configurables
-   - Prévisualisation avant découpage
-
-3. **Fonctionnalités**
-
-   - Découpage manuel (points de coupure)
-   - Filtres et effets
-   - Export vers formats spécifiques (TikTok, Instagram)
-   - Watermark personnalisé
-
-4. **Monétisation**
-
-   - Abonnement premium
-   - Suppression des publicités
-   - Fonctionnalités avancées
-
-5. **Analytics**
-   - Dashboard analytics
-   - A/B testing
-   - Suivi de rétention
-
----
-
-## 📞 Support et Contribution
-
-### Structure de Code
-
-- **GetX Pattern**: Respecter l'architecture GetX (Controllers, Bindings, Views)
-- **Nommage**: Noms descriptifs en français pour variables locales
-- **Documentation**: Commenter les fonctions complexes
-- **Tests**: Ajouter des tests pour nouvelles fonctionnalités
-
-### Guidelines
-
-- Suivre les conventions Flutter/Dart
-- Utiliser le linter configuré (`flutter_lints`)
-- Tester sur Android et iOS
-- Vérifier la performance
-- Respecter les règles d'accessibilité
-
-### Contact
-
-- **Site web**: https://cutitapp.net
-- **Politique de confidentialité**: https://cutitapp.net/privacy-policy
-- **App Store**: https://apps.apple.com/us/app/cutit-découpage-de-vidéos/id6747193487
-- **Play Store**: https://play.google.com/store/apps/details?id=com.meetsum.cutIt
-
----
-
-## 📝 Notes Techniques Importantes
-
-### Limitations
-
-1. **Plateformes**: Android et iOS uniquement (pas de Web/Linux/Windows pour FFmpeg)
-2. **Taille de vidéo**: Dépend de la mémoire disponible
-3. **Formats**: Principalement MP4 (autres formats peuvent nécessiter conversion)
-4. **Performance**: Découpage peut prendre du temps pour vidéos longues
-
-### Bonnes Pratiques
-
-1. **Gestion Mémoire**: Toujours disposer les VideoPlayerController
-2. **Erreurs**: Toujours capturer et logger les erreurs FFmpeg
-3. **Permissions**: Vérifier avant chaque opération de fichier
-4. **Analytics**: Ne pas bloquer l'UI avec les appels analytics
-5. **Publicités**: Respecter les cooldowns pour éviter saturation
-
----
-
-**Documentation générée pour**: Cutit v1.0.3+30
-**Dernière mise à jour**: 2024
-
----
-
 _Développé avec ❤️ en Flutter_

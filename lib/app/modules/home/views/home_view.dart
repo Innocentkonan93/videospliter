@@ -70,7 +70,10 @@ class HomeView extends GetView<HomeController> {
                                   alignment: Alignment.center,
                                   width: controller.banner!.size.width.toDouble(),
                                   height: controller.banner!.size.height.toDouble(),
-                                  child: AdWidget(ad: controller.banner!),
+                                  child: AdWidget(
+                                    key: ObjectKey(controller.banner),
+                                    ad: controller.banner!,
+                                  ),
                                 ),
                               ),
                             const Spacer(flex: 4),
