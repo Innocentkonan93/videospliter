@@ -5,12 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
+import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/widgets/premium_success_view.dart';
 import 'package:video_spliter/app/services/firebase_notification_service.dart';
 
 class RevenueCatService extends GetxService {
-  static const String _androidApiKey = "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV";
-  static const String _iosApiKey = "appl_NycGQMwdBmSQQHlkJxhLwBKhxWC";
+  static const String _androidApiKey = String.fromEnvironment(
+    'RC_ANDROID_KEY',
+    defaultValue: "goog_BEgzcIzQuqrLjGZaSnfLEjSqpNV",
+  );
+  static const String _iosApiKey = String.fromEnvironment(
+    'RC_IOS_KEY',
+    defaultValue: "appl_NycGQMwdBmSQQHlkJxhLwBKhxWC",
+  );
   static const String entitlementId = "Cutit Pro";
   static const String monthlyProduct = "cutit_monthly";
   static const String yearlyProduct = "cutit_yearly";
@@ -99,7 +106,7 @@ class RevenueCatService extends GetxService {
           paywallResult == PaywallResult.restored) {
         Get.off(() => const PremiumSuccessView());
       } else if (paywallResult == PaywallResult.notPresented) {
-        Get.snackbar("info".tr, "already_pro".tr);
+        showSnackBar("already_pro".tr, isError: true);
       }
     } catch (e) {
       debugPrint("Error presenting paywall: $e");
@@ -152,7 +159,10 @@ class RevenueCatService extends GetxService {
       final errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
         debugPrint("Purchase error: \$e");
-        Get.snackbar("Error", "We had a problem during the purchase process.");
+        showSnackBar(
+          "We had a problem during the purchase process.",
+          isError: true,
+        );
       }
       return false;
     }
@@ -169,17 +179,13 @@ class RevenueCatService extends GetxService {
           customerInfo.entitlements.all[entitlementId]!.isActive) {
         Get.off(() => const PremiumSuccessView());
       } else {
-        Get.snackbar(
-          "info".tr,
-          "no_active_subscription".tr,
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        showSnackBar("no_active_subscription".tr, isError: true);
       }
     } on PlatformException catch (e) {
       final errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
         debugPrint("Restore purchases error: \$e");
-        Get.snackbar("Error", "Failed to restore purchases.");
+        showSnackBar("Failed to restore purchases.", isError: true);
       }
     }
   }
@@ -190,7 +196,7 @@ class RevenueCatService extends GetxService {
       await RevenueCatUI.presentCustomerCenter();
     } catch (e) {
       debugPrint("Error presenting customer center: \$e");
-      Get.snackbar("Error", "Could not open Customer Center.");
+      showSnackBar("Could not open Customer Center.", isError: true);
     }
   }
 }

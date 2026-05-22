@@ -65,12 +65,15 @@ class HomeView extends GetView<HomeController> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (controller.banner != null && controller.isBannerLoaded)
+                            if (controller.banner != null &&
+                                controller.isBannerLoaded)
                               SafeArea(
                                 child: Container(
                                   alignment: Alignment.center,
-                                  width: controller.banner!.size.width.toDouble(),
-                                  height: controller.banner!.size.height.toDouble(),
+                                  width:
+                                      controller.banner!.size.width.toDouble(),
+                                  height:
+                                      controller.banner!.size.height.toDouble(),
                                   child: AdWidget(
                                     key: ObjectKey(controller.banner),
                                     ad: controller.banner!,
@@ -199,6 +202,7 @@ class HomeView extends GetView<HomeController> {
                                               showDragHandle: true,
                                               isScrollControlled: true,
                                               enableDrag: false,
+                                              backgroundColor: AppColors.white,
                                               builder: (context) {
                                                 return const TimeSlicingSheet();
                                               },

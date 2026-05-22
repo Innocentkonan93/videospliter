@@ -16,6 +16,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_compress/video_compress.dart';
+import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
@@ -272,7 +273,7 @@ class VideoService {
     final exportType = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.white,
       builder: (context) => const ExportTypeSheet(),
     );
 
