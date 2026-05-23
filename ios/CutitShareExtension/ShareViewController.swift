@@ -7,160 +7,186 @@
 
 import AVFoundation
 import Foundation
-import Social
 import UIKit
 import UniformTypeIdentifiers
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
     let appGroupId = "group.com.meetsum.cutit"
-    let sharedKey = "ShareKey"
-    var sharedMedia: [SharedMediaFile] = []
-
-    enum SharedMediaType: Int, CaseIterable, Codable {
-        case video
+    let sharedUrlKey = "shared_video_url"
+    let sharedTimestampKey = "shared_video_timestamp"
+    
+    private var isProcessing = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupLoader()
     }
-
-    enum RedirectionType {
-        case media
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard !isProcessing else { return }
+        isProcessing = true
+        
+        handleSharedVideo()
     }
-
-    override func isContentValid() -> Bool {
-        // Do validation of contentText and/or NSExtensionContext attachments here
-        return true
+    
+    private func setupLoader() {
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = UIColor(red: 25/255, green: 25/255, blue: 27/255, alpha: 0.95)
+        container.layer.cornerRadius = 20
+        container.layer.masksToBounds = true
+        view.addSubview(container)
+        
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.color = .white
+        spinner.startAnimating()
+        container.addSubview(spinner)
+        
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Traitement de la vidéo..."
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.textAlignment = .center
+        container.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            container.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 220),
+            container.heightAnchor.constraint(equalToConstant: 140),
+            
+            spinner.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            spinner.topAnchor.constraint(equalTo: container.topAnchor, constant: 28),
+            
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
+            label.topAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 16)
+        ])
     }
-
-    override func didSelectPost() {
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-
-        if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
-            if let contents = content.attachments {
-                for (index, attachment) in (contents).enumerated() {
-                    if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-                        handleVideos(content: content, attachment: attachment, index: index)
-                        return
-                    }
-                }
+    
+    private func handleSharedVideo() {
+        guard let items = extensionContext?.inputItems as? [NSExtensionItem],
+              let item = items.first,
+              let attachments = item.attachments else {
+            dismissWithError(message: "Aucun élément de partage trouvé.")
+            return
+        }
+        
+        // Find video attachment
+        var videoAttachment: NSItemProvider? = nil
+        for attachment in attachments {
+            if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                videoAttachment = attachment
+                break
             }
         }
-
-        self.redirectToHostApp(type: .media)
+        
+        guard let attachment = videoAttachment else {
+            dismissWithError(message: "Veuillez partager un fichier vidéo valide.")
+            return
+        }
+        
+        attachment.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil) { [weak self] data, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.dismissWithError(message: "Erreur lors du chargement de la vidéo: \(error.localizedDescription)")
+                return
+            }
+            
+            // data can be URL
+            guard let url = data as? URL else {
+                self.dismissWithError(message: "Le type de données partagé n'est pas supporté.")
+                return
+            }
+            
+            self.processVideoURL(url)
+        }
     }
-
-    private func handleVideos(content: NSExtensionItem, attachment: NSItemProvider, index: Int) {
-        attachment.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil) {
-            [weak self] data, error in
-
-            if error == nil, let url = data as? URL, let this = self {
-
-                // Always copy
-                let fileName = this.getFileName(from: url, type: .video)
-                let newPath = FileManager.default
-                    .containerURL(forSecurityApplicationGroupIdentifier: this.appGroupId)!
-                    .appendingPathComponent(fileName)
-                let copied = this.copyFile(at: url, to: newPath)
-                if copied {
-                    guard let sharedFile = this.getSharedMediaFile(forVideo: newPath) else {
-                        return
-                    }
-                    this.sharedMedia.append(sharedFile)
-                }
-
-                // If this is the last item, save imagesData in userDefaults and redirect to host app
-                if index == (content.attachments?.count)! - 1 {
-                    let userDefaults = UserDefaults(suiteName: this.appGroupId)
-                    userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
-                    userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .media)
-                }
-
+    
+    private func processVideoURL(_ url: URL) {
+        let fileName = getFileName(from: url)
+        
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) else {
+            dismissWithError(message: "Impossible d'accéder au dossier partagé de l'application.")
+            return
+        }
+        
+        let destinationURL = containerURL.appendingPathComponent(fileName)
+        
+        let success = copyFile(at: url, to: destinationURL)
+        if success {
+            // Save to UserDefaults
+            if let userDefaults = UserDefaults(suiteName: appGroupId) {
+                userDefaults.set(destinationURL.path, forKey: sharedUrlKey)
+                userDefaults.set(Date().timeIntervalSince1970, forKey: sharedTimestampKey)
+                userDefaults.synchronize()
+                
+                // Redirect and complete request
+                self.redirectToHostApp()
             } else {
-                self?.dismissWithError()
+                dismissWithError(message: "Erreur lors de la sauvegarde des paramètres.")
             }
+        } else {
+            dismissWithError(message: "Erreur lors de la copie du fichier vidéo.")
         }
     }
-
-    private func dismissWithError() {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(
-                title: "Erreur", message: "Erreur lors du partage de la vidéo",
-                preferredStyle: .alert)
-            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
-                self.dismiss(animated: true)
-            }
-            alert.addAction(action)
-            self.present(alert, animated: true)
-        }
-    }
-
-    private func redirectToHostApp(type: RedirectionType) {
-        let url = URL(string: "cutit://media")
-        var responder = self as UIResponder?
-        let selectorOpenURL = sel_registerName("openURL:")
-
-        while responder != nil {
-            if responder?.responds(to: selectorOpenURL) == true {
-                let _ = responder?.perform(selectorOpenURL, with: url)
-            }
-            responder = responder!.next
-        }
-        extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
-    }
-
-    private func getFileName(from url: URL, type: SharedMediaType) -> String {
+    
+    private func getFileName(from url: URL) -> String {
         var name = url.lastPathComponent
-
         if name.isEmpty {
-            name = UUID().uuidString + "." + (type == .video ? "mp4" : "jpg")
+            name = UUID().uuidString + ".mp4"
         }
-
         return name
     }
-
+    
     private func copyFile(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
             if FileManager.default.fileExists(atPath: dstURL.path) {
                 try FileManager.default.removeItem(at: dstURL)
             }
             try FileManager.default.copyItem(at: srcURL, to: dstURL)
-        } catch (let error) {
+            return true
+        } catch {
             print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
             return false
         }
-        return true
     }
-
-    private func getSharedMediaFile(forVideo: URL) -> SharedMediaFile? {
-        let asset = AVURLAsset(url: forVideo)
-        let duration = (CMTimeGetSeconds(asset.duration) * 1000).rounded()
-
-        if FileManager.default.fileExists(atPath: forVideo.path) {
-            return SharedMediaFile(
-                path: forVideo.absoluteString, thumbnail: nil, duration: duration, type: .video)
-        }
-        return nil
-    }
-
-    class SharedMediaFile: Codable {
-        var path: String
-        var thumbnail: String?
-        var duration: Double?
-        var type: SharedMediaType
-
-        init(path: String, thumbnail: String?, duration: Double?, type: SharedMediaType) {
-            self.path = path
-            self.thumbnail = thumbnail
-            self.duration = duration
-            self.type = type
+    
+    private func redirectToHostApp() {
+        let url = URL(string: "cutit://media")!
+        var responder = self as UIResponder?
+        let selectorOpenURL = sel_registerName("openURL:")
+        
+        DispatchQueue.main.async {
+            while responder != nil {
+                if responder?.responds(to: selectorOpenURL) == true {
+                    let _ = responder?.perform(selectorOpenURL, with: url)
+                }
+                responder = responder!.next
+            }
+            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
     }
-
-    func toData(data: [SharedMediaFile]) -> Data {
-        let encodedData = try? JSONEncoder().encode(data)
-        return encodedData!
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Configuration par défaut
+    
+    private func dismissWithError(message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title: "Erreur",
+                message: message,
+                preferredStyle: .alert
+            )
+            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+                self.extensionContext?.cancelRequest(withError: NSError(domain: "com.meetsum.cutit", code: 1, userInfo: [NSLocalizedDescriptionKey: message]))
+            }
+            alert.addAction(action)
+            self.present(alert, animated: true)
+        }
     }
 }
