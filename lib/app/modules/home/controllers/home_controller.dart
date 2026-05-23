@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
-// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
@@ -29,6 +29,7 @@ import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
 import 'package:video_spliter/app/widgets/deletion_dialog.dart';
 import 'package:video_spliter/app/widgets/folder_name_dialog.dart';
+import 'package:video_spliter/app/widgets/premium_limit_dialog.dart';
 
 /// Contrôleur principal pour la gestion des vidéos et de l'interface utilisateur
 /// Gère le découpage de vidéos, la sélection de fichiers, les publicités et le cycle de vie de l'application
@@ -108,109 +109,141 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   /// Permet à l'utilisateur de sélectionner une vidéo depuis le système de fichiers
   /// Demande les permissions nécessaires avant la sélection
-  Future<void> pickVideo() async {
+  /// Valide et traite une vidéo importée (taille, durée, compression).
+  /// Affiche automatiquement une boîte de dialogue explicative si l'utilisateur dépasse les limites gratuites.
+  /// Retourne true si la vidéo a été acceptée et stockée dans selectedVideo.
+  Future<bool> processAndValidateVideo(File videoFile, {required String source}) async {
+    selectedFolder.value = "";
     isVideoLoading.value = true;
     update();
-    try {
-      selectedFolder.value = "";
-      await requestPermissions();
 
+    try {
+      final sizeMb = videoFile.lengthSync() / (1024 * 1024);
+      final isPro = FeatureManager.isProUser;
+      final maxAllowedSize = isPro ? maxVideoSizeMb : maxVideoSizeMbFree;
+
+      // 1. Vérification de la taille
+      if (!VideoLogic.isFileSizeValid(sizeMb, maxAllowedSize)) {
+        if (!isPro && sizeMb <= maxVideoSizeMb) {
+          // Vidéo trop lourde pour un utilisateur gratuit, mais OK pour Pro
+          if (FeatureManager.isProVersionAvailable) {
+            isVideoLoading.value = false;
+            update();
+            final upgrade = await Get.dialog<bool>(
+              PremiumLimitDialog(
+                isSizeExceeded: true,
+                value: sizeMb,
+                limit: maxVideoSizeMbFree,
+              ),
+            );
+            if (upgrade == true) {
+              await Get.find<RevenueCatService>().presentPaywall();
+            }
+            return false;
+          }
+        }
+
+        // Autre cas (vidéo trop lourde même en Pro, ou Pro non disponible)
+        showSnackBar(
+          "La vidéo est trop lourde. Veuillez choisir une vidéo moins lourde !",
+          isError: true,
+        );
+        isVideoLoading.value = false;
+        update();
+        return false;
+      }
+
+      log("Taille vidéo : ${sizeMb.toStringAsFixed(2)} Mo");
+
+      // 2. Vérification de la durée
+      try {
+        final mediaInfoSession = await FFprobeKit.getMediaInformation(videoFile.path);
+        final info = mediaInfoSession.getMediaInformation();
+        final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
+        final maxAllowedDuration = isPro ? maxVideoDurationSec : maxVideoDurationSecFree;
+
+        if (!VideoLogic.isDurationValid(durationSec, maxAllowedDuration)) {
+          if (!isPro && durationSec <= maxVideoDurationSec) {
+            // Vidéo trop longue pour gratuit, mais OK pour Pro
+            if (FeatureManager.isProVersionAvailable) {
+              isVideoLoading.value = false;
+              update();
+              final upgrade = await Get.dialog<bool>(
+                PremiumLimitDialog(
+                  isSizeExceeded: false,
+                  value: durationSec,
+                  limit: maxVideoDurationSecFree,
+                ),
+              );
+              if (upgrade == true) {
+                await Get.find<RevenueCatService>().presentPaywall();
+              }
+              return false;
+            }
+          }
+
+          // Autre cas
+          showSnackBar(
+            "La vidéo est trop longue. Veuillez choisir une vidéo moins longue",
+            isError: true,
+          );
+          isVideoLoading.value = false;
+          update();
+          return false;
+        }
+
+        selectedVideo.value = videoFile;
+
+        // Enregistrer l'import de la vidéo dans analytics
+        await AnalyticsService.videoImported(
+          durationSec: durationSec.round(),
+          sizeMb: sizeMb,
+          source: source,
+        );
+
+        // Compresser uniquement les vidéos lourdes (> 100 Mo) pour optimiser le temps
+        if (VideoLogic.shouldCompress(sizeMb, maxVideoSizeMbForCompress)) {
+          await compressVideo();
+        }
+
+        isVideoLoading.value = false;
+        update();
+        return true;
+      } catch (e) {
+        // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
+        // avec des valeurs par défaut
+        selectedVideo.value = videoFile;
+        await AnalyticsService.videoImported(
+          durationSec: 0,
+          sizeMb: sizeMb,
+          source: source,
+        );
+
+        isVideoLoading.value = false;
+        update();
+        return true;
+      }
+    } catch (e) {
+      isVideoLoading.value = false;
+      showSnackBar(e.toString(), isError: true);
+      update();
+      return false;
+    }
+  }
+
+  /// Permet à l'utilisateur de sélectionner une vidéo depuis le système de fichiers
+  /// Demande les permissions nécessaires avant la sélection
+  Future<void> pickVideo() async {
+    try {
+      await requestPermissions();
       final result = await FilePicker.pickFiles(type: FileType.video);
 
       if (result != null && result.files.single.path != null) {
         final videoFile = File(result.files.single.path!);
-
-        // Vérification de la taille
-        final sizeMb = videoFile.lengthSync() / (1024 * 1024);
-        final isPro = FeatureManager.isProUser;
-        final maxAllowedSize = isPro ? maxVideoSizeMb : maxVideoSizeMbFree;
-
-        if (!VideoLogic.isFileSizeValid(sizeMb, maxAllowedSize)) {
-          if (!isPro && sizeMb <= maxVideoSizeMb) {
-            // Dans ce cas, l'utilisateur a dépassé la limite gratuite, mais la vidéo est valide en Pro
-            if (FeatureManager.isProVersionAvailable) {
-              Get.find<RevenueCatService>().presentPaywall();
-            } else {
-              showSnackBar(
-                "La vidéo est trop lourde. Essayez avec une vidéo !",
-                isError: true,
-              );
-            }
-          } else {
-            showSnackBar(
-              "La vidéo est trop lourde. Essayez avec une vidéo !",
-              isError: true,
-            );
-          }
-          isVideoLoading.value = false;
-          update();
-          return;
-        }
-
-        // compresser les videos de grande taille
-        log(sizeMb.toString());
-        // Enregistrer l'import de la vidéo dans analytics
-        try {
-          final mediaInfoSession = await FFprobeKit.getMediaInformation(
-            videoFile.path,
-          );
-          final info = mediaInfoSession.getMediaInformation();
-          final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
-
-          // Vérification de la durée
-          final maxAllowedDuration =
-              FeatureManager.isProUser
-                  ? maxVideoDurationSec
-                  : maxVideoDurationSecFree;
-
-          if (!VideoLogic.isDurationValid(durationSec, maxAllowedDuration)) {
-            if (!isPro && durationSec <= maxVideoDurationSec) {
-              Get.find<RevenueCatService>().presentPaywall();
-            } else {
-              showSnackBar(
-                "La vidéo est trop longue. Veuillez choisir une vidéo moins longue",
-                isError: true,
-              );
-            }
-            isVideoLoading.value = false;
-            update();
-            return;
-          }
-
-          selectedVideo.value = videoFile;
-
-          // Enregistrer l'import de la vidéo dans analytics
-          await AnalyticsService.videoImported(
-            durationSec: durationSec.round(),
-            sizeMb: sizeMb,
-            source: 'file_picker',
-          );
-          // Compresser uniquement les vidéos lourdes (> 50 Mo) pour optimiser le temps
-          if (VideoLogic.shouldCompress(sizeMb, maxVideoSizeMbForCompress)) {
-            await compressVideo();
-          }
-          isVideoLoading.value = false;
-          update();
-        } catch (e) {
-          isVideoLoading.value = false;
-          // Si l'analyse de la vidéo échoue, on enregistre quand même l'import
-          // avec des valeurs par défaut
-          selectedVideo.value = videoFile;
-          await AnalyticsService.videoImported(
-            durationSec: 0,
-            sizeMb: sizeMb,
-            source: 'file_picker',
-          );
-          update();
-        }
-      } else {
-        isVideoLoading.value = false;
+        await processAndValidateVideo(videoFile, source: 'file_picker');
       }
-
-      update();
     } catch (e) {
-      isVideoLoading.value = false;
-      showSnackBar(e.toString());
+      showSnackBar(e.toString(), isError: true);
     }
   }
 
@@ -480,9 +513,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     try {
       print("📥 Vidéo reçue : ${file.value}");
       if (file.value != null) {
-        selectedVideo.value = File(file.value!);
+        final videoFile = File(file.value!);
+        processAndValidateVideo(videoFile, source: 'share_intent');
       }
-      update();
     } catch (e) {
       print(e);
     }
@@ -513,17 +546,19 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         print(
           "📱 HomeController: Vidéo partagée reçue via extension: ${sharedVideo.path}",
         );
-        selectedVideo.value = sharedVideo;
-        // Afficher une notification à l'utilisateur
-        Get.snackbar(
-          'Vidéo reçue',
-          'Une vidéo a été partagée depuis l\'extension',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: AppColors.primary,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-        );
-        update();
+        processAndValidateVideo(sharedVideo, source: 'share_extension').then((success) {
+          if (success) {
+            // Afficher une notification à l'utilisateur
+            Get.snackbar(
+              'Vidéo reçue',
+              'Une vidéo a été partagée depuis l\'extension',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: AppColors.primary,
+              colorText: Colors.white,
+              duration: const Duration(seconds: 3),
+            );
+          }
+        });
       }
     } catch (e) {
       print(

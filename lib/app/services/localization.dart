@@ -238,6 +238,10 @@ class Localization extends Translations {
       'info': 'Info',
       'already_pro': 'You are already a Pro user!',
       'only_mobile': 'This feature is only available on mobile devices.',
+      'limit_exceeded_title': 'Limit Exceeded',
+      'size_limit_exceeded_desc': 'This video is @size MB, which exceeds the free limit of @limit MB.\n\nUpgrade to Pro to cut videos up to 1.5 GB!',
+      'duration_limit_exceeded_desc': 'This video is @duration long, which exceeds the free limit of @limit minutes.\n\nUpgrade to Pro to cut videos up to 1 hour!',
+      'upgrade_to_pro': 'Upgrade to Pro',
     },
     'fr': {
       // App name and general
@@ -484,6 +488,10 @@ class Localization extends Translations {
       'already_pro': 'Vous êtes déjà un utilisateur Pro !',
       'only_mobile':
           'Cette fonctionnalité est uniquement disponible sur les appareils mobiles.',
+      'limit_exceeded_title': 'Limite dépassée',
+      'size_limit_exceeded_desc': 'Cette vidéo fait @size Mo, ce qui dépasse la limite gratuite de @limit Mo.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1.5 Go !',
+      'duration_limit_exceeded_desc': 'Cette vidéo dure @duration, ce qui dépasse la limite gratuite de @limit minutes.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1 heure !',
+      'upgrade_to_pro': 'Passer Pro',
     },
     'es': {
       // App name and general
@@ -731,6 +739,10 @@ class Localization extends Translations {
       'app_up_to_date': '¡Tu aplicación está actualizada!',
       'update_check_error':
           'Error al buscar actualizaciones. Por favor, inténtalo de nuevo.',
+      'limit_exceeded_title': 'Límite excedido',
+      'size_limit_exceeded_desc': 'Este video tiene @size MB, lo que supera el límite gratuito de @limit MB.\n\n¡Actualiza a Pro para cortar videos de hasta 1.5 GB!',
+      'duration_limit_exceeded_desc': 'Este video dura @duration, lo que supera el límite gratuito de @limit minutos.\n\n¡Actualiza a Pro para cortar videos de hasta 1 hora!',
+      'upgrade_to_pro': 'Hacerse Pro',
     },
     'pt': {
       // App name and general
@@ -977,6 +989,10 @@ class Localization extends Translations {
       'update_check_error':
           'Falha ao verificar atualizações. Por favor, tente novamente.',
       'later': 'Mais tarde',
+      'limit_exceeded_title': 'Limite excedido',
+      'size_limit_exceeded_desc': 'Este vídeo tem @size MB, o que supera o limite gratuito de @limit MB.\n\nAtualize para o Pro para cortar vídeos de até 1.5 GB!',
+      'duration_limit_exceeded_desc': 'Este vídeo tem @duration de duração, o que supera o limite gratuito de @limit minutos.\n\nAtualize para o Pro para cortar vídeos de até 1 hora!',
+      'upgrade_to_pro': 'Atualizar para o Pro',
     },
     'ar': {
       // App name and general
@@ -1211,6 +1227,10 @@ class Localization extends Translations {
           'فشل التحقق من وجود تحديثات. يرجى المحاولة مرة أخرى.',
       'choose_format': 'اختر التنسيق',
       'custom': 'مخصص',
+      'limit_exceeded_title': 'تم تجاوز الحد',
+      'size_limit_exceeded_desc': 'هذا الفيديو بحجم @size ميجابايت، وهو ما يتجاوز الحد المجاني البالغ @limit ميجابايت.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى 1.5 جيجابايت!',
+      'duration_limit_exceeded_desc': 'هذا الفيديو مدته @duration، وهو ما يتجاوز الحد المجاني البالغ @limit دقائق.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى ساعة واحدة!',
+      'upgrade_to_pro': 'الترقية إلى Pro',
     },
   };
 }
