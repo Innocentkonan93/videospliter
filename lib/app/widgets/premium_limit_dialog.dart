@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
@@ -147,4 +148,22 @@ class PremiumLimitDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+@Preview(name: 'Exceeded Size Limit Dialog', group: 'Dialogs')
+Widget previewSizeLimit() {
+  return const PremiumLimitDialog(
+    isSizeExceeded: true,
+    value: 254.5,
+    limit: 150.0,
+  );
+}
+
+@Preview(name: 'Exceeded Duration Limit Dialog', group: 'Dialogs')
+Widget previewDurationLimit() {
+  return const PremiumLimitDialog(
+    isSizeExceeded: false,
+    value: 1200.0,
+    limit: 600.0,
+  );
 }
