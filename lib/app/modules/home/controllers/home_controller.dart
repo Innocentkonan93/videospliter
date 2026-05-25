@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -5,6 +7,7 @@ import 'dart:io';
 // import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
 import 'package:flutter_sharing_intent/model/sharing_file.dart';
@@ -75,7 +78,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxInt currentPage = 0.obs;
 
   /// Durée de découpage en secondes
-  RxDouble sliceDuration = 30.0.obs;
+  RxDouble sliceDuration = 60.0.obs;
 
   /// Indicateur si l'utilisateur peut sélectionner une vidéo
   final canSelectVideo = false.obs;
@@ -100,10 +103,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final selectedFolder = "".obs;
 
   /// Custom
-  final isCustom = true.obs;
+  final isCustom = false.obs;
 
   /// select Social
-  final selectedSocial = "".obs;
+  final selectedSocial = "Whatsapp".obs;
 
   // ==================== MÉTHODES DE SÉLECTION DE FICHIERS ====================
 
@@ -112,7 +115,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Valide et traite une vidéo importée (taille, durée, compression).
   /// Affiche automatiquement une boîte de dialogue explicative si l'utilisateur dépasse les limites gratuites.
   /// Retourne true si la vidéo a été acceptée et stockée dans selectedVideo.
-  Future<bool> processAndValidateVideo(File videoFile, {required String source}) async {
+  Future<bool> processAndValidateVideo(
+    File videoFile, {
+    required String source,
+  }) async {
     selectedFolder.value = "";
     isVideoLoading.value = true;
     update();
@@ -157,10 +163,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
       // 2. Vérification de la durée
       try {
-        final mediaInfoSession = await FFprobeKit.getMediaInformation(videoFile.path);
+        final mediaInfoSession = await FFprobeKit.getMediaInformation(
+          videoFile.path,
+        );
         final info = mediaInfoSession.getMediaInformation();
         final durationSec = double.tryParse(info?.getDuration() ?? '0') ?? 0;
-        final maxAllowedDuration = isPro ? maxVideoDurationSec : maxVideoDurationSecFree;
+        final maxAllowedDuration =
+            isPro ? maxVideoDurationSec : maxVideoDurationSecFree;
 
         if (!VideoLogic.isDurationValid(durationSec, maxAllowedDuration)) {
           if (!isPro && durationSec <= maxVideoDurationSec) {
@@ -276,6 +285,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       videoFile: selectedVideo.value!,
       sliceDuration: sliceDuration.value,
       isPro: isPro,
+      onProgress: (double p) {
+        progress.value = p;
+        update();
+      },
     );
     videoParts.addAll(parts);
     return parts;
@@ -449,7 +462,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
 
     final statuses = await permissions.request();
-    print(statuses);
+    if (kDebugMode) {
+      print(statuses);
+    }
   }
 
   // ==================== MÉTHODES UTILITAIRES ====================
@@ -546,7 +561,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         print(
           "📱 HomeController: Vidéo partagée reçue via extension: ${sharedVideo.path}",
         );
-        processAndValidateVideo(sharedVideo, source: 'share_extension').then((success) {
+        processAndValidateVideo(sharedVideo, source: 'share_extension').then((
+          success,
+        ) {
           if (success) {
             // Afficher une notification à l'utilisateur
             Get.snackbar(

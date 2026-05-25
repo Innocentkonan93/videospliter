@@ -7,7 +7,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
 import 'package:video_spliter/app/modules/home/views/progressing_view.dart';
-import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 import 'package:video_spliter/app/modules/settings/views/settings_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
 import 'package:video_spliter/app/widgets/time_slicing_sheet.dart';

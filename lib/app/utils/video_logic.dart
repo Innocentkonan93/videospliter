@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:gal/gal.dart';
 
 class VideoLogic {

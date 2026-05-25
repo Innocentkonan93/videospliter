@@ -1,5 +1,5 @@
+// ignore_for_file: file_names
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -25,7 +25,9 @@ class AllVideosPreview extends StatefulWidget {
 class _AllVideosPreviewState extends State<AllVideosPreview> {
   late PageController controller;
   int currentPage = 0;
-  final ValueNotifier<double> _currentVideoProgress = ValueNotifier<double>(0.0);
+  final ValueNotifier<double> _currentVideoProgress = ValueNotifier<double>(
+    0.0,
+  );
 
   @override
   void initState() {
@@ -170,41 +172,47 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                                         ],
                                       ),
                                       clipBehavior: Clip.hardEdge,
-                                      child: index < currentPage
-                                          ? Container(color: Colors.white)
-                                          : index > currentPage
+                                      child:
+                                          index < currentPage
+                                              ? Container(color: Colors.white)
+                                              : index > currentPage
                                               ? Container(
-                                                  color: Colors.white.withValues(
-                                                    alpha: 0.3,
-                                                  ),
-                                                )
-                                              : ValueListenableBuilder<double>(
-                                                  valueListenable:
-                                                      _currentVideoProgress,
-                                                  builder:
-                                                      (context, progress, child) {
-                                                    return Stack(
-                                                      children: [
-                                                        Container(
-                                                          color: Colors.white
-                                                              .withValues(
-                                                            alpha: 0.3,
-                                                          ),
-                                                        ),
-                                                        FractionallySizedBox(
-                                                          alignment:
-                                                              Alignment.centerLeft,
-                                                          widthFactor: progress,
-                                                          child: Container(
-                                                            color: Theme.of(
-                                                              context,
-                                                            ).primaryColor,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
+                                                color: Colors.white.withValues(
+                                                  alpha: 0.3,
                                                 ),
+                                              )
+                                              : ValueListenableBuilder<double>(
+                                                valueListenable:
+                                                    _currentVideoProgress,
+                                                builder: (
+                                                  context,
+                                                  progress,
+                                                  child,
+                                                ) {
+                                                  return Stack(
+                                                    children: [
+                                                      Container(
+                                                        color: Colors.white
+                                                            .withValues(
+                                                              alpha: 0.3,
+                                                            ),
+                                                      ),
+                                                      FractionallySizedBox(
+                                                        alignment:
+                                                            Alignment
+                                                                .centerLeft,
+                                                        widthFactor: progress,
+                                                        child: Container(
+                                                          color:
+                                                              Theme.of(
+                                                                context,
+                                                              ).primaryColor,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
                                     ),
                                   ),
                                 ),

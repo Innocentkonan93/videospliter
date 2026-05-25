@@ -1,14 +1,15 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_16kb/return_code.dart';
-// import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
-// import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
-// import 'package:ffmpeg_kit_flutter_new/return_code.dart';
-
+// import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_16kb/return_code.dart';
+import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
-import 'package:video_spliter/app/modules/home/controllers/home_controller.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
@@ -56,9 +56,8 @@ class VideoService {
     required File videoFile,
     required double sliceDuration,
     required bool isPro,
+    void Function(double)? onProgress,
   }) async {
-    final HomeController homeController = Get.find<HomeController>();
-
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
       throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
     }
@@ -123,8 +122,7 @@ class VideoService {
         log('Skipping micro-segment: duration $segDur is too short.');
         // Mettre à jour la progression pour ne pas bloquer l'UI
         final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
-        homeController.progress.value = global;
-        homeController.update();
+        onProgress?.call(global);
         continue;
       }
 
@@ -161,8 +159,7 @@ class VideoService {
             }
             // Fixe la progression à la fin du segment (100% du segment)
             final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
-            homeController.progress.value = global;
-            homeController.update();
+            onProgress?.call(global);
             segCompleter.complete();
           } else {
             final logs = await session.getAllLogsAsString();
@@ -189,8 +186,7 @@ class VideoService {
             0.0,
             1.0,
           );
-          homeController.progress.value = global.toDouble();
-          homeController.update();
+          onProgress?.call(global.toDouble());
         },
       );
 

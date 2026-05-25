@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
 import 'package:video_spliter/app/modules/introduction/introduction_middleware.dart';
 

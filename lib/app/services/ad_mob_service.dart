@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -304,8 +306,9 @@ class AdMobService {
           ad.dispose();
           _isRewardedAdReady = false;
           _rewardedAd = null;
-          if (onAdFailedToLoad != null)
+          if (onAdFailedToLoad != null) {
             onAdFailedToLoad(); // En cas d'erreur de show, on peut gérer (ex: fallback)
+          }
           if (onAdClosed != null) onAdClosed();
           _preloadRewardedAd();
         },

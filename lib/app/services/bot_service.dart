@@ -1,49 +1,51 @@
-import 'dart:developer';
+// // ignore_for_file: avoid_print
 
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+// import 'dart:developer';
 
-class BotService {
-  static const String token = "7641964638:AAH5iJwuYmE2lnQHbqtXe-Yx6d6bkLHRC2E";
-  static const String baseUrl = "https://api.telegram.org/bot$token";
+// import 'package:flutter/foundation.dart';
+// import 'package:http/http.dart' as http;
 
-  static const chatId = '5689989310';
+// class BotService {
+//   static const String token = "7641964638:AAH5iJwuYmE2lnQHbqtXe-Yx6d6bkLHRC2E";
+//   static const String baseUrl = "https://api.telegram.org/bot$token";
 
-  Future<bool> sendFeedback(String feedback, {List<String>? imagePaths}) async {
-    // Send text feedback
-    final textResponse = await http.post(
-      Uri.parse("$baseUrl/sendMessage"),
-      body: {"text": feedback, "chat_id": chatId},
-    );
+//   static const chatId = '5689989310';
 
-    if (textResponse.statusCode != 200) {
-      if (kDebugMode) {
-        print(textResponse.body);
-        print("Failed to send feedback text");
-      }
-      return false;
-    }
+//   Future<bool> sendFeedback(String feedback, {List<String>? imagePaths}) async {
+//     // Send text feedback
+//     final textResponse = await http.post(
+//       Uri.parse("$baseUrl/sendMessage"),
+//       body: {"text": feedback, "chat_id": chatId},
+//     );
 
-    log(textResponse.statusCode.toString());
-    // Send images if provided
-    if (imagePaths != null) {
-      for (final imagePath in imagePaths) {
-        final imageFile = await http.MultipartFile.fromPath('photo', imagePath);
-        final request = http.MultipartRequest(
-          'POST',
-          Uri.parse("$baseUrl/sendPhoto"),
-        );
-        request.fields['chat_id'] = chatId;
-        request.files.add(imageFile);
+//     if (textResponse.statusCode != 200) {
+//       if (kDebugMode) {
+//         print(textResponse.body);
+//         print("Failed to send feedback text");
+//       }
+//       return false;
+//     }
 
-        final imageResponse = await request.send();
-        if (imageResponse.statusCode != 200) {
-          print("Failed to send image: $imagePath");
-        }
-      }
-    }
+//     log(textResponse.statusCode.toString());
+//     // Send images if provided
+//     if (imagePaths != null) {
+//       for (final imagePath in imagePaths) {
+//         final imageFile = await http.MultipartFile.fromPath('photo', imagePath);
+//         final request = http.MultipartRequest(
+//           'POST',
+//           Uri.parse("$baseUrl/sendPhoto"),
+//         );
+//         request.fields['chat_id'] = chatId;
+//         request.files.add(imageFile);
 
-    log("Feedback sent successfully");
-    return true;
-  }
-}
+//         final imageResponse = await request.send();
+//         if (imageResponse.statusCode != 200) {
+//           print("Failed to send image: $imagePath");
+//         }
+//       }
+//     }
+
+//     log("Feedback sent successfully");
+//     return true;
+//   }
+// }

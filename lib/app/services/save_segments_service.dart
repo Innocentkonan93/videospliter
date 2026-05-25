@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
+import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 
@@ -16,6 +17,8 @@ class SaveSegmentsService {
     final startTime = DateTime.now();
     int? segmentCount;
     double? totalSizeMb;
+    final isPro = FeatureManager.isProUser;
+    Directory? targetDir;
 
     try {
       if (segments.isEmpty) {
@@ -30,14 +33,15 @@ class SaveSegmentsService {
       // Enregistrer le début de l'export
       AnalyticsService.exportStarted(
         segmentCount: segmentCount,
-        isPremium: false,
+        isPremium: isPro,
         exportFormat: 'mp4',
       );
 
-      final String folderName = '$baseFolderName-$_splitCounter';
+      final String cleanBaseName = (baseFolderName == null || baseFolderName.trim().isEmpty)
+          ? "Cutit"
+          : baseFolderName.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_').trim();
+      final String folderName = '$cleanBaseName-$_splitCounter';
       _splitCounter++;
-
-      Directory? targetDir;
 
       if (Platform.isAndroid) {
         final dir = await getExternalStorageDirectory();
@@ -68,7 +72,7 @@ class SaveSegmentsService {
       // Enregistrer le succès de l'export
       AnalyticsService.exportSuccess(
         exportTimeSec: exportTimeSec,
-        isPremium: false,
+        isPremium: isPro,
         segmentCount: segmentCount,
         totalSizeMb: totalSizeMb,
         exportFormat: 'mp4',
@@ -79,13 +83,21 @@ class SaveSegmentsService {
       // final readablePath = targetDir.path.split("/Android").first;
       showSnackBar("saving_videos".tr);
     } catch (e) {
+      // ignore: avoid_print
       print('❌ Erreur lors de la sauvegarde : $e');
+
+      // Nettoyer le dossier cible s'il a été créé pour éviter de laisser des dossiers vides ou corrompus
+      if (targetDir != null && await targetDir.exists()) {
+        try {
+          await targetDir.delete(recursive: true);
+        } catch (_) {}
+      }
 
       // Enregistrer l'échec de l'export
       await AnalyticsService.exportFailed(
         reason: e.toString(),
         segmentCount: segmentCount,
-        isPremium: false, // TODO: À adapter selon votre logique premium
+        isPremium: isPro,
       );
 
       showSnackBar('error_saving_videos'.tr, isError: true);

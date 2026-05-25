@@ -131,6 +131,11 @@ var settingsGroups = [
 
 var introductions = <Map<String, dynamic>>[
   {
+    "title": "intro_title_3".tr,
+    "description": "intro_desc_3".tr,
+    "image_path": "image3.png",
+  },
+  {
     "title": "intro_title_1".tr,
     "description": "intro_desc_1".tr,
     "image_path": "image1.png",
@@ -139,11 +144,6 @@ var introductions = <Map<String, dynamic>>[
     "title": "intro_title_2".tr,
     "description": "intro_desc_2".tr,
     "image_path": "image0.png",
-  },
-  {
-    "title": "intro_title_3".tr,
-    "description": "intro_desc_3".tr,
-    "image_path": "image3.png",
   },
   {
     "title": "intro_title_4".tr,

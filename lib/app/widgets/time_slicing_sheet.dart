@@ -46,58 +46,6 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Custom button (abacus icon)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                controller.isCustom.value = true;
-                                controller.selectedSocial.value = "";
-                              },
-                              borderRadius: BorderRadius.circular(60),
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color:
-                                      controller.isCustom.value
-                                          ? AppColors.primary
-                                          : const Color.fromARGB(
-                                            255,
-                                            219,
-                                            219,
-                                            219,
-                                          ).withValues(alpha: .26),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: HugeIcon(
-                                  icon: HugeIcons.strokeRoundedAbacus,
-                                  size: 35,
-                                  color:
-                                      controller.isCustom.value
-                                          ? AppColors.white
-                                          : AppColors.black.withValues(
-                                            alpha: .7,
-                                          ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'custom'.tr,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color:
-                                    controller.isCustom.value
-                                        ? AppColors.orange
-                                        : AppColors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       // Social media icons
                       ...socialMedia.map(
                         (e) => Padding(
@@ -164,6 +112,58 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                      // Custom button (abacus icon)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                controller.isCustom.value = true;
+                                controller.selectedSocial.value = "";
+                              },
+                              borderRadius: BorderRadius.circular(60),
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color:
+                                      controller.isCustom.value
+                                          ? AppColors.primary
+                                          : const Color.fromARGB(
+                                            255,
+                                            219,
+                                            219,
+                                            219,
+                                          ).withValues(alpha: .26),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: HugeIcon(
+                                  icon: HugeIcons.strokeRoundedAbacus,
+                                  size: 35,
+                                  color:
+                                      controller.isCustom.value
+                                          ? AppColors.white
+                                          : AppColors.black.withValues(
+                                            alpha: .7,
+                                          ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'custom'.tr,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color:
+                                    controller.isCustom.value
+                                        ? AppColors.orange
+                                        : AppColors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

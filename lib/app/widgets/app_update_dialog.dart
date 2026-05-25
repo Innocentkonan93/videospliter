@@ -29,7 +29,7 @@ class AppUpdateDialog extends StatelessWidget {
           ),
           shadows: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.1),
+              color: AppColors.black.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -53,7 +53,7 @@ class AppUpdateDialog extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -75,9 +75,9 @@ class AppUpdateDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  message ?? "",
+                  message,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.black.withOpacity(0.7),
+                    color: AppColors.black.withValues(alpha: 0.7),
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,

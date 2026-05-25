@@ -55,6 +55,7 @@ void main() async {
     }
   } catch (e) {
     // En cas d'erreur, utiliser la langue par défaut du système
+    // ignore: avoid_print
     print('Erreur lors du chargement de la langue sauvegardée: $e');
   }
 
