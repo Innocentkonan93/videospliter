@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-// import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +26,7 @@ import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/app/services/ad_mob_service.dart';
 import 'package:video_spliter/app/services/save_segments_service.dart';
 import 'package:video_spliter/app/services/video_service.dart';
+import 'package:video_spliter/app/services/parallel_video_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/services/feature_manager.dart';
 import 'package:video_spliter/app/services/sharing_service.dart';
@@ -282,6 +282,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     final isPro = FeatureManager.isProUser;
 
     final parts = await VideoService.splitBySSAsync(
+      videoFile: selectedVideo.value!,
+      sliceDuration: sliceDuration.value,
+      isPro: isPro,
+      onProgress: (double p) {
+        progress.value = p;
+        update();
+      },
+    );
+    videoParts.addAll(parts);
+    return parts;
+  }
+
+  /// Découpe la vidéo en parallèle (multi-threading via ParallelVideoService)
+  Future<List<File>?> splitVideoParallelIsolate() async {
+    if (selectedVideo.value == null) return null;
+    videoParts.clear();
+
+    final isPro = FeatureManager.isProUser;
+
+    final parts = await ParallelVideoService.splitBySSParallelAsync(
       videoFile: selectedVideo.value!,
       sliceDuration: sliceDuration.value,
       isPro: isPro,

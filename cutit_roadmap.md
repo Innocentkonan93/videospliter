@@ -5,7 +5,7 @@
 
 ## 1. Analyse de l'existant
 Actuellement, l'application est fonctionnelle et repose sur des bases solides :
-- **Stack** : Flutter, FFmpeg (`ffmpeg_kit_16kb`), GetX.
+- **Stack** : Flutter, FFmpeg (`ffmpeg_kit_flutter_new`), GetX.
 - **Business Model** : Hybride (AdMob + RevenueCat).
 - **Core Feature** : Découpage vidéo (synchrone/asynchrone), compression, partage direct iOS/Android.
 

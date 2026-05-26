@@ -4,9 +4,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;
-// import 'package:ffmpeg_kit_16kb/ffmpeg_kit.dart';
-// import 'package:ffmpeg_kit_16kb/ffprobe_kit.dart';
-// import 'package:ffmpeg_kit_16kb/return_code.dart';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
@@ -146,8 +143,8 @@ class VideoService {
       final segCompleter = Completer<void>();
 
       // Lancer l’exécution asynchrone
-      final session = await FFmpegKit.executeAsync(
-        joinArgs(args),
+      final session = await FFmpegKit.executeWithArgumentsAsync(
+        args,
         // onComplete
         (session) async {
           final rc = await session.getReturnCode();
@@ -198,23 +195,6 @@ class VideoService {
     }
 
     return videoParts;
-  }
-
-  /// Formatte un double propre (3 décimales max)
-  static String fmt(double v) => v.toStringAsFixed(3);
-
-  /// Concatène proprement les arguments en une commande string.
-  /// Quote uniquement si nécessaire (espaces, guillemets).
-  static String joinArgs(List<String> args) {
-    return args
-        .map((a) {
-          if (a.contains(' ') || a.contains('"') || a.contains("'")) {
-            final escaped = a.replaceAll('"', r'\"');
-            return '"$escaped"';
-          }
-          return a;
-        })
-        .join(' ');
   }
 
   static Future<void> shareVideos(List<File> videoParts) async {
