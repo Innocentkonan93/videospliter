@@ -168,7 +168,7 @@ class _ResultViewState extends State<ResultView> {
                                   file: file,
                                   label: "${'segment'.tr} ${index + 1}",
                                   showPlayIcon: !controller.canSelectVideo.value,
-                                  usePlayer: false,
+                                  usePlayer: true,
                                 ),
                               ),
                               // Selection Indicator
@@ -179,31 +179,34 @@ class _ResultViewState extends State<ResultView> {
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 200),
                                     decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : Colors.white.withValues(alpha: 0.5),
+                                      color:
+                                          isSelected
+                                              ? AppColors.primary
+                                              : Colors.white.withValues(
+                                                alpha: 0.5,
+                                              ),
                                       shape: BoxShape.circle,
-                                      border: isSelected
-                                          ? null
-                                          : Border.all(
-                                              color: Colors.white,
-                                              width: 2,
-                                            ),
+                                      border:
+                                          isSelected
+                                              ? null
+                                              : Border.all(
+                                                color: Colors.white,
+                                                width: 2,
+                                              ),
                                     ),
                                     padding: const EdgeInsets.all(4),
-                                    child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 200),
-                                      child: isSelected
-                                          ? const HugeIcon(
-                                              icon: HugeIcons.strokeRoundedTick01,
+                                    child:
+                                        isSelected
+                                            ? const HugeIcon(
+                                              icon:
+                                                  HugeIcons.strokeRoundedTick01,
                                               color: Colors.white,
                                               size: 16,
                                             )
-                                          : const SizedBox(
+                                            : const SizedBox(
                                               width: 16,
                                               height: 16,
                                             ),
-                                    ),
                                   ),
                                 ),
                             ],
