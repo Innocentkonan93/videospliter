@@ -168,6 +168,7 @@ class _ResultViewState extends State<ResultView> {
                                   file: file,
                                   label: "${'segment'.tr} ${index + 1}",
                                   showPlayIcon: !controller.canSelectVideo.value,
+                                  usePlayer: false,
                                 ),
                               ),
                               // Selection Indicator
