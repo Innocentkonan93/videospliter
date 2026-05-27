@@ -54,6 +54,9 @@ class VideoService {
     required double sliceDuration,
     required bool isPro,
     void Function(double)? onProgress,
+    void Function(int count)? onSegmentsCalculated,
+    void Function(int index, double progress)? onSegmentProgress,
+    void Function(int index, File file)? onSegmentComplete,
   }) async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
       throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
@@ -105,6 +108,7 @@ class VideoService {
       totalDuration,
       sliceDuration,
     );
+    onSegmentsCalculated?.call(totalSegments);
     final fileBase = p.basenameWithoutExtension(videoFile.path);
     final List<File> videoParts = [];
 
@@ -120,6 +124,7 @@ class VideoService {
         // Mettre à jour la progression pour ne pas bloquer l'UI
         final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
         onProgress?.call(global);
+        onSegmentProgress?.call(index, 1.0);
         continue;
       }
 
@@ -153,10 +158,12 @@ class VideoService {
             // Vérifier que le fichier existe et n'est pas vide
             if (await file.exists() && await file.length() > 0) {
               videoParts.add(file);
+              onSegmentComplete?.call(index, file);
             }
             // Fixe la progression à la fin du segment (100% du segment)
             final global = ((index + 1) / totalSegments).clamp(0.0, 1.0);
             onProgress?.call(global);
+            onSegmentProgress?.call(index, 1.0);
             segCompleter.complete();
           } else {
             final logs = await session.getAllLogsAsString();
@@ -184,6 +191,7 @@ class VideoService {
             1.0,
           );
           onProgress?.call(global.toDouble());
+          onSegmentProgress?.call(index, segProgress.clamp(0.0, 1.0));
         },
       );
 

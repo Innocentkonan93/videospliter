@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
@@ -184,171 +185,479 @@ class _ProcessViewState extends State<ProcessView> {
     }
   }
 
+  Widget _buildSegmentCard(int index, double progress, File? file) {
+    final isCompleted = file != null;
+    final isActive = !isCompleted && progress > 0.0;
+
+    Widget cardContent;
+
+    if (isCompleted) {
+      final playerController = controller.videoControllers[file];
+      cardContent = Stack(
+        children: [
+          Positioned.fill(
+            child: playerController != null &&
+                    playerController.value.isInitialized
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: playerController.value.size.width,
+                      height: playerController.value.size.height,
+                      child: VideoPlayer(playerController),
+                    ),
+                  )
+                : Container(color: const Color(0xFFF5F5F7)),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.7),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.3),
+                shape: BoxShape.circle,
+              ),
+              child: const HugeIcon(
+                icon: HugeIcons.strokeRoundedPlay,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 12,
+            left: 12,
+            right: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${'segment'.tr} ${index + 1}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                if (playerController != null &&
+                    playerController.value.isInitialized)
+                  Text(
+                    formatDuration(playerController.value.duration),
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 11,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: AppColors.green,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.check,
+                color: Colors.white,
+                size: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if (isActive) {
+      cardContent = Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              color: const Color(0xFFF5F5F7),
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FractionallySizedBox(
+                heightFactor: progress.clamp(0.0, 1.0),
+                child: Container(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${(progress * 100).toInt()}%",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "segment".tr,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.primary.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 12,
+            left: 12,
+            child: Text(
+              "${'segment'.tr} ${index + 1}",
+              style: TextStyle(
+                color: AppColors.primary.withValues(alpha: 0.6),
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      cardContent = Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              color: const Color(0xFFF5F5F7),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HugeIcon(
+                  icon: HugeIcons.strokeRoundedScissor,
+                  color: AppColors.grey.withValues(alpha: 0.4),
+                  size: 28,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "please_wait".tr,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.grey.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 12,
+            left: 12,
+            child: Text(
+              "${'segment'.tr} ${index + 1}",
+              style: TextStyle(
+                color: AppColors.grey.withValues(alpha: 0.6),
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isActive
+              ? AppColors.primary
+              : isCompleted
+                  ? AppColors.primary.withValues(alpha: 0.2)
+                  : Colors.transparent,
+          width: isActive ? 2.5 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: cardContent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg.png'),
-            fit: BoxFit.cover,
-            opacity: .2,
-          ),
-        ),
+      backgroundColor: AppColors.white,
+      body: SafeArea(
         child: GetBuilder<HomeController>(
           init: controller,
           builder: (context) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Obx(
-                        () => AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
-                          transitionBuilder:
-                              (child, animation) => FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              ),
-                          child: Text(
-                            messages[_messageIndex.value],
-                            key: ValueKey(messages[_messageIndex.value]),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    "cutting_title".tr,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.black,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: Obx(
+                      () => AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        transitionBuilder:
+                            (child, animation) => FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
+                        child: Text(
+                          messages[_messageIndex.value],
+                          key: ValueKey(messages[_messageIndex.value]),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.black.withValues(alpha: 0.6),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    CircularPercentIndicator(
-                      radius: 100.0,
-                      lineWidth: 10.0,
-                      percent: controller.progress.value,
-                      animateFromLastPercent: true,
-                      animation: true,
-                      circularStrokeCap: CircularStrokeCap.round,
-                      center:
-                          controller.progress.value >= 1.0
-                              ? const HugeIcon(
-                                icon: HugeIcons.strokeRoundedCheckmarkCircle01,
-                                color: AppColors.green,
-                                size: 80,
-                              )
-                              : Text(
-                                "${(controller.progress.value * 100).toStringAsFixed(1)} %",
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  if (controller.segmentProgresses.isEmpty)
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircularProgressIndicator.adaptive(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary,
                               ),
-                      progressColor:
-                          controller.progress.value >= 1.0
-                              ? AppColors.green
-                              : AppColors.primary,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              "please_wait".tr,
+                              style: const TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: GridView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 14,
+                              mainAxisSpacing: 14,
+                              childAspectRatio: 0.85,
+                            ),
+                        itemCount: controller.segmentProgresses.length,
+                        itemBuilder: (context, index) {
+                          final progress = controller.segmentProgresses[index];
+                          final file = index < controller.segmentFiles.length
+                              ? controller.segmentFiles[index]
+                              : null;
+                          return _buildSegmentCard(index, progress, file);
+                        },
+                      ),
                     ),
-                     const SizedBox(height: 30),
-                    if (controller.progress.value < 1.0) ...[
-                      if (FeatureManager.isProUser)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppColors.orange.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.orange, width: 1.5),
+                  
+                  const SizedBox(height: 16),
+                  
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Progression globale",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black.withValues(alpha: 0.7),
+                              ),
+                            ),
+                            Text(
+                              "${(controller.progress.value * 100).toStringAsFixed(1)} %",
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinearProgressIndicator(
+                            value: controller.progress.value,
+                            backgroundColor:
+                                AppColors.primary.withValues(alpha: 0.1),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.primary,
+                            ),
+                            minHeight: 8,
                           ),
-                          child: Row(
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  if (controller.progress.value < 1.0) ...[
+                    if (FeatureManager.isProUser)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.orange.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.orange,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const HugeIcon(
+                              icon: HugeIcons.strokeRoundedFlash,
+                              color: AppColors.orange,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "turbo_mode_active".tr,
+                              style: const TextStyle(
+                                color: AppColors.orange,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () {
+                          Get.find<RevenueCatService>().presentPaywall(
+                            placement: 'processing_turbo_ad',
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const HugeIcon(
-                                icon: HugeIcons.strokeRoundedFlash,
-                                color: AppColors.orange,
-                                size: 18,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const HugeIcon(
+                                    icon: HugeIcons.strokeRoundedFlash,
+                                    color: AppColors.primary,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "upgrade_turbo_title".tr,
+                                    style: const TextStyle(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 6),
+                              const SizedBox(height: 4),
                               Text(
-                                "turbo_mode_active".tr,
-                                style: const TextStyle(
-                                  color: AppColors.orange,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                                "upgrade_turbo_desc".tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppColors.grey,
+                                  fontSize: 11,
                                 ),
                               ),
                             ],
                           ),
-                        )
-                      else
-                        GestureDetector(
-                          onTap: () {
-                            Get.find<RevenueCatService>().presentPaywall(
-                              placement: 'processing_turbo_ad',
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: AppColors.primary.withValues(alpha: 0.3),
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const HugeIcon(
-                                      icon: HugeIcons.strokeRoundedFlash,
-                                      color: AppColors.primary,
-                                      size: 18,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      "upgrade_turbo_title".tr,
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "upgrade_turbo_desc".tr,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: AppColors.grey,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
-                      const SizedBox(height: 30),
-                    ],
-                    if (controller.progress.value >= 1.0)
-                      const SizedBox(
+                      ),
+                  ],
+                  
+                  if (controller.progress.value >= 1.0)
+                    const Center(
+                      child: SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator.adaptive(),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             );
           },

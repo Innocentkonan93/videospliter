@@ -20,6 +20,9 @@ class ParallelVideoService {
     required double sliceDuration,
     required bool isPro,
     void Function(double)? onProgress,
+    void Function(int count)? onSegmentsCalculated,
+    void Function(int index, double progress)? onSegmentProgress,
+    void Function(int index, File file)? onSegmentComplete,
   }) async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
       throw UnsupportedError('FFmpegKit is only supported on Android and iOS.');
@@ -69,6 +72,7 @@ class ParallelVideoService {
       totalDuration,
       sliceDuration,
     );
+    onSegmentsCalculated?.call(totalSegments);
     final fileBase = p.basenameWithoutExtension(videoFile.path);
 
     final List<File?> videoPartsArray = List.filled(totalSegments, null);
@@ -116,6 +120,7 @@ class ParallelVideoService {
               onSegmentProgress: (progress) {
                 segmentProgresses[taskIndex] = progress;
                 updateGlobalProgress();
+                onSegmentProgress?.call(taskIndex, progress);
               },
             )
             .then((file) {
@@ -123,6 +128,9 @@ class ParallelVideoService {
               segmentProgresses[taskIndex] = 1.0;
               updateGlobalProgress();
               videoPartsArray[taskIndex] = file;
+              if (file != null) {
+                onSegmentComplete?.call(taskIndex, file);
+              }
               activeTasks--;
               startNextTask();
               // log(file?.path.toString() ?? 'No path');

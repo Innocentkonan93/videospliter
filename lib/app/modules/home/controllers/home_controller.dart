@@ -95,6 +95,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   /// Progression du traitement
   RxDouble progress = 0.0.obs;
 
+  /// Progression individuelle de chaque segment
+  final RxList<double> segmentProgresses = <double>[].obs;
+
+  /// Fichiers de segments terminés
+  final RxList<File?> segmentFiles = <File?>[].obs;
+
   /// Indicateur si la bannière publicitaire est chargée
   bool get isBannerLoaded => adMobService.isBannerAdLoaded;
   final isVideoLoading = false.obs;
@@ -278,6 +284,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   Future<List<File>?> splitVideoIsolate() async {
     if (selectedVideo.value == null) return null;
     videoParts.clear();
+    segmentProgresses.clear();
+    segmentFiles.clear();
 
     final isPro = FeatureManager.isProUser;
 
@@ -289,7 +297,35 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         progress.value = p;
         update();
       },
+      onSegmentsCalculated: (count) {
+        segmentProgresses.assignAll(List.filled(count, 0.0));
+        segmentFiles.assignAll(List.filled(count, null));
+        update();
+      },
+      onSegmentProgress: (index, p) {
+        if (index < segmentProgresses.length) {
+          segmentProgresses[index] = p;
+          segmentProgresses.refresh();
+          update();
+        }
+      },
+      onSegmentComplete: (index, file) {
+        if (index < segmentFiles.length) {
+          segmentFiles[index] = file;
+          segmentFiles.refresh();
+          vibrate(); // Retour haptique lors de la complétion d'un segment
+          
+          // Initialisation asynchrone du lecteur vidéo pour la vignette de la grille
+          final playerController = VideoPlayerController.file(file);
+          playerController.initialize().then((_) {
+            videoControllers[file] = playerController;
+            update();
+          });
+          update();
+        }
+      },
     );
+    parts.sort((a, b) => a.path.compareTo(b.path));
     videoParts.addAll(parts);
     return parts;
   }
@@ -298,6 +334,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   Future<List<File>?> splitVideoParallelIsolate() async {
     if (selectedVideo.value == null) return null;
     videoParts.clear();
+    segmentProgresses.clear();
+    segmentFiles.clear();
 
     final isPro = FeatureManager.isProUser;
 
@@ -309,7 +347,35 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         progress.value = p;
         update();
       },
+      onSegmentsCalculated: (count) {
+        segmentProgresses.assignAll(List.filled(count, 0.0));
+        segmentFiles.assignAll(List.filled(count, null));
+        update();
+      },
+      onSegmentProgress: (index, p) {
+        if (index < segmentProgresses.length) {
+          segmentProgresses[index] = p;
+          segmentProgresses.refresh();
+          update();
+        }
+      },
+      onSegmentComplete: (index, file) {
+        if (index < segmentFiles.length) {
+          segmentFiles[index] = file;
+          segmentFiles.refresh();
+          vibrate(); // Retour haptique lors de la complétion d'un segment
+          
+          // Initialisation asynchrone du lecteur vidéo pour la vignette de la grille
+          final playerController = VideoPlayerController.file(file);
+          playerController.initialize().then((_) {
+            videoControllers[file] = playerController;
+            update();
+          });
+          update();
+        }
+      },
     );
+    parts.sort((a, b) => a.path.compareTo(b.path));
     videoParts.addAll(parts);
     return parts;
   }

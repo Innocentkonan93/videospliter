@@ -45,6 +45,8 @@ class Localization extends Translations {
       'no_cutouts_found': 'No cutouts found.',
 
       // Processing screen
+      'cutting_title': 'Cutting in progress',
+      'please_wait': 'Please wait...',
       'cutting_in_progress': '✂️ Cutting in progress... don\'t leave the app.',
       'no_manual_cutting': '🔪 No more need to manually cut your videos.',
       'share_easily': '📱 Share long videos more easily in several parts.',
@@ -296,6 +298,8 @@ class Localization extends Translations {
       'no_cutouts_found': 'Aucun découpage trouvé.',
 
       // Processing screen
+      'cutting_title': 'Découpe en cours',
+      'please_wait': 'Veuillez patienter...',
       'cutting_in_progress':
           '✂️ Découpage en cours… ne quitte pas l\'application.',
       'no_manual_cutting': '🔪 Plus besoin de couper manuellement tes vidéos.',
@@ -545,6 +549,8 @@ class Localization extends Translations {
       'no_cutouts_found': 'No se encontraron cortes.',
 
       // Processing screen
+      'cutting_title': 'Corte en progreso',
+      'please_wait': 'Por favor, espere...',
       'cutting_in_progress':
           '✂️ Cortando en progreso... no salgas de la aplicación.',
       'no_manual_cutting': '🔪 Ya no necesitas cortar manualmente tus videos.',
@@ -801,6 +807,8 @@ class Localization extends Translations {
       'no_cutouts_found': 'Nenhum corte encontrado.',
 
       // Processing screen
+      'cutting_title': 'Corte em progresso',
+      'please_wait': 'Por favor, aguarde...',
       'cutting_in_progress': '✂️ Corte em progresso... não saia do aplicativo.',
       'no_manual_cutting':
           '🔪 Não há mais necessidade de cortar manualmente seus vídeos.',
@@ -1055,6 +1063,8 @@ class Localization extends Translations {
       'no_cutouts_found': 'لم يتم العثور على قصات.',
 
       // Processing screen
+      'cutting_title': 'جاري القص',
+      'please_wait': 'يرجى الانتظار...',
       'cutting_in_progress': '✂️ القص قيد التنفيذ... لا تغادر التطبيق.',
       'no_manual_cutting': '🔪 لا حاجة بعد الآن لقص مقاطع الفيديو يدوياً.',
       'share_easily': '📱 شارك مقاطع الفيديو الطويلة بسهولة أكبر في عدة أجزاء.',
