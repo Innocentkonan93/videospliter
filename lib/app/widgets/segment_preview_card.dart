@@ -37,6 +37,24 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant SegmentPreviewCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.file.path != widget.file.path ||
+        oldWidget.usePlayer != widget.usePlayer) {
+      if (oldWidget.usePlayer) {
+        _controller?.dispose();
+        _controller = null;
+        _isInitialized = false;
+      }
+      if (widget.usePlayer) {
+        _initializePlayer();
+      } else {
+        setState(() {});
+      }
+    }
+  }
+
   Future<void> _initializePlayer() async {
     try {
       final controller = VideoPlayerController.file(widget.file);

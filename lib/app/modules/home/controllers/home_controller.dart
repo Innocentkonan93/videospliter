@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
@@ -70,9 +69,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   /// Contrôleur de pagination pour les vues
   PageController pageController = PageController();
-
-  /// Map des contrôleurs vidéo pour chaque fichier
-  final Map<File, VideoPlayerController> videoControllers = {};
 
   /// Page actuellement affichée
   RxInt currentPage = 0.obs;
@@ -413,34 +409,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  // ==================== MÉTHODES DE GESTION DES CONTRÔLEURS VIDÉO ====================
-
-  /// Initialise les contrôleurs vidéo pour une liste de fichiers
-  /// Évite la duplication en vérifiant l'existence avant création
-  Future<void> initVideoControllers(
-    List<File> parts, {
-    bool isSaved = false,
-  }) async {
-    for (final file in parts) {
-      if (!videoControllers.containsKey(file)) {
-        final controller = VideoPlayerController.file(file);
-        await controller.initialize();
-        videoControllers[file] = controller;
-      }
-    }
-    if (isSaved) {
-      update();
-    }
-  }
-
-  /// Libère la mémoire en disposant tous les contrôleurs vidéo
-  /// Nettoie la map des contrôleurs
-  Future<void> disposeVideoControllers() async {
-    for (final controller in videoControllers.values) {
-      await controller.dispose();
-    }
-    videoControllers.clear();
-  }
 
   // ==================== MÉTHODES DE SÉLECTION ====================
 
