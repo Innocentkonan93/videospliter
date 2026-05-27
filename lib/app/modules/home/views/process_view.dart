@@ -205,7 +205,9 @@ class _ProcessViewState extends State<ProcessView> {
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: FractionallySizedBox(
+              child: AnimatedFractionallySizedBox(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
                 heightFactor: progress.clamp(0.0, 1.0),
                 child: Container(
                   color: AppColors.primary.withValues(alpha: 0.12),
