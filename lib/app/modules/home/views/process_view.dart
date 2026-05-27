@@ -196,6 +196,7 @@ class _ProcessViewState extends State<ProcessView> {
         file: file,
         label: "${'segment'.tr} ${index + 1}",
         showCheckmark: true,
+        usePlayer: false,
       );
     } else if (isActive) {
       cardContent = Stack(

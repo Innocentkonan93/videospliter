@@ -10,6 +10,7 @@ class SegmentPreviewCard extends StatefulWidget {
   final String label;
   final bool showCheckmark;
   final bool showPlayIcon;
+  final bool usePlayer;
 
   const SegmentPreviewCard({
     super.key,
@@ -17,6 +18,7 @@ class SegmentPreviewCard extends StatefulWidget {
     required this.label,
     this.showCheckmark = false,
     this.showPlayIcon = true,
+    this.usePlayer = true,
   });
 
   @override
@@ -30,7 +32,9 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
   @override
   void initState() {
     super.initState();
-    _initializePlayer();
+    if (widget.usePlayer) {
+      _initializePlayer();
+    }
   }
 
   Future<void> _initializePlayer() async {
@@ -62,7 +66,7 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
       children: [
         // 1. Video Player
         Positioned.fill(
-          child: _isInitialized && _controller != null
+          child: widget.usePlayer && _isInitialized && _controller != null
               ? FittedBox(
                   fit: BoxFit.cover,
                   child: SizedBox(
@@ -73,15 +77,23 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
                 )
               : Container(
                   color: const Color(0xFFF5F5F7),
-                  child: const Center(
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                      ),
-                    ),
+                  child: Center(
+                    child: widget.usePlayer
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary,
+                              ),
+                            ),
+                          )
+                        : HugeIcon(
+                            icon: HugeIcons.strokeRoundedVideo01,
+                            color: AppColors.primary.withValues(alpha: 0.15),
+                            size: 48,
+                          ),
                   ),
                 ),
         ),
@@ -137,13 +149,10 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
                   fontSize: 14,
                 ),
               ),
-              if (_isInitialized && _controller != null)
+              if (widget.usePlayer && _isInitialized && _controller != null)
                 Text(
                   formatDuration(_controller!.value.duration),
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 11,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 11),
                 ),
             ],
           ),
@@ -160,11 +169,7 @@ class _SegmentPreviewCardState extends State<SegmentPreviewCard> {
                 color: AppColors.green,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 12,
-              ),
+              child: const Icon(Icons.check, color: Colors.white, size: 12),
             ),
           ),
       ],
