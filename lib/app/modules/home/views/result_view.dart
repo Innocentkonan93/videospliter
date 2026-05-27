@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/widgets/segment_preview_card.dart';
 import 'package:video_spliter/app/modules/home/views/all_videos_preview..dart';
 import 'package:video_spliter/app/services/video_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
@@ -117,7 +117,6 @@ class _ResultViewState extends State<ResultView> {
                   itemCount: widget.parts.length,
                   itemBuilder: (context, index) {
                     final file = widget.parts[index];
-                    final playerController = controller.videoControllers[file];
                     final isSelected = controller.selectedVideoParts.contains(
                       file,
                     );
@@ -164,94 +163,11 @@ class _ResultViewState extends State<ResultView> {
                           borderRadius: BorderRadius.circular(12),
                           child: Stack(
                             children: [
-                              // Video Thumbnail/Preview
                               Positioned.fill(
-                                child:
-                                    playerController != null &&
-                                            playerController.value.isInitialized
-                                        ? FittedBox(
-                                          fit: BoxFit.cover,
-                                          child: SizedBox(
-                                            width:
-                                                playerController
-                                                    .value
-                                                    .size
-                                                    .width,
-                                            height:
-                                                playerController
-                                                    .value
-                                                    .size
-                                                    .height,
-                                            child: VideoPlayer(
-                                              playerController,
-                                            ),
-                                          ),
-                                        )
-                                        : const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                              ),
-                              // Gradient Overlay
-                              Positioned.fill(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.transparent,
-                                        Colors.black.withValues(alpha: 0.7),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Play Icon
-                              if (!controller.canSelectVideo.value)
-                                Center(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.3,
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const HugeIcon(
-                                      icon: HugeIcons.strokeRoundedPlay,
-                                      color: Colors.white,
-                                      size: 32,
-                                    ),
-                                  ),
-                                ),
-                              // Part Number
-                              Positioned(
-                                bottom: 8,
-                                left: 10,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${'segment'.tr} ${index + 1}",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    if (playerController != null &&
-                                        playerController.value.isInitialized)
-                                      Text(
-                                        formatDuration(
-                                          playerController.value.duration,
-                                        ),
-                                        style: const TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                  ],
+                                child: SegmentPreviewCard(
+                                  file: file,
+                                  label: "${'segment'.tr} ${index + 1}",
+                                  showPlayIcon: !controller.canSelectVideo.value,
                                 ),
                               ),
                               // Selection Indicator
@@ -262,34 +178,31 @@ class _ResultViewState extends State<ResultView> {
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 200),
                                     decoration: BoxDecoration(
-                                      color:
-                                          isSelected
-                                              ? AppColors.primary
-                                              : Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : Colors.white.withValues(alpha: 0.5),
                                       shape: BoxShape.circle,
-                                      border:
-                                          isSelected
-                                              ? null
-                                              : Border.all(
-                                                color: Colors.white,
-                                                width: 2,
-                                              ),
+                                      border: isSelected
+                                          ? null
+                                          : Border.all(
+                                              color: Colors.white,
+                                              width: 2,
+                                            ),
                                     ),
                                     padding: const EdgeInsets.all(4),
-                                    child:
-                                        isSelected
-                                            ? const HugeIcon(
-                                              icon:
-                                                  HugeIcons.strokeRoundedTick01,
+                                    child: AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 200),
+                                      child: isSelected
+                                          ? const HugeIcon(
+                                              icon: HugeIcons.strokeRoundedTick01,
                                               color: Colors.white,
                                               size: 16,
                                             )
-                                            : const SizedBox(
+                                          : const SizedBox(
                                               width: 16,
                                               height: 16,
                                             ),
+                                    ),
                                   ),
                                 ),
                             ],

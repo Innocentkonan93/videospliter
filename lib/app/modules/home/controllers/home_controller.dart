@@ -314,13 +314,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           segmentFiles[index] = file;
           segmentFiles.refresh();
           vibrate(); // Retour haptique lors de la complétion d'un segment
-          
-          // Initialisation asynchrone du lecteur vidéo pour la vignette de la grille
-          final playerController = VideoPlayerController.file(file);
-          playerController.initialize().then((_) {
-            videoControllers[file] = playerController;
-            update();
-          });
           update();
         }
       },
@@ -364,13 +357,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           segmentFiles[index] = file;
           segmentFiles.refresh();
           vibrate(); // Retour haptique lors de la complétion d'un segment
-          
-          // Initialisation asynchrone du lecteur vidéo pour la vignette de la grille
-          final playerController = VideoPlayerController.file(file);
-          playerController.initialize().then((_) {
-            videoControllers[file] = playerController;
-            update();
-          });
           update();
         }
       },

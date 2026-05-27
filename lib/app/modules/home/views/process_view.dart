@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
+import 'package:video_spliter/app/widgets/segment_preview_card.dart';
 import 'package:video_spliter/app/modules/home/views/result_view.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/feedback_service.dart';
@@ -62,15 +62,15 @@ class _ProcessViewState extends State<ProcessView> {
     final startTime = DateTime.now();
     try {
       final isPro = FeatureManager.isProUser;
-      final parts = isPro
-          ? await controller.splitVideoParallelIsolate()
-          : await controller.splitVideoIsolate();
+      final parts =
+          isPro
+              ? await controller.splitVideoParallelIsolate()
+              : await controller.splitVideoIsolate();
       AnalyticsService.videoProcessingStarted(
         videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
         segmentCount: parts?.length ?? 0,
       );
       if (parts != null && parts.isNotEmpty) {
-        await controller.initVideoControllers(parts);
         await Future.delayed(const Duration(seconds: 1));
         vibrate();
         Get.off(() => ResultView(parts: controller.videoParts));
@@ -192,105 +192,15 @@ class _ProcessViewState extends State<ProcessView> {
     Widget cardContent;
 
     if (isCompleted) {
-      final playerController = controller.videoControllers[file];
-      cardContent = Stack(
-        children: [
-          Positioned.fill(
-            child: playerController != null &&
-                    playerController.value.isInitialized
-                ? FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: playerController.value.size.width,
-                      height: playerController.value.size.height,
-                      child: VideoPlayer(playerController),
-                    ),
-                  )
-                : Container(color: const Color(0xFFF5F5F7)),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.7),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: const HugeIcon(
-                icon: HugeIcons.strokeRoundedPlay,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 12,
-            left: 12,
-            right: 12,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "${'segment'.tr} ${index + 1}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                if (playerController != null &&
-                    playerController.value.isInitialized)
-                  Text(
-                    formatDuration(playerController.value.duration),
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 11,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: AppColors.green,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 12,
-              ),
-            ),
-          ),
-        ],
+      cardContent = SegmentPreviewCard(
+        file: file,
+        label: "${'segment'.tr} ${index + 1}",
+        showCheckmark: true,
       );
     } else if (isActive) {
       cardContent = Stack(
         children: [
-          Positioned.fill(
-            child: Container(
-              color: const Color(0xFFF5F5F7),
-            ),
-          ),
+          Positioned.fill(child: Container(color: const Color(0xFFF5F5F7))),
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -343,11 +253,7 @@ class _ProcessViewState extends State<ProcessView> {
     } else {
       cardContent = Stack(
         children: [
-          Positioned.fill(
-            child: Container(
-              color: const Color(0xFFF5F5F7),
-            ),
-          ),
+          Positioned.fill(child: Container(color: const Color(0xFFF5F5F7))),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -389,9 +295,10 @@ class _ProcessViewState extends State<ProcessView> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isActive
-              ? AppColors.primary
-              : isCompleted
+          color:
+              isActive
+                  ? AppColors.primary
+                  : isCompleted
                   ? AppColors.primary.withValues(alpha: 0.2)
                   : Colors.transparent,
           width: isActive ? 2.5 : 1,
@@ -461,7 +368,7 @@ class _ProcessViewState extends State<ProcessView> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  
+
                   if (controller.segmentProgresses.isEmpty)
                     Expanded(
                       child: Center(
@@ -500,16 +407,17 @@ class _ProcessViewState extends State<ProcessView> {
                         itemCount: controller.segmentProgresses.length,
                         itemBuilder: (context, index) {
                           final progress = controller.segmentProgresses[index];
-                          final file = index < controller.segmentFiles.length
-                              ? controller.segmentFiles[index]
-                              : null;
+                          final file =
+                              index < controller.segmentFiles.length
+                                  ? controller.segmentFiles[index]
+                                  : null;
                           return _buildSegmentCard(index, progress, file);
                         },
                       ),
                     ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Column(
@@ -541,8 +449,9 @@ class _ProcessViewState extends State<ProcessView> {
                           borderRadius: BorderRadius.circular(10),
                           child: LinearProgressIndicator(
                             value: controller.progress.value,
-                            backgroundColor:
-                                AppColors.primary.withValues(alpha: 0.1),
+                            backgroundColor: AppColors.primary.withValues(
+                              alpha: 0.1,
+                            ),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               AppColors.primary,
                             ),
@@ -552,9 +461,9 @@ class _ProcessViewState extends State<ProcessView> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   if (controller.progress.value < 1.0) ...[
                     if (FeatureManager.isProUser)
                       Container(
@@ -648,7 +557,7 @@ class _ProcessViewState extends State<ProcessView> {
                         ),
                       ),
                   ],
-                  
+
                   if (controller.progress.value >= 1.0)
                     const Center(
                       child: SizedBox(
