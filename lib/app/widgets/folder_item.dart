@@ -108,7 +108,9 @@ class FolderItem extends GetWidget<HomeController> {
                                   controller.showFolderOptions(folderName);
                                 },
                                 child: const HugeIcon(
-                                  icon: HugeIcons.strokeRoundedMoreHorizontalCircle01,
+                                  icon:
+                                      HugeIcons
+                                          .strokeRoundedMoreHorizontalCircle01,
                                   color: AppColors.black,
                                   size: 20,
                                 ),

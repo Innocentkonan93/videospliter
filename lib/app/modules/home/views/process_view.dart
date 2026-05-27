@@ -60,7 +60,10 @@ class _ProcessViewState extends State<ProcessView> {
   Future<void> _processVideo() async {
     final startTime = DateTime.now();
     try {
-      final parts = await controller.splitVideoParallelIsolate();
+      final isPro = FeatureManager.isProUser;
+      final parts = isPro
+          ? await controller.splitVideoParallelIsolate()
+          : await controller.splitVideoIsolate();
       AnalyticsService.videoProcessingStarted(
         videoDurationSec: controller.selectedVideo.value?.lengthSync() ?? 0,
         segmentCount: parts?.length ?? 0,
@@ -84,7 +87,7 @@ class _ProcessViewState extends State<ProcessView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  title: Text("cut_done_title".tr),
+                  title: Text("cut_done_title".tr, textAlign: TextAlign.center),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -157,12 +160,13 @@ class _ProcessViewState extends State<ProcessView> {
       }
     } catch (e) {
       print(e);
+      final isPro = FeatureManager.isProUser;
       FeedbackService().send(
-        message: 'Découpage parallèle échoué',
-        step: 'cutting_parallel',
+        message: isPro ? 'Découpage parallèle échoué' : 'Découpage échoué',
+        step: isPro ? 'cutting_parallel' : 'cutting',
         type: FeedbackType.automatic,
         error: {
-          'code': 'FFMPEG_ERROR_PARALLEL',
+          'code': isPro ? 'FFMPEG_ERROR_PARALLEL' : 'FFMPEG_ERROR',
           'raw': e.toString(),
           'stack_trace': StackTrace.current.toString(),
         },
@@ -253,7 +257,90 @@ class _ProcessViewState extends State<ProcessView> {
                               ? AppColors.green
                               : AppColors.primary,
                     ),
-                    const SizedBox(height: 30),
+                     const SizedBox(height: 30),
+                    if (controller.progress.value < 1.0) ...[
+                      if (FeatureManager.isProUser)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppColors.orange.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.orange, width: 1.5),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const HugeIcon(
+                                icon: HugeIcons.strokeRoundedFlash,
+                                color: AppColors.orange,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                "turbo_mode_active".tr,
+                                style: const TextStyle(
+                                  color: AppColors.orange,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        GestureDetector(
+                          onTap: () {
+                            Get.find<RevenueCatService>().presentPaywall(
+                              placement: 'processing_turbo_ad',
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const HugeIcon(
+                                      icon: HugeIcons.strokeRoundedFlash,
+                                      color: AppColors.primary,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      "upgrade_turbo_title".tr,
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "upgrade_turbo_desc".tr,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColors.grey,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 30),
+                    ],
                     if (controller.progress.value >= 1.0)
                       const SizedBox(
                         width: 20,

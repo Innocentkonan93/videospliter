@@ -125,6 +125,7 @@ class ParallelVideoService {
               videoPartsArray[taskIndex] = file;
               activeTasks--;
               startNextTask();
+              // log(file?.path.toString() ?? 'No path');
             })
             .catchError((e) {
               if (!hasError) {
@@ -142,8 +143,13 @@ class ParallelVideoService {
 
     // Attendre que tout soit fini ou qu'une erreur survienne
     await completer.future;
-
-    return videoPartsArray.whereType<File>().toList();
+    for (var element in videoPartsArray) {
+      log(element?.path ?? 'No path');
+    }
+    // Filtrer les valeurs nulles d'abord pour éviter une erreur de type "Null check operator on null value" au runtime
+    final orderedParts = videoPartsArray.whereType<File>().toList();
+    orderedParts.sort((a, b) => a.path.compareTo(b.path));
+    return orderedParts;
   }
 
   static Future<File?> _runSegmentTask({

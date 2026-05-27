@@ -56,7 +56,7 @@ class Localization extends Translations {
       'create_automatically':
           '⏱️ Automatically create 10, 30, 60 second excerpts.',
       'use_cutit_like_pro': '🎬 Use cutit to cut your videos like a pro',
-      'cut_done_title': 'Cutting done 💯',
+      'cut_done_title': 'Cutting done ✅',
       'cut_done_body': 'You can share or save it',
       'cut_done_notification': 'Cutting done, you can share or save it',
       'error_cutting':
@@ -239,9 +239,14 @@ class Localization extends Translations {
       'already_pro': 'You are already a Pro user!',
       'only_mobile': 'This feature is only available on mobile devices.',
       'limit_exceeded_title': 'Limit Exceeded',
-      'size_limit_exceeded_desc': 'This video is @size MB, which exceeds the free limit of @limit MB.\n\nUpgrade to Pro to cut videos up to 1.5 GB!',
-      'duration_limit_exceeded_desc': 'This video is @duration long, which exceeds the free limit of @limit minutes.\n\nUpgrade to Pro to cut videos up to 1 hour!',
+      'size_limit_exceeded_desc':
+          'This video is @size MB, which exceeds the free limit of @limit MB.\n\nUpgrade to Pro to cut videos up to 1.5 GB!',
+      'duration_limit_exceeded_desc':
+          'This video is @duration long, which exceeds the free limit of @limit minutes.\n\nUpgrade to Pro to cut videos up to 1 hour!',
       'upgrade_to_pro': 'Upgrade to Pro',
+      'turbo_mode_active': '⚡ Turbo Mode Active (Pro)',
+      'upgrade_turbo_title': '⚡ Upgrade to Turbo Mode',
+      'upgrade_turbo_desc': 'Split your videos 2x faster by upgrading to Pro!',
     },
     'fr': {
       // App name and general
@@ -317,7 +322,7 @@ class Localization extends Translations {
       'segments_timeline': 'Timeline des segments',
       'share': 'Partager',
       'save': 'Enregistrer',
-      'cut_done_title': 'Découpage terminée 💯',
+      'cut_done_title': 'Découpage terminée ✅',
       'cut_done_body': 'Vous pouvez le partager ou l\'enregistrer',
       'cut_done_notification':
           'Découpage terminé, vous pouvez le partager ou l\'enregistrer',
@@ -489,9 +494,14 @@ class Localization extends Translations {
       'only_mobile':
           'Cette fonctionnalité est uniquement disponible sur les appareils mobiles.',
       'limit_exceeded_title': 'Limite dépassée',
-      'size_limit_exceeded_desc': 'Cette vidéo fait @size Mo, ce qui dépasse la limite gratuite de @limit Mo.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1.5 Go !',
-      'duration_limit_exceeded_desc': 'Cette vidéo dure @duration, ce qui dépasse la limite gratuite de @limit minutes.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1 heure !',
+      'size_limit_exceeded_desc':
+          'Cette vidéo fait @size Mo, ce qui dépasse la limite gratuite de @limit Mo.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1.5 Go !',
+      'duration_limit_exceeded_desc':
+          'Cette vidéo dure @duration, ce qui dépasse la limite gratuite de @limit minutes.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1 heure !',
       'upgrade_to_pro': 'Passer Pro',
+      'turbo_mode_active': '⚡ Mode Turbo Actif (Pro)',
+      'upgrade_turbo_title': '⚡ Passer au Mode Turbo',
+      'upgrade_turbo_desc': 'Découpez vos vidéos 2x plus vite en passant Pro !',
     },
     'es': {
       // App name and general
@@ -550,7 +560,7 @@ class Localization extends Translations {
           '⏱️ Crea automáticamente extractos de 10, 30, 60 segundos.',
       'use_cutit_like_pro':
           '🎬 Usa cutit para cortar tus videos como un profesional',
-      'cut_done_title': 'Corte completado 💯',
+      'cut_done_title': 'Corte completado ✅',
       'cut_done_body': 'Puedes compartirlo o guardarlo',
       'cut_done_notification':
           'Corte completado, puedes compartirlo o guardarlo',
@@ -740,9 +750,14 @@ class Localization extends Translations {
       'update_check_error':
           'Error al buscar actualizaciones. Por favor, inténtalo de nuevo.',
       'limit_exceeded_title': 'Límite excedido',
-      'size_limit_exceeded_desc': 'Este video tiene @size MB, lo que supera el límite gratuito de @limit MB.\n\n¡Actualiza a Pro para cortar videos de hasta 1.5 GB!',
-      'duration_limit_exceeded_desc': 'Este video dura @duration, lo que supera el límite gratuito de @limit minutos.\n\n¡Actualiza a Pro para cortar videos de hasta 1 hora!',
+      'size_limit_exceeded_desc':
+          'Este video tiene @size MB, lo que supera el límite gratuito de @limit MB.\n\n¡Actualiza a Pro para cortar videos de hasta 1.5 GB!',
+      'duration_limit_exceeded_desc':
+          'Este video dura @duration, lo que supera el límite gratuito de @limit minutos.\n\n¡Actualiza a Pro para cortar videos de hasta 1 hora!',
       'upgrade_to_pro': 'Hacerse Pro',
+      'turbo_mode_active': '⚡ Modo Turbo Activo (Pro)',
+      'upgrade_turbo_title': '⚡ Cambiar al Modo Turbo',
+      'upgrade_turbo_desc': '¡Corta tus videos 2x más rápido haciéndose Pro!',
     },
     'pt': {
       // App name and general
@@ -801,7 +816,7 @@ class Localization extends Translations {
           '⏱️ Crie automaticamente trechos de 10, 30, 60 segundos.',
       'use_cutit_like_pro':
           '🎬 Use cutit para cortar seus vídeos como um profissional',
-      'cut_done_title': 'Corte concluído 💯',
+      'cut_done_title': 'Corte concluído ✅',
       'cut_done_body': 'Você pode compartilhar ou salvar',
       'cut_done_notification':
           'Corte concluído, você pode compartilhar ou salvar',
@@ -990,9 +1005,14 @@ class Localization extends Translations {
           'Falha ao verificar atualizações. Por favor, tente novamente.',
       'later': 'Mais tarde',
       'limit_exceeded_title': 'Limite excedido',
-      'size_limit_exceeded_desc': 'Este vídeo tem @size MB, o que supera o limite gratuito de @limit MB.\n\nAtualize para o Pro para cortar vídeos de até 1.5 GB!',
-      'duration_limit_exceeded_desc': 'Este vídeo tem @duration de duração, o que supera o limite gratuito de @limit minutos.\n\nAtualize para o Pro para cortar vídeos de até 1 hora!',
+      'size_limit_exceeded_desc':
+          'Este vídeo tem @size MB, o que supera o limite gratuito de @limit MB.\n\nAtualize para o Pro para cortar vídeos de até 1.5 GB!',
+      'duration_limit_exceeded_desc':
+          'Este vídeo tem @duration de duração, o que supera o limite gratuito de @limit minutos.\n\nAtualize para o Pro para cortar vídeos de até 1 hora!',
       'upgrade_to_pro': 'Atualizar para o Pro',
+      'turbo_mode_active': '⚡ Modo Turbo Ativo (Pro)',
+      'upgrade_turbo_title': '⚡ Mudar para o Modo Turbo',
+      'upgrade_turbo_desc': 'Corte seus vídeos 2x mais rápido atualizando para o Pro!',
     },
     'ar': {
       // App name and general
@@ -1047,7 +1067,7 @@ class Localization extends Translations {
           '⏱️ أنشئ تلقائياً مقتطفات مدتها 10، 30، 60 ثانية.',
       'use_cutit_like_pro':
           '🎬 استخدم Cutit لقص مقاطع الفيديو الخاصة بك مثل محترف',
-      'cut_done_title': 'تم القص 💯',
+      'cut_done_title': 'تم القص ✅',
       'cut_done_body': 'يمكنك مشاركته أو حفظه',
       'cut_done_notification': 'تم القص، يمكنك مشاركته أو حفظه',
       'error_cutting': 'حدث خطأ أثناء القص، يرجى المحاولة مرة أخرى',
@@ -1228,9 +1248,14 @@ class Localization extends Translations {
       'choose_format': 'اختر التنسيق',
       'custom': 'مخصص',
       'limit_exceeded_title': 'تم تجاوز الحد',
-      'size_limit_exceeded_desc': 'هذا الفيديو بحجم @size ميجابايت، وهو ما يتجاوز الحد المجاني البالغ @limit ميجابايت.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى 1.5 جيجابايت!',
-      'duration_limit_exceeded_desc': 'هذا الفيديو مدته @duration، وهو ما يتجاوز الحد المجاني البالغ @limit دقائق.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى ساعة واحدة!',
+      'size_limit_exceeded_desc':
+          'هذا الفيديو بحجم @size ميجابايت، وهو ما يتجاوز الحد المجاني البالغ @limit ميجابايت.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى 1.5 جيجابايت!',
+      'duration_limit_exceeded_desc':
+          'هذا الفيديو مدته @duration، وهو ما يتجاوز الحد المجاني البالغ @limit دقائق.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى ساعة واحدة!',
       'upgrade_to_pro': 'الترقية إلى Pro',
+      'turbo_mode_active': '⚡ وضع التوربو نشط (Pro)',
+      'upgrade_turbo_title': '⚡ ترقية إلى وضع التوربو',
+      'upgrade_turbo_desc': 'قص مقاطع الفيديو الخاصة بك أسرع بمرتين بالترقية إلى Pro!',
     },
   };
 }

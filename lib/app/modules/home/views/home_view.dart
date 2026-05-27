@@ -7,7 +7,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 import 'package:video_spliter/app/modules/home/views/my_cutouts_view.dart';
 import 'package:video_spliter/app/modules/home/views/process_view.dart';
-import 'package:video_spliter/app/modules/home/views/progressing_view.dart';
 import 'package:video_spliter/app/modules/settings/views/settings_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
 import 'package:video_spliter/app/widgets/time_slicing_sheet.dart';
@@ -211,8 +210,7 @@ class HomeView extends GetView<HomeController> {
                                             result is double) {
                                           controller.sliceDuration.value =
                                               result;
-                                          // Get.to(() => const ProcessView());
-                                          Get.to(() => const ProcessingView());
+                                          Get.to(() => const ProcessView());
                                         }
                                       },
                                     ),

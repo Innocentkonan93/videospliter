@@ -37,9 +37,10 @@ class SaveSegmentsService {
         exportFormat: 'mp4',
       );
 
-      final String cleanBaseName = (baseFolderName == null || baseFolderName.trim().isEmpty)
-          ? "Cutit"
-          : baseFolderName.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_').trim();
+      final String cleanBaseName =
+          (baseFolderName == null || baseFolderName.trim().isEmpty)
+              ? "Cutit"
+              : baseFolderName.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_').trim();
       final String folderName = '$cleanBaseName-$_splitCounter';
       _splitCounter++;
 
