@@ -4,6 +4,8 @@ import UIKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+  private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier = .invalid
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -26,6 +28,39 @@ import UIKit
         self.getSharedVideo(result: result)
       case "clearSharedVideo":
         self.clearSharedVideo(result: result)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    })
+
+    // Configuration du MethodChannel pour les tâches de fond iOS
+    let backgroundChannel = FlutterMethodChannel(
+      name: "com.meetsum.cutit/background_task",
+      binaryMessenger: controller.binaryMessenger)
+
+    backgroundChannel.setMethodCallHandler({
+      [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+      guard let self = self else { return }
+
+      switch call.method {
+      case "beginBackgroundTask":
+        self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(withName: "VideoProcessing") {
+          UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+          self.backgroundTaskIdentifier = .invalid
+        }
+        result(self.backgroundTaskIdentifier.rawValue)
+      case "endBackgroundTask":
+        if let args = call.arguments as? [String: Any],
+           let rawId = args["id"] as? Int {
+          let taskId = UIBackgroundTaskIdentifier(rawValue: rawId)
+          if taskId != .invalid {
+            UIApplication.shared.endBackgroundTask(taskId)
+          }
+        } else if self.backgroundTaskIdentifier != .invalid {
+          UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
+          self.backgroundTaskIdentifier = .invalid
+        }
+        result(nil)
       default:
         result(FlutterMethodNotImplemented)
       }

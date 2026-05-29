@@ -19,6 +19,7 @@ import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/file_service.dart';
+import 'package:video_spliter/app/services/background_processing_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
 import 'package:video_spliter/app/utils/constants.dart';
@@ -285,38 +286,47 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     final isPro = FeatureManager.isProUser;
 
-    final parts = await VideoService.splitBySSAsync(
-      videoFile: selectedVideo.value!,
-      sliceDuration: sliceDuration.value,
-      isPro: isPro,
-      onProgress: (double p) {
-        progress.value = p;
-        update();
-      },
-      onSegmentsCalculated: (count) {
-        segmentProgresses.assignAll(List.filled(count, 0.0));
-        segmentFiles.assignAll(List.filled(count, null));
-        update();
-      },
-      onSegmentProgress: (index, p) {
-        if (index < segmentProgresses.length) {
-          segmentProgresses[index] = p;
-          segmentProgresses.refresh();
+    final bgTaskId = await BackgroundProcessingService.start('Découpage de vidéo en cours...');
+
+    try {
+      final parts = await VideoService.splitBySSAsync(
+        videoFile: selectedVideo.value!,
+        sliceDuration: sliceDuration.value,
+        isPro: isPro,
+        onProgress: (double p) {
+          progress.value = p;
+          BackgroundProcessingService.update(
+            'Progression : ${(p * 100).toStringAsFixed(0)}%',
+          );
           update();
-        }
-      },
-      onSegmentComplete: (index, file) {
-        if (index < segmentFiles.length) {
-          segmentFiles[index] = file;
-          segmentFiles.refresh();
-          vibrate(); // Retour haptique lors de la complétion d'un segment
+        },
+        onSegmentsCalculated: (count) {
+          segmentProgresses.assignAll(List.filled(count, 0.0));
+          segmentFiles.assignAll(List.filled(count, null));
           update();
-        }
-      },
-    );
-    parts.sort((a, b) => a.path.compareTo(b.path));
-    videoParts.addAll(parts);
-    return parts;
+        },
+        onSegmentProgress: (index, p) {
+          if (index < segmentProgresses.length) {
+            segmentProgresses[index] = p;
+            segmentProgresses.refresh();
+            update();
+          }
+        },
+        onSegmentComplete: (index, file) {
+          if (index < segmentFiles.length) {
+            segmentFiles[index] = file;
+            segmentFiles.refresh();
+            vibrate(); // Retour haptique lors de la complétion d'un segment
+            update();
+          }
+        },
+      );
+      parts.sort((a, b) => a.path.compareTo(b.path));
+      videoParts.addAll(parts);
+      return parts;
+    } finally {
+      await BackgroundProcessingService.stop(bgTaskId);
+    }
   }
 
   /// Découpe la vidéo en parallèle (multi-threading via ParallelVideoService)
@@ -328,38 +338,47 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     final isPro = FeatureManager.isProUser;
 
-    final parts = await ParallelVideoService.splitBySSParallelAsync(
-      videoFile: selectedVideo.value!,
-      sliceDuration: sliceDuration.value,
-      isPro: isPro,
-      onProgress: (double p) {
-        progress.value = p;
-        update();
-      },
-      onSegmentsCalculated: (count) {
-        segmentProgresses.assignAll(List.filled(count, 0.0));
-        segmentFiles.assignAll(List.filled(count, null));
-        update();
-      },
-      onSegmentProgress: (index, p) {
-        if (index < segmentProgresses.length) {
-          segmentProgresses[index] = p;
-          segmentProgresses.refresh();
+    final bgTaskId = await BackgroundProcessingService.start('Découpage parallèle de vidéo...');
+
+    try {
+      final parts = await ParallelVideoService.splitBySSParallelAsync(
+        videoFile: selectedVideo.value!,
+        sliceDuration: sliceDuration.value,
+        isPro: isPro,
+        onProgress: (double p) {
+          progress.value = p;
+          BackgroundProcessingService.update(
+            'Progression : ${(p * 100).toStringAsFixed(0)}%',
+          );
           update();
-        }
-      },
-      onSegmentComplete: (index, file) {
-        if (index < segmentFiles.length) {
-          segmentFiles[index] = file;
-          segmentFiles.refresh();
-          vibrate(); // Retour haptique lors de la complétion d'un segment
+        },
+        onSegmentsCalculated: (count) {
+          segmentProgresses.assignAll(List.filled(count, 0.0));
+          segmentFiles.assignAll(List.filled(count, null));
           update();
-        }
-      },
-    );
-    parts.sort((a, b) => a.path.compareTo(b.path));
-    videoParts.addAll(parts);
-    return parts;
+        },
+        onSegmentProgress: (index, p) {
+          if (index < segmentProgresses.length) {
+            segmentProgresses[index] = p;
+            segmentProgresses.refresh();
+            update();
+          }
+        },
+        onSegmentComplete: (index, file) {
+          if (index < segmentFiles.length) {
+            segmentFiles[index] = file;
+            segmentFiles.refresh();
+            vibrate(); // Retour haptique lors de la complétion d'un segment
+            update();
+          }
+        },
+      );
+      parts.sort((a, b) => a.path.compareTo(b.path));
+      videoParts.addAll(parts);
+      return parts;
+    } finally {
+      await BackgroundProcessingService.stop(bgTaskId);
+    }
   }
 
   // ==================== MÉTHODES DE SAUVEGARDE ====================

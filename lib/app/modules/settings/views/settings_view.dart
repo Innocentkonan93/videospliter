@@ -107,14 +107,20 @@ class SettingsView extends GetWidget<SettingsController> {
                                         title.tr,
                                         style: theme.textTheme.titleMedium,
                                       ),
-                                      subtitle: title == 'clean_cache'
-                                          ? Obx(() => Text(
-                                                controller.cacheSize.value,
-                                                style: theme.textTheme.bodySmall?.copyWith(
-                                                  color: AppColors.grey,
+                                      subtitle:
+                                          title == 'clean_cache'
+                                              ? Obx(
+                                                () => Text(
+                                                  controller.cacheSize.value,
+                                                  style: theme
+                                                      .textTheme
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        color: AppColors.grey,
+                                                      ),
                                                 ),
-                                              ))
-                                          : null,
+                                              )
+                                              : null,
                                       leading: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
@@ -154,12 +160,14 @@ class SettingsView extends GetWidget<SettingsController> {
                     }),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Obx(() => Text(
-                            "${'version'.tr} ${controller.version.value}",
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppColors.grey,
-                            ),
-                          )),
+                      child: Obx(
+                        () => Text(
+                          "${'version'.tr} ${controller.version.value}",
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.grey,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
