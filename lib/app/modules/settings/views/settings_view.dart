@@ -107,6 +107,14 @@ class SettingsView extends GetWidget<SettingsController> {
                                         title.tr,
                                         style: theme.textTheme.titleMedium,
                                       ),
+                                      subtitle: title == 'clean_cache'
+                                          ? Obx(() => Text(
+                                                controller.cacheSize.value,
+                                                style: theme.textTheme.bodySmall?.copyWith(
+                                                  color: AppColors.grey,
+                                                ),
+                                              ))
+                                          : null,
                                       leading: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(

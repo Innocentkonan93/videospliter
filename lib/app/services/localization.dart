@@ -96,6 +96,8 @@ class Localization extends Translations {
       'language': 'Language',
       'privacy_policy': 'Privacy policy',
       'terms_of_use': 'Terms of use',
+      'clean_cache': 'Clean cache files',
+      'clean_cache_success': 'Temporary files cleaned successfully.',
 
       // How it works
       'welcome_cutit_title': 'Welcome to Cutit!',
@@ -353,6 +355,8 @@ class Localization extends Translations {
       'language': 'Langue',
       'privacy_policy': 'Confidentialité',
       'terms_of_use': 'Conditions d\'utilisation',
+      'clean_cache': 'Nettoyer le cache',
+      'clean_cache_success': 'Fichiers temporaires nettoyés avec succès.',
 
       // How it works
       'welcome_cutit_title': 'Bienvenue sur Cutit !',
@@ -605,6 +609,8 @@ class Localization extends Translations {
       'language': 'Idioma',
       'privacy_policy': 'Política de privacidad',
       'terms_of_use': 'Condiciones de uso',
+      'clean_cache': 'Limpiar caché',
+      'clean_cache_success': 'Archivos temporales limpiados con éxito.',
 
       // How it works
       'welcome_cutit_title': '¡Bienvenido a Cutit!',
@@ -863,6 +869,8 @@ class Localization extends Translations {
       'language': 'Idioma',
       'privacy_policy': 'Política de privacidade',
       'terms_of_use': 'Termos de uso',
+      'clean_cache': 'Limpar cache',
+      'clean_cache_success': 'Arquivos temporários limpos com sucesso.',
 
       // How it works
       'welcome_cutit_title': 'Bem-vindo ao Cutit!',
@@ -1114,6 +1122,8 @@ class Localization extends Translations {
       'language': 'اللغة',
       'privacy_policy': 'سياسة الخصوصية',
       'terms_of_use': 'شروط الاستخدام',
+      'clean_cache': 'مسح ذاكرة التخزين المؤقت',
+      'clean_cache_success': 'تم تنظيف الملفات المؤقتة بنجاح.',
 
       // How it works
       'welcome_cutit_title': 'مرحباً بك في Cutit!',

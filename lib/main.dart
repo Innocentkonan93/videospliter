@@ -19,6 +19,7 @@ import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 import 'package:video_spliter/firebase_options.dart';
 
+import 'package:video_spliter/app/services/file_service.dart';
 import 'package:video_spliter/app/services/config_service.dart';
 import 'app/routes/app_pages.dart';
 
@@ -28,6 +29,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await CacheHelper.init();
+
+  // Nettoyage asynchrone des fichiers temporaires obsolètes au démarrage
+  FileService.cleanTemporaryFiles();
 
   // Initialiser le service de configuration (Feature Flags)
   // Requis pour savoir si on doit charger les pubs ou les fonctions pro

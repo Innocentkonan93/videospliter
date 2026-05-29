@@ -10,6 +10,8 @@ import 'package:video_spliter/app/services/app_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/widgets/language_selection_sheet.dart';
+import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
+
 
 const String appName = 'Cutit';
 const String folderName = 'Cutit';
@@ -75,6 +77,13 @@ var settingsGroups = [
         'title': 'share_app',
         'icon': HugeIcons.strokeRoundedShare01,
         'onTap': AppService.shareApp,
+      },
+      {
+        'title': 'clean_cache',
+        'icon': HugeIcons.strokeRoundedDelete01,
+        'onTap': () {
+          Get.find<SettingsController>().cleanCache();
+        },
       },
     ],
   },

@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -209,10 +211,62 @@ class SettingsController extends GetxController {
     }
   }
 
+  final cacheSize = '0.00 Mo'.obs;
+  final isCleaning = false.obs;
+
+  Future<void> updateCacheSize() async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      int totalSize = 0;
+      if (await tempDir.exists()) {
+        await for (final entity in tempDir.list(recursive: true, followLinks: false)) {
+          if (entity is File) {
+            try {
+              totalSize += await entity.length();
+            } catch (_) {}
+          }
+        }
+      }
+      final sizeInMb = totalSize / (1024 * 1024);
+      cacheSize.value = '${sizeInMb.toStringAsFixed(2)} Mo';
+    } catch (e) {
+      cacheSize.value = '0.00 Mo';
+    }
+  }
+
+  Future<void> cleanCache() async {
+    if (isCleaning.value) return;
+    try {
+      isCleaning(true);
+      final tempDir = await getTemporaryDirectory();
+      int deletedCount = 0;
+      if (await tempDir.exists()) {
+        await for (final entity in tempDir.list(recursive: true, followLinks: false)) {
+          if (entity is File) {
+            try {
+              await entity.delete();
+              deletedCount++;
+            } catch (e) {
+              print('⚠️ Impossible de supprimer le fichier temporaire ${entity.path} : $e');
+            }
+          }
+        }
+      }
+      print('✅ Nettoyage du cache terminé. Fichiers supprimés : $deletedCount');
+      await updateCacheSize();
+      showSnackBar('clean_cache_success'.tr);
+    } catch (e) {
+      print('❌ Erreur lors du nettoyage manuel du cache : $e');
+    } finally {
+      isCleaning(false);
+    }
+  }
+
   @override
   void onInit() {
     getPackageInfo();
     loadSavedLanguage();
+    updateCacheSize();
     super.onInit();
   }
 

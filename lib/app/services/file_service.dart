@@ -67,4 +67,37 @@ class FileService {
       print('❌ Erreur lors du renommage de $folderName : $e');
     }
   }
+
+  static Future<void> cleanTemporaryFiles() async {
+    print('🧹 Lancement du nettoyage des fichiers temporaires...');
+    try {
+      final tempDir = await getTemporaryDirectory();
+      if (await tempDir.exists()) {
+        final now = DateTime.now();
+        final threshold = now.subtract(const Duration(hours: 24));
+        int deletedCount = 0;
+
+        await for (final entity in tempDir.list(recursive: true, followLinks: false)) {
+          if (entity is File) {
+            try {
+              final lastModified = await entity.lastModified();
+              if (lastModified.isBefore(threshold)) {
+                await entity.delete();
+                deletedCount++;
+              }
+            } catch (e) {
+              // On ignore et continue pour les autres fichiers
+              print('⚠️ Impossible de supprimer le fichier temporaire ${entity.path} : $e');
+            }
+          }
+        }
+        print('✅ Nettoyage des fichiers temporaires terminé. Fichiers supprimés : $deletedCount');
+      } else {
+        print('⚠️ Dossier temporaire non trouvé.');
+      }
+    } catch (e) {
+      print('❌ Erreur lors du nettoyage des fichiers temporaires : $e');
+    }
+  }
 }
+
