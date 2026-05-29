@@ -163,7 +163,8 @@ class _ResultViewState extends State<ResultView> {
                                 child: SegmentPreviewCard(
                                   file: file,
                                   label: "${'segment'.tr} ${index + 1}",
-                                  showPlayIcon: !controller.canSelectVideo.value,
+                                  showPlayIcon:
+                                      !controller.canSelectVideo.value,
                                   usePlayer: true,
                                 ),
                               ),

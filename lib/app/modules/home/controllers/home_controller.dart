@@ -409,7 +409,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   // ==================== MÉTHODES DE SÉLECTION ====================
 
   /// Gère la sélection/désélection d'une partie de vidéo

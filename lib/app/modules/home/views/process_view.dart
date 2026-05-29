@@ -160,7 +160,7 @@ class _ProcessViewState extends State<ProcessView> {
         );
       }
     } catch (e) {
-      print(e);
+      // print(e);
       final isPro = FeatureManager.isProUser;
       FeedbackService().send(
         message: isPro ? 'Découpage parallèle échoué' : 'Découpage échoué',

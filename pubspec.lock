@@ -220,10 +220,11 @@ packages:
   ffmpeg_kit_flutter_new:
     dependency: "direct main"
     description:
-      name: ffmpeg_kit_flutter_new
-      sha256: d127635f27e93a7f21f0a14ce0a1a148e80919c402dac4a2118d73bfb17ce841
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "fix/ios-simulator-arm64"
+      resolved-ref: a2fc82e3ead6a2e6ef9d511a5f277766a30c7a06
+      url: "https://github.com/maickonn/ffmpeg_kit_flutter.git"
+    source: git
     version: "4.1.0"
   ffmpeg_kit_flutter_platform_interface:
     dependency: transitive
