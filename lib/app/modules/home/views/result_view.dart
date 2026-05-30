@@ -136,18 +136,21 @@ class _ResultViewState extends State<ResultView> {
                         }
                       },
                       child: AnimatedContainer(
+                        clipBehavior: Clip.hardEdge,
                         duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
+                        decoration: ShapeDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          border:
-                              isSelected
-                                  ? Border.all(
-                                    color: AppColors.primary,
-                                    width: 3,
-                                  )
-                                  : null,
-                          boxShadow: [
+                          shape: RoundedSuperellipseBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            side:
+                                isSelected
+                                    ? BorderSide(
+                                      color: AppColors.primary,
+                                      width: 3,
+                                    )
+                                    : BorderSide.none,
+                          ),
+                          shadows: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
@@ -155,59 +158,54 @@ class _ResultViewState extends State<ResultView> {
                             ),
                           ],
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                child: SegmentPreviewCard(
-                                  file: file,
-                                  label: "${'segment'.tr} ${index + 1}",
-                                  showPlayIcon:
-                                      !controller.canSelectVideo.value,
-                                  usePlayer: true,
-                                ),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: SegmentPreviewCard(
+                                file: file,
+                                label: "${'segment'.tr} ${index + 1}",
+                                showPlayIcon: !controller.canSelectVideo.value,
+                                usePlayer: true,
                               ),
-                              // Selection Indicator
-                              if (controller.canSelectVideo.value)
-                                Positioned(
-                                  top: 8,
-                                  right: 8,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          isSelected
-                                              ? AppColors.primary
-                                              : Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                      shape: BoxShape.circle,
-                                      border:
-                                          isSelected
-                                              ? null
-                                              : Border.all(
-                                                color: Colors.white,
-                                                width: 2,
-                                              ),
-                                    ),
-                                    padding: const EdgeInsets.all(4),
-                                    child:
+                            ),
+                            // Selection Indicator
+                            if (controller.canSelectVideo.value)
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  decoration: BoxDecoration(
+                                    color:
                                         isSelected
-                                            ? const HugeIcon(
-                                              icon:
-                                                  HugeIcons.strokeRoundedTick01,
+                                            ? AppColors.primary
+                                            : Colors.white.withValues(
+                                              alpha: 0.5,
+                                            ),
+                                    shape: BoxShape.circle,
+                                    border:
+                                        isSelected
+                                            ? null
+                                            : Border.all(
                                               color: Colors.white,
-                                              size: 16,
-                                            )
-                                            : const SizedBox(
-                                              width: 16,
-                                              height: 16,
+                                              width: 2,
                                             ),
                                   ),
+                                  padding: const EdgeInsets.all(4),
+                                  child:
+                                      isSelected
+                                          ? const HugeIcon(
+                                            icon: HugeIcons.strokeRoundedTick01,
+                                            color: Colors.white,
+                                            size: 16,
+                                          )
+                                          : const SizedBox(
+                                            width: 16,
+                                            height: 16,
+                                          ),
                                 ),
-                            ],
-                          ),
+                              ),
+                          ],
                         ),
                       ),
                     );

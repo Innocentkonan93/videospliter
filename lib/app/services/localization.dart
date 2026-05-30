@@ -166,11 +166,11 @@ class Localization extends Translations {
       'import_video': 'Importing video...',
 
       // Time slicing
-      'define_duration_excerpts': 'Define the duration of each video excerpt',
+      'define_duration_excerpts': 'Define the duration of the excerpts',
       'duration_defined': 'Duration defined: ',
       'social_preset': 'Social Preset',
       'custom': 'Custom',
-      'choose_format': 'Choose a format',
+      'choose_format': 'Choose a platform or custom duration',
       'cut': 'Cut',
 
       // Notifications
@@ -426,11 +426,11 @@ class Localization extends Translations {
       'import_video': 'Importation de la vidéo...',
 
       // Time slicing
-      'define_duration_excerpts': 'Définir la durée de chaque extrait vidéo',
+      'define_duration_excerpts': 'Définir la durée des extraits',
       'duration_defined': 'Durée définie : ',
       'social_preset': 'Réseau social',
       'custom': 'Personnalisé',
-      'choose_format': 'Choisir un format',
+      'choose_format': 'Choisissez une plateforme ou une durée personnalisée',
       'cut': 'Découper',
 
       // Notifications
@@ -681,12 +681,11 @@ class Localization extends Translations {
       'import_video': 'Importando video...',
 
       // Time slicing
-      'define_duration_excerpts':
-          'Define la duración de cada extracto de video',
+      'define_duration_excerpts': 'Define la duración de los extractos',
       'duration_defined': 'Duración definida: ',
       'social_preset': 'Red social',
       'custom': 'Personalizado',
-      'choose_format': 'Elegir un formato',
+      'choose_format': 'Elige una plataforma o duración personalizada',
       'cut': 'Cortar',
 
       // Notifications
@@ -940,11 +939,11 @@ class Localization extends Translations {
       'import_video': 'Importando vídeo...',
 
       // Time slicing
-      'define_duration_excerpts': 'Defina a duração de cada trecho de vídeo',
+      'define_duration_excerpts': 'Defina a duração dos trechos',
       'duration_defined': 'Duração definida: ',
       'social_preset': 'Rede social',
       'custom': 'Personalizado',
-      'choose_format': 'Escolher um formato',
+      'choose_format': 'Escolha uma plataforma ou duração personalizada',
       'cut': 'Cortar',
 
       // Notifications
@@ -1028,7 +1027,8 @@ class Localization extends Translations {
       'upgrade_to_pro': 'Atualizar para o Pro',
       'turbo_mode_active': '⚡ Modo Turbo Ativo (Pro)',
       'upgrade_turbo_title': '⚡ Mudar para o Modo Turbo',
-      'upgrade_turbo_desc': 'Corte seus vídeos 2x mais rápido atualizando para o Pro!',
+      'upgrade_turbo_desc':
+          'Corte seus vídeos 2x mais rápido atualizando para o Pro!',
     },
     'ar': {
       // App name and general
@@ -1189,7 +1189,7 @@ class Localization extends Translations {
       'import_video': 'جاري استيراد الفيديو...',
 
       // Time slicing
-      'define_duration_excerpts': 'حدد مدة كل مقتطف فيديو',
+      'define_duration_excerpts': 'حدد مدة المقتطفات',
       'duration_defined': 'المدة المحددة: ',
       'social_preset': 'شبكة اجتماعية',
       'cut': 'قص',
@@ -1265,7 +1265,7 @@ class Localization extends Translations {
       'app_up_to_date': 'تطبيقك محدث بالكامل!',
       'update_check_error':
           'فشل التحقق من وجود تحديثات. يرجى المحاولة مرة أخرى.',
-      'choose_format': 'اختر التنسيق',
+      'choose_format': 'اختر منصة أو مدة مخصصة',
       'custom': 'مخصص',
       'limit_exceeded_title': 'تم تجاوز الحد',
       'size_limit_exceeded_desc':
@@ -1275,7 +1275,8 @@ class Localization extends Translations {
       'upgrade_to_pro': 'الترقية إلى Pro',
       'turbo_mode_active': '⚡ وضع التوربو نشط (Pro)',
       'upgrade_turbo_title': '⚡ ترقية إلى وضع التوربو',
-      'upgrade_turbo_desc': 'قص مقاطع الفيديو الخاصة بك أسرع بمرتين بالترقية إلى Pro!',
+      'upgrade_turbo_desc':
+          'قص مقاطع الفيديو الخاصة بك أسرع بمرتين بالترقية إلى Pro!',
     },
   };
 }

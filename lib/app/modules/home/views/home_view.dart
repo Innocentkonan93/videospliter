@@ -81,13 +81,18 @@ class HomeView extends GetView<HomeController> {
                               ),
                             const Spacer(flex: 4),
 
-                            Text(
-                              "cut_share_save".tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w900,
-                                color: AppColors.white,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                "cut_share_save".tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.white,
+                                ),
                               ),
                             ),
                             const Spacer(flex: 1),
