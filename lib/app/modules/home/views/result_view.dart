@@ -142,13 +142,6 @@ class _ResultViewState extends State<ResultView> {
                           color: AppColors.white,
                           shape: RoundedSuperellipseBorder(
                             borderRadius: BorderRadius.circular(24),
-                            side:
-                                isSelected
-                                    ? BorderSide(
-                                      color: AppColors.primary,
-                                      width: 3,
-                                    )
-                                    : BorderSide.none,
                           ),
                           shadows: [
                             BoxShadow(
@@ -157,6 +150,18 @@ class _ResultViewState extends State<ResultView> {
                               offset: const Offset(0, 4),
                             ),
                           ],
+                        ),
+                        foregroundDecoration: ShapeDecoration(
+                          shape: RoundedSuperellipseBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            side:
+                                isSelected
+                                    ? BorderSide(
+                                      color: AppColors.primary,
+                                      width: 3,
+                                    )
+                                    : BorderSide.none,
+                          ),
                         ),
                         child: Stack(
                           children: [
