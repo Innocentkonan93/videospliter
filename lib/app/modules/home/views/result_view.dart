@@ -37,6 +37,7 @@ class _ResultViewState extends State<ResultView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
     return GetBuilder<HomeController>(
       builder: (controller) {
         return Scaffold(
@@ -66,14 +67,24 @@ class _ResultViewState extends State<ResultView> {
                 },
               ),
             ),
-            title: Text(
-              controller.canSelectVideo.value
-                  ? '${controller.selectedVideoParts.length} ${controller.selectedVideoParts.length > 1 ? 'clips_selected'.tr : 'clip_selected'.tr}'
-                  : 'cutting_results'.tr,
-              style: const TextStyle(
-                color: AppColors.black,
-                fontWeight: FontWeight.bold,
-              ),
+            title: Column(
+              children: [
+                Text(
+                  controller.canSelectVideo.value
+                      ? '${controller.selectedVideoParts.length} ${controller.selectedVideoParts.length > 1 ? 'clips_selected'.tr : 'clip_selected'.tr}'
+                      : 'cutting_results'.tr,
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'long_press_to_select'.tr,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
             ),
             actions: [
               IconButton(
@@ -224,97 +235,105 @@ class _ResultViewState extends State<ResultView> {
             color: AppColors.white,
             surfaceTintColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
               children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      if (controller.selectedVideoParts.isEmpty) {
-                        showSnackBar('no_video_selected'.tr, isError: true);
-                        return;
-                      }
-                      VideoService.shareVideos(controller.selectedVideoParts);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          controller.selectedVideoParts.isEmpty
-                              ? Colors.grey[200]
-                              : AppColors.primary,
-                      foregroundColor:
-                          controller.selectedVideoParts.isEmpty
-                              ? Colors.grey
-                              : AppColors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          if (controller.selectedVideoParts.isEmpty) {
+                            showSnackBar('no_video_selected'.tr, isError: true);
+                            return;
+                          }
+                          VideoService.shareVideos(
+                            controller.selectedVideoParts,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              controller.selectedVideoParts.isEmpty
+                                  ? Colors.grey[200]
+                                  : AppColors.primary,
+                          foregroundColor:
+                              controller.selectedVideoParts.isEmpty
+                                  ? Colors.grey
+                                  : AppColors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const HugeIcon(
+                          icon: HugeIcons.strokeRoundedShare01,
+                          color: Colors.white,
+                        ),
+                        label: Text('share'.tr),
                       ),
                     ),
-                    icon: const HugeIcon(
-                      icon: HugeIcons.strokeRoundedShare01,
-                      color: Colors.white,
-                    ),
-                    label: Text('share'.tr),
-                  ),
+                    if (!widget.isSaved) ...[
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final result = await controller.showFolderDialog();
+                            if (result != null) {
+                              controller.saveSegments(result as String);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.green,
+                            foregroundColor: AppColors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const HugeIcon(
+                            icon: HugeIcons.strokeRoundedFloppyDisk,
+                            color: Colors.white,
+                          ),
+                          label: Text('save'.tr),
+                        ),
+                      ),
+                    ],
+                    if (widget.isSaved) ...[
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            VideoService.saveVideos(
+                              controller.selectedVideoParts,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                controller.selectedVideoParts.isEmpty
+                                    ? Colors.grey[200]
+                                    : AppColors.orange,
+                            foregroundColor:
+                                controller.selectedVideoParts.isEmpty
+                                    ? Colors.grey
+                                    : AppColors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const HugeIcon(
+                            icon: HugeIcons.strokeRoundedDownload01,
+                            color: Colors.white,
+                          ),
+                          label: Text('export'.tr),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-                if (!widget.isSaved) ...[
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        final result = await controller.showFolderDialog();
-                        if (result != null) {
-                          controller.saveSegments(result as String);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.green,
-                        foregroundColor: AppColors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      icon: const HugeIcon(
-                        icon: HugeIcons.strokeRoundedFloppyDisk,
-                        color: Colors.white,
-                      ),
-                      label: Text('save'.tr),
-                    ),
-                  ),
-                ],
-                if (widget.isSaved) ...[
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        VideoService.saveVideos(controller.selectedVideoParts);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            controller.selectedVideoParts.isEmpty
-                                ? Colors.grey[200]
-                                : AppColors.orange,
-                        foregroundColor:
-                            controller.selectedVideoParts.isEmpty
-                                ? Colors.grey
-                                : AppColors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      icon: const HugeIcon(
-                        icon: HugeIcons.strokeRoundedDownload01,
-                        color: Colors.white,
-                      ),
-                      label: Text('export'.tr),
-                    ),
-                  ),
-                ],
               ],
             ),
           ),

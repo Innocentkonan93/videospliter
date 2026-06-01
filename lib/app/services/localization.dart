@@ -67,6 +67,7 @@ class Localization extends Translations {
       // Result screen
       'clips_selected': 'clips selected',
       'clip_selected': 'clip selected',
+      'long_press_to_select': 'Long press to select',
       'select': 'Select',
       'cutting_results': 'Cutting results',
       'preview': 'Preview',
@@ -321,6 +322,7 @@ class Localization extends Translations {
       // Result screen
       'clips_selected': 'clips sélectionnés',
       'clip_selected': 'clip sélectionné',
+      'long_press_to_select': 'Faites un appui long pour sélectionner',
       'select': 'Sélectionner',
       'cutting_results': 'Résultats du découpage',
       'preview': 'Aperçu',
@@ -579,6 +581,7 @@ class Localization extends Translations {
       // Result screen
       'clips_selected': 'clips seleccionados',
       'clip_selected': 'clip seleccionado',
+      'long_press_to_select': 'Mantenga presionado para seleccionar',
       'select': 'Seleccionar',
       'cutting_results': 'Resultados del corte',
       'preview': 'Vista previa',
@@ -838,6 +841,7 @@ class Localization extends Translations {
       // Result screen
       'clips_selected': 'clipes selecionados',
       'clip_selected': 'clipe selecionado',
+      'long_press_to_select': 'Pressione e segure para selecionar',
       'select': 'Selecionar',
       'cutting_results': 'Resultados do corte',
       'preview': 'Visualização',
@@ -1093,6 +1097,7 @@ class Localization extends Translations {
       // Result screen
       'clips_selected': 'مقاطع محددة',
       'clip_selected': 'مقطع محدد',
+      'long_press_to_select': 'اضغط مطولاً للتحديد',
       'select': 'تحديد',
       'cutting_results': 'نتائج القص',
       'preview': 'معاينة',
