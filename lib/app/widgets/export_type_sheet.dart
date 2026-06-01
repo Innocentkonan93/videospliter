@@ -46,12 +46,24 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
             shape: RoundedSuperellipseBorder(
               borderRadius: BorderRadius.circular(30),
             ),
-            title: Text(
-              'export_hd_title'.tr,
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'export_hd_title'.tr,
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  icon: const Icon(Icons.close, color: Colors.grey),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ),
             content: Text('export_hd_desc'.tr, style: TextStyle(fontSize: 15)),
             actions: [

@@ -21,6 +21,7 @@ import 'package:video_spliter/app/services/analytics_service.dart';
 import 'package:video_spliter/app/utils/methods_utils.dart';
 import 'package:video_spliter/app/utils/video_logic.dart';
 import 'package:video_spliter/app/widgets/export_type_sheet.dart';
+import 'package:lottie/lottie.dart';
 
 class VideoService {
   /// Pre-compress a video to improve performance for further processing
@@ -210,9 +211,20 @@ class VideoService {
     if (context == null) return;
     final box = context.findRenderObject() as RenderBox?;
 
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    Get.snackbar(
+      'processing'.tr,
+      'please_wait'.tr,
+      // showProgressIndicator: true,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: AppColors.white,
+      colorText: AppColors.black,
+      isDismissible: false,
+      duration: const Duration(days: 1),
+      icon: Lottie.asset(
+        'assets/animations/loading.json',
+        width: 40,
+        height: 40,
+      ),
     );
 
     try {
@@ -221,7 +233,7 @@ class VideoService {
           videoParts.where((file) => file.existsSync()).toList();
 
       if (filesToProcess.isEmpty) {
-        Get.back();
+        if (Get.isSnackbarOpen) Get.closeAllSnackbars();
         Get.snackbar('error_sharing_videos'.tr, 'no_video_to_share'.tr);
         return;
       }
@@ -229,7 +241,9 @@ class VideoService {
       List<XFile> filesToShare =
           filesToProcess.map((file) => XFile(file.path)).toList();
 
-      Get.back(); // Ferme le loading avant d'ouvrir le menu natif de partage
+      if (Get.isSnackbarOpen) {
+        Get.closeAllSnackbars(); // Ferme le loading avant d'ouvrir le menu natif de partage
+      }
 
       await SharePlus.instance.share(
         ShareParams(
@@ -244,7 +258,7 @@ class VideoService {
       AppService().handleRatingRequestAfterShare();
       adMobService.showInterstitialAd(onAdClosed: () {});
     } catch (e) {
-      if (Get.isDialogOpen ?? false) Get.back();
+      if (Get.isSnackbarOpen) Get.closeAllSnackbars();
       showSnackBar('${'error_sharing_videos'.tr} $e', isError: true);
       // print(e);
     }
@@ -263,16 +277,27 @@ class VideoService {
 
     if (exportType == null) return; // Action annulée par l'utilisateur
 
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    Get.snackbar(
+      'processing'.tr,
+      'please_wait'.tr,
+      // showProgressIndicator: true,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: AppColors.white,
+      colorText: AppColors.black,
+      isDismissible: false,
+      duration: const Duration(days: 1),
+      icon: Lottie.asset(
+        'assets/animations/loading.json',
+        width: 40,
+        height: 40,
+      ),
     );
 
     try {
       final adMobService = AdMobService();
 
       if (videoParts.isEmpty) {
-        Get.back(); // Close loading
+        if (Get.isSnackbarOpen) Get.closeAllSnackbars(); // Close loading
         Get.snackbar('error_saving_videos'.tr, 'no_video_to_save'.tr);
         return;
       }
@@ -302,7 +327,7 @@ class VideoService {
         await VideoLogic.saveVideoToGallery(finalPathToSave);
       }
 
-      Get.back(); // Close loading
+      if (Get.isSnackbarOpen) Get.closeAllSnackbars(); // Close loading
       showSnackBar('export_success'.tr, isError: false);
 
       // Demande de notation après un export réussi
@@ -310,7 +335,7 @@ class VideoService {
 
       adMobService.showInterstitialAd(onAdClosed: () {});
     } catch (e) {
-      Get.back(); // Close loading
+      if (Get.isSnackbarOpen) Get.closeAllSnackbars(); // Close loading
       showSnackBar('${'error_saving_videos'.tr} $e', isError: true);
       print(e);
     }

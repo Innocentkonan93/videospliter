@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_spliter/app/configs/app_colors.dart';
 
@@ -130,7 +131,13 @@ class _VideoPreviewViewState extends State<VideoPreviewView> {
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(_controller),
                       )
-                      : const Center(child: CircularProgressIndicator()),
+                      : Center(
+                        child: Lottie.asset(
+                          'assets/animations/loading.json',
+                          width: 80,
+                          height: 80,
+                        ),
+                      ),
 
                   // Controls Overlay
                   if (_showControls && isReady)
