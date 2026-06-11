@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A tool for video splitting"
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.1.5+45
+version: 1.2.0+46
 
 environment:
   sdk: ^3.7.0
@@ -57,6 +57,7 @@ dependencies:
   versionarte: any
   video_compress: ^3.1.4
   video_player: ^2.11.1
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_lints: ^6.0.0

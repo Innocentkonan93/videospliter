@@ -6,12 +6,14 @@ import 'package:video_spliter/app/utils/methods_utils.dart';
 
 class PremiumLimitDialog extends StatelessWidget {
   final bool isSizeExceeded;
+  final bool isDailyLimit;
   final double value;
   final double limit;
 
   const PremiumLimitDialog({
     super.key,
     required this.isSizeExceeded,
+    this.isDailyLimit = false,
     required this.value,
     required this.limit,
   });
@@ -21,7 +23,10 @@ class PremiumLimitDialog extends StatelessWidget {
     final theme = context.theme;
 
     String descText = "";
-    if (isSizeExceeded) {
+    if (isDailyLimit) {
+      descText = 'daily_limit_exceeded_desc'.tr
+          .replaceAll('@limit', limit.toInt().toString());
+    } else if (isSizeExceeded) {
       descText = 'size_limit_exceeded_desc'.tr
           .replaceAll('@size', value.toStringAsFixed(1))
           .replaceAll('@limit', limit.toInt().toString());
@@ -80,7 +85,7 @@ class PremiumLimitDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'limit_exceeded_title'.tr,
+                  isDailyLimit ? 'daily_limit_title'.tr : 'limit_exceeded_title'.tr,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: AppColors.black,
                     fontWeight: FontWeight.bold,

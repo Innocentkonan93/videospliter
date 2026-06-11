@@ -74,7 +74,7 @@ class FolderItem extends GetWidget<HomeController> {
                           child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('assets/images/folder.png'),
+                                image: AssetImage('assets/images/folder.webp'),
                               ),
                             ),
                           ),

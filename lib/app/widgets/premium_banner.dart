@@ -61,7 +61,7 @@ class PremiumBanner extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'remove_ads_watermark'.tr,
+                        'remove_ads'.tr,
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

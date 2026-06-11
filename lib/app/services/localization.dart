@@ -35,6 +35,9 @@ class Localization extends Translations {
       'intro_title_4': 'Stay Notified',
       'intro_desc_4':
           'Enable notifications to know exactly when your video is fully processed, even in the background.',
+      'intro_title_export': 'Fast Export & HD Quality',
+      'intro_desc_export':
+          'Export your split videos in a flash. Enjoy uncompromised HD quality tailored for your social networks.',
 
       // Home screen
       'cut_share_save': 'Cut, share and save your videos in a few clicks',
@@ -197,7 +200,7 @@ class Localization extends Translations {
       'export_success': 'Export successful',
       // Premium
       'premium_title': 'Unlock Cutit Pro ✨',
-      'premium_subtitle': 'No ads • HD export • No size limit',
+      'premium_subtitle': 'No ads • Turbo Mode ⚡ • HD export • No size limit',
       'cutit_pro_active': 'Cutit Pro Active',
       'enjoy_pro_features': 'You have full access to all features',
       // Export modal
@@ -228,10 +231,10 @@ class Localization extends Translations {
       'update_check': 'Update check',
       'app_up_to_date': 'Your app is up to date!',
       'update_check_error': 'Failed to check for updates. Please try again.',
-      'remove_ads_watermark': 'Remove ads & watermark',
+      'remove_ads': 'Remove ads',
       'unlock_pro_features_now': 'Unlock Pro features now',
       'pro_success_cta':
-          'Unlock ultra-fast export, HD quality, and remove watermarks/ads forever!',
+          'Unlock ultra-fast export, HD quality, and remove ads forever!',
       'congratulations': 'Congratulations!',
       'premium_unlocked_desc':
           'You have unlocked Cutit Pro. Enjoy an ad-free experience without time or size limits!',
@@ -244,10 +247,13 @@ class Localization extends Translations {
       'already_pro': 'You are already a Pro user!',
       'only_mobile': 'This feature is only available on mobile devices.',
       'limit_exceeded_title': 'Limit Exceeded',
+      'daily_limit_title': 'Daily Limit Reached',
       'size_limit_exceeded_desc':
           'This video is @size MB, which exceeds the free limit of @limit MB.\n\nUpgrade to Pro to cut videos up to 1.5 GB!',
       'duration_limit_exceeded_desc':
           'This video is @duration long, which exceeds the free limit of @limit minutes.\n\nUpgrade to Pro to cut videos up to 1 hour!',
+      'daily_limit_exceeded_desc':
+          'You have reached your daily limit of @limit free cuts.\n\nUpgrade to Pro for unlimited exports, turbo mode, and ad-free splitting!',
       'upgrade_to_pro': 'Upgrade to Pro',
       'turbo_mode_active': '⚡ Turbo Mode Active (Pro)',
       'upgrade_turbo_title': '⚡ Upgrade to Turbo Mode',
@@ -290,6 +296,9 @@ class Localization extends Translations {
       'intro_title_4': 'Restez Informé',
       'intro_desc_4':
           'Autorisez les notifications pour savoir exactement quand votre export est terminé, même en arrière-plan.',
+      'intro_title_export': 'Export Rapide & Qualité HD',
+      'intro_desc_export':
+          'Exportez vos vidéos découpées en un éclair. Profitez d\'une qualité HD sans compromis pour vos réseaux sociaux.',
 
       // Home screen
       'cut_share_save':
@@ -458,7 +467,7 @@ class Localization extends Translations {
       'no_video_to_share': 'Aucune vidéo à partager',
       //
       'premium_title': 'Débloquez Cutit Pro ✨',
-      'premium_subtitle': 'Zéro pub • Export HD • Sans limite',
+      'premium_subtitle': 'Zéro pub • Mode Turbo ⚡ • Export HD • Sans limite',
       'cutit_pro_active': 'Cutit Pro Actif',
       'enjoy_pro_features': 'Vous avez accès à toutes les fonctionnalités',
       // Export modal
@@ -487,10 +496,10 @@ class Localization extends Translations {
       'update_mandatory_title': 'Mise à jour obligatoire',
       'update_optional_title': 'Mise à jour disponible',
       'update_button': 'Mettre à jour maintenant',
-      'remove_ads_watermark': 'Retirer les pubs & le filigrane',
-      'unlock_pro_features_now': 'Débloquer les fonctionnalités Pro maintenant',
+      'remove_ads': 'Retirer les publicités',
+      'unlock_pro_features_now': 'Débloquez les fonctions Pro',
       'pro_success_cta':
-          "Débloquez l'export ultra-rapide en HD, et supprimez le filigrane/pubs à tout jamais !",
+          "Débloquez l'export ultra-rapide en HD, et supprimez les pubs à tout jamais !",
       'congratulations': 'Félicitations !',
       'premium_unlocked_desc':
           "Vous avez débloqué Cutit Pro. Profitez d'une expérience sans publicité et sans limite de temps et taille !",
@@ -504,10 +513,13 @@ class Localization extends Translations {
       'only_mobile':
           'Cette fonctionnalité est uniquement disponible sur les appareils mobiles.',
       'limit_exceeded_title': 'Limite dépassée',
+      'daily_limit_title': 'Limite journalière atteinte',
       'size_limit_exceeded_desc':
           'Cette vidéo fait @size Mo, ce qui dépasse la limite gratuite de @limit Mo.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1.5 Go !',
       'duration_limit_exceeded_desc':
           'Cette vidéo dure @duration, ce qui dépasse la limite gratuite de @limit minutes.\n\nPassez à la version Pro pour couper des vidéos allant jusqu\'à 1 heure !',
+      'daily_limit_exceeded_desc':
+          'Vous avez atteint votre limite journalière de @limit découpes gratuites.\n\nPassez à la version Pro pour des exports illimités, le mode turbo et un découpage sans pub !',
       'upgrade_to_pro': 'Passer Pro',
       'turbo_mode_active': '⚡ Mode Turbo Actif (Pro)',
       'upgrade_turbo_title': '⚡ Passer au Mode Turbo',
@@ -545,6 +557,9 @@ class Localization extends Translations {
       'intro_title_4': 'Mantente notificado',
       'intro_desc_4':
           'Activa las notificaciones para saber exactamente cuándo se ha procesado tu video, incluso en segundo plano.',
+      'intro_title_export': 'Exportación Rápida y Calidad HD',
+      'intro_desc_export':
+          'Exporta tus videos divididos en un instante. Disfruta de una calidad HD sin compromisos para tus redes sociales.',
 
       // Home screen
       'cut_share_save': 'Corta, comparte y guarda tus videos en unos clics',
@@ -643,7 +658,7 @@ class Localization extends Translations {
 
       // About app
       'about_cutit':
-          '✂️ Acerca de Cutit\n\nCutit es una aplicación innovadora que transforma tus videos largos en segmentos cortos perfectos para redes sociales. En unos clics, corta automáticamente tus videos en segmentos de un minuto o menos, ideales para TikTok, Instagram Reels, YouTube Shorts y más.\n\nCaracterísticas principales:\n• Interfaz simple e intuitiva\n• Corte automático inteligente\n• Duración personalizable (30 segundos por defecto)\n• Exportación rápida y optimizada\n• Compatible con todos los formatos populares\n\nYa seas creador de contenido o un usuario simple, Cutit te ahorra un tiempo valioso automatizando el corte de tus videos mientras preserva su calidad.\n\n¡Comienza ahora a transformar tus videos largos en contenido atractivo!',
+          '✂️ Acerca de Cutit\n\nCutit es una aplicación innovante que transforma tus videos largos en segmentos cortos perfectos para redes sociales. En unos clics, corta automáticamente tus videos en segmentos de un minuto o menos, ideales para TikTok, Instagram Reels, YouTube Shorts y más.\n\nCaracterísticas principales:\n• Interfaz simple e intuitiva\n• Corte automático inteligente\n• Duración personalizable (30 segundos por defecto)\n• Exportación rápida y optimizada\n• Compatible con todos los formatos populares\n\nYa seas creador de contenido o un usuario simple, Cutit te ahorra un tiempo valioso automatizando el corte de tus videos mientras preserva su calidad.\n\n¡Comienza ahora a transformar tus videos largos en contenido atractivo!',
       'version': 'Versión',
 
       // Feedback
@@ -714,7 +729,8 @@ class Localization extends Translations {
       'no_video_to_share': 'No hay video para compartir',
       //
       'premium_title': 'Desbloquea Cutit Pro ✨',
-      'premium_subtitle': 'Sin anuncios • Exportación HD • Sin límite',
+      'premium_subtitle':
+          'Sin anuncios • Modo Turbo ⚡ • Exportación HD • Sin límite',
       'cutit_pro_active': 'Cutit Pro Activo',
       'enjoy_pro_features': 'Tienes acceso a todas las funciones',
       // Export modal
@@ -740,10 +756,10 @@ class Localization extends Translations {
       'error': 'Error',
       'ad_load_error':
           'No se pudo cargar el anuncio de video. Por favor, inténtalo de nuevo más tarde.',
-      'remove_ads_watermark': 'Quitar anuncios y marca de agua',
-      'unlock_pro_features_now': 'Desbloquear funciones Pro ahora',
+      'remove_ads': 'Quitar anuncios',
+      'unlock_pro_features_now': 'Desbloquea las funciones Pro ahora',
       'pro_success_cta':
-          '¡Desbloquea exportación ultra rápida en HD y elimina marcas de agua/anuncios para siempre!',
+          '¡Desbloquea exportación ultrarrápida, calidad HD y elimina los anuncios para siempre!',
       'congratulations': '¡Felicitaciones!',
       'premium_unlocked_desc':
           'Has desbloqueado Cutit Pro. ¡Disfruta de una experiencia sin anuncios y sin límites de tiempo o tamaño!',
@@ -764,10 +780,13 @@ class Localization extends Translations {
       'update_check_error':
           'Error al buscar actualizaciones. Por favor, inténtalo de nuevo.',
       'limit_exceeded_title': 'Límite excedido',
+      'daily_limit_title': 'Límite diario alcanzado',
       'size_limit_exceeded_desc':
           'Este video tiene @size MB, lo que supera el límite gratuito de @limit MB.\n\n¡Actualiza a Pro para cortar videos de hasta 1.5 GB!',
       'duration_limit_exceeded_desc':
           'Este video dura @duration, lo que supera el límite gratuito de @limit minutos.\n\n¡Actualiza a Pro para cortar videos de hasta 1 hora!',
+      'daily_limit_exceeded_desc':
+          'Has alcanzado tu límite diario de @limit cortes gratuitos.\n\n¡Actualiza a Pro para exportaciones ilimitadas, modo turbo y cortes sin anuncios!',
       'upgrade_to_pro': 'Hacerse Pro',
       'turbo_mode_active': '⚡ Modo Turbo Activo (Pro)',
       'upgrade_turbo_title': '⚡ Cambiar al Modo Turbo',
@@ -804,6 +823,9 @@ class Localization extends Translations {
       'intro_title_4': 'Mantenha-se notificado',
       'intro_desc_4':
           'Ative as notificações para saber exatamente quando seu vídeo foi totalmente processado, mesmo em segundo plano.',
+      'intro_title_export': 'Exportação Rápida e Qualidade HD',
+      'intro_desc_export':
+          'Exporte seus vídeos divididos em um instante. Desfrute de uma qualidade HD sem compromissos para suas redes sociais.',
 
       // Home screen
       'cut_share_save':
@@ -973,7 +995,8 @@ class Localization extends Translations {
       'no_video_to_share': 'Nenhum vídeo para compartilhar',
       //
       'premium_title': 'Desbloquear Cutit Pro ✨',
-      'premium_subtitle': 'Sem anúncios • Exportação HD • Sem limite',
+      'premium_subtitle':
+          'Sem anúncios • Modo Turbo ⚡ • Exportação HD • Sem limite',
       'cutit_pro_active': 'Cutit Pro Ativo',
       'enjoy_pro_features': 'Você tem acesso a todas as funcionalidades',
       // Export modal
@@ -999,10 +1022,10 @@ class Localization extends Translations {
       'error': 'Erro',
       'ad_load_error':
           'Não foi possível carregar o anúncio em vídeo. Por favor, tente novamente mais tarde.',
-      'remove_ads_watermark': 'Remover anúncios e marca d\'água',
-      'unlock_pro_features_now': 'Desbloquear recursos Pro agora',
+      'remove_ads': 'Remover anúncios',
+      'unlock_pro_features_now': 'Desbloqueie recursos Pro agora',
       'pro_success_cta':
-          "Desbloqueie exportação ultra rápida em HD e remova marcas d'água/anúncios para sempre!",
+          'Desbloqueie exportação ultrarrápida, qualidade HD e remova anúncios para sempre!',
       'congratulations': 'Parabéns!',
       'premium_unlocked_desc':
           'Você desbloqueou o Cutit Pro. Desfrute de uma experiência sem anúncios e sem limites de tempo ou tamanho!',
@@ -1024,12 +1047,15 @@ class Localization extends Translations {
           'Falha ao verificar atualizações. Por favor, tente novamente.',
       'later': 'Mais tarde',
       'limit_exceeded_title': 'Limite excedido',
+      'daily_limit_title': 'Limite diário atingido',
       'size_limit_exceeded_desc':
           'Este vídeo tem @size MB, o que supera o limite gratuito de @limit MB.\n\nAtualize para o Pro para cortar vídeos de até 1.5 GB!',
       'duration_limit_exceeded_desc':
           'Este vídeo tem @duration de duração, o que supera o limite gratuito de @limit minutos.\n\nAtualize para o Pro para cortar vídeos de até 1 hora!',
+      'daily_limit_exceeded_desc':
+          'Você atingiu o seu limite diário de @limit cortes gratuitos.\n\nAtualize para o Pro para exportações ilimitadas, modo turbo e cortes sem anúncios!',
       'upgrade_to_pro': 'Atualizar para o Pro',
-      'turbo_mode_active': '⚡ Modo Turbo Ativo (Pro)',
+      'turbo_mode_active': '⚡ Modo Turbo Activo (Pro)',
       'upgrade_turbo_title': '⚡ Mudar para o Modo Turbo',
       'upgrade_turbo_desc':
           'Corte seus vídeos 2x mais rápido atualizando para o Pro!',
@@ -1065,6 +1091,9 @@ class Localization extends Translations {
       'intro_title_4': 'ابق على اطلاع',
       'intro_desc_4':
           'اسمح بالإشعارات لمعرفة متى يتم معالجة الفيديو الخاص بك بالكامل، حتى في الخلفية.',
+      'intro_title_export': 'تصدير سريع وجودة عالية HD',
+      'intro_desc_export':
+          'قم بتصدير مقاطع الفيديو المقسمة في لمح البصر. استمتع بجودة HD لا مثيل لها لشبكات التواصل الاجتماعي الخاصة بك.',
 
       // Home screen
       'cut_share_save': 'اقطع وشارك واحفظ مقاطع الفيديو الخاصة بك في بضع نقرات',
@@ -1157,7 +1186,6 @@ class Localization extends Translations {
       'about_cutit':
           '✂️ حول Cutit\n\nCutit هو تطبيق مبتكر يحوّل مقاطع الفيديو الطويلة الخاصة بك إلى مقاطع قصيرة مثالية للشبكات الاجتماعية. في بضع نقرات، اقطع تلقائياً مقاطع الفيديو الخاصة بك إلى مقاطع مدتها دقيقة أو أقل، مثالية لـ TikTok و Instagram Reels و YouTube Shorts والمزيد.\n\nالميزات الرئيسية:\n• واجهة بسيطة وبديهية\n• قص تلقائي ذكي\n• مدة قابلة للتخصيص (30 ثانية افتراضياً)\n• تصدير سريع ومحسّن\n• متوافق مع جميع التنسيقات الشائعة\n\nسواء كنت منشئ محتوى أو مستخدم عادي، يوفر لك Cutit وقتاً ثميناً من خلال أتمتة قص مقاطع الفيديو الخاصة بك مع الحفاظ على جودتها.\n\nابدأ الآن لتحويل مقاطع الفيديو الطويلة الخاصة بك إلى محتوى جذاب!',
       'version': 'الإصدار',
-
       // Feedback
       'sorry_problem':
           'نأسف لأنك تواجه مشكلة. صف ما حدث وسنبذل قصارى جهدنا لمساعدتك.',
@@ -1222,7 +1250,7 @@ class Localization extends Translations {
       'no_video_to_share': 'لا يوجد فيديو للمشاركة',
       //
       'premium_title': 'افتح Cutit Pro ✨',
-      'premium_subtitle': 'بدون إعلانات • تصدير HD • بدون حد',
+      'premium_subtitle': 'بدون إعلانات • وضع التيربو ⚡ • تصدير HD • بدون حد',
       'cutit_pro_active': 'Cutit Pro نشط',
       'enjoy_pro_features': 'لديك وصول كامل إلى جميع الميزات',
       // Export modal
@@ -1248,10 +1276,10 @@ class Localization extends Translations {
       'error': 'خطأ',
       'ad_load_error':
           'تعذر تحميل إعلان الفيديو. يرجى المحاولة مرة أخرى لاحقًا.',
-      'remove_ads_watermark': 'إزالة الإعلانات والعلامة المائية',
+      'remove_ads': 'إزالة الإعلانات',
       'unlock_pro_features_now': 'افتح ميزات Pro الآن',
       'pro_success_cta':
-          'افتح التصدير فائق السرعة وجودة HD وأزل العلامات المائية/الإعلانات إلى الأبد!',
+          'افتح تصديرًا فائق السرعة، جودة HD، وقم بإزالة الإعلانات إلى الأبد!',
       'congratulations': 'تهانينا!',
       'premium_unlocked_desc':
           'لقد قمت بفتح Cutit Pro. استمتع بتجربة خالية من الإعلانات وبدون حدود للوقت أو الحجم!',
@@ -1273,10 +1301,13 @@ class Localization extends Translations {
       'choose_format': 'اختر منصة أو مدة مخصصة',
       'custom': 'مخصص',
       'limit_exceeded_title': 'تم تجاوز الحد',
+      'daily_limit_title': 'تم الوصول للحد اليومي',
       'size_limit_exceeded_desc':
           'هذا الفيديو بحجم @size ميجابايت، وهو ما يتجاوز الحد المجاني البالغ @limit ميجابايت.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى 1.5 جيجابايت!',
       'duration_limit_exceeded_desc':
           'هذا الفيديو مدته @duration، وهو ما يتجاوز الحد المجاني البالغ @limit دقائق.\n\nقم بالترقية إلى Pro لقص مقاطع فيديو تصل إلى ساعة واحدة!',
+      'daily_limit_exceeded_desc':
+          'لقد وصلت إلى الحد اليومي الأقصى البالغ @limit عمليات قص مجانية.\n\nقم بالترقية إلى Pro للحصول على تصدير غير محدود، ووضع التوربو، وقص خالٍ من الإعلانات!',
       'upgrade_to_pro': 'الترقية إلى Pro',
       'turbo_mode_active': '⚡ وضع التوربو نشط (Pro)',
       'upgrade_turbo_title': '⚡ ترقية إلى وضع التوربو',

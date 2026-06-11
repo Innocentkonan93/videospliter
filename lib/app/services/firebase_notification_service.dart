@@ -64,7 +64,7 @@ class FirebaseNotificationService extends GetxService {
   }
 
   Future<void> initFirebaseNotifications() async {
-    await _firebaseMessaging.requestPermission(provisional: true);
+    await _firebaseMessaging.requestPermission(provisional: false);
     await initPushNotification();
     await syncTopics();
   }

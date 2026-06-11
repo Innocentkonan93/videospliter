@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:video_spliter/app/configs/caches/cache_helper.dart';
 import 'package:video_spliter/app/routes/app_pages.dart';
 import 'package:video_spliter/app/services/firebase_notification_service.dart';
+import 'package:video_spliter/app/services/local_notifications_service.dart';
 import 'package:video_spliter/app/services/revenuecat_service.dart';
 import 'package:video_spliter/app/utils/constants.dart';
 
@@ -17,12 +18,9 @@ class IntroductionController extends GetxController {
     final status = await Permission.notification.request();
     if (status.isGranted) {
       await FirebaseNotificationService.to.initFirebaseNotifications();
+      await LocalNotificationService().requestPermissions();
       completedIntro();
     } else {
-      // showSnackBar(
-      //   "permission_denied_to_receive_notifications".tr,
-      //   isError: true,
-      // );
       completedIntro();
     }
   }

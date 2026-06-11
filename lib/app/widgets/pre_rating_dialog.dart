@@ -35,11 +35,13 @@ class PreRatingDialog extends StatelessWidget {
             bottom: 20,
           ),
           margin: const EdgeInsets.only(top: 20),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
+          decoration: ShapeDecoration(
+            shape: RoundedSuperellipseBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
+            // borderRadius: BorderRadius.circular(20),
+            shadows: const [
               BoxShadow(
                 color: Colors.black26,
                 offset: Offset(0, 10),

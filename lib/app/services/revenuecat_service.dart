@@ -104,7 +104,14 @@ class RevenueCatService extends GetxService {
       );
       if (paywallResult == PaywallResult.purchased ||
           paywallResult == PaywallResult.restored) {
-        Get.off(() => const PremiumSuccessView());
+        final customerInfo = await Purchases.getCustomerInfo();
+        _updateSubscriptionStatus(customerInfo);
+
+        if (isProUser.value) {
+          Get.off(() => const PremiumSuccessView());
+        } else {
+          showSnackBar("no_active_subscription".tr, isError: true);
+        }
       } else if (paywallResult == PaywallResult.notPresented) {
         showSnackBar("already_pro".tr, isError: true);
       }
@@ -121,7 +128,14 @@ class RevenueCatService extends GetxService {
       );
       if (paywallResult == PaywallResult.purchased ||
           paywallResult == PaywallResult.restored) {
-        Get.to(() => const PremiumSuccessView());
+        final customerInfo = await Purchases.getCustomerInfo();
+        _updateSubscriptionStatus(customerInfo);
+
+        if (isProUser.value) {
+          Get.to(() => const PremiumSuccessView());
+        } else {
+          showSnackBar("no_active_subscription".tr, isError: true);
+        }
       }
     } catch (e) {
       debugPrint("Error presenting paywall: $e");

@@ -20,9 +20,9 @@ class LocalNotificationService {
 
     DarwinInitializationSettings iosInitializationSettings =
         DarwinInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestSoundPermission: true,
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
         );
 
     final InitializationSettings settings = InitializationSettings(
@@ -31,6 +31,17 @@ class LocalNotificationService {
     );
 
     _localNotificationService.initialize(settings: settings);
+  }
+
+  Future<bool?> requestPermissions() async {
+    return await _localNotificationService
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   void onDidReceiveLocalNotification(

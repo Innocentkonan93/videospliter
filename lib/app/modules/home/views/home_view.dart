@@ -10,6 +10,8 @@ import 'package:video_spliter/app/modules/home/views/process_view.dart';
 import 'package:video_spliter/app/modules/settings/views/settings_view.dart';
 import 'package:video_spliter/app/widgets/custom_video_player_view.dart';
 import 'package:video_spliter/app/widgets/time_slicing_sheet.dart';
+import 'package:video_spliter/app/widgets/premium_limit_dialog.dart';
+import 'package:video_spliter/app/services/revenuecat_service.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -52,7 +54,7 @@ class HomeView extends GetView<HomeController> {
                     Opacity(
                       opacity: .5,
                       child: Image.asset(
-                        "assets/images/bg.png",
+                        "assets/images/bg.webp",
                         fit: BoxFit.cover,
                         height: height,
                         width: width,
@@ -213,6 +215,23 @@ class HomeView extends GetView<HomeController> {
                                             );
                                         if (result != null &&
                                             result is double) {
+                                          final canProceed = await controller.checkDailyLimit();
+                                          if (!canProceed) {
+                                            final upgrade = await Get.dialog<bool>(
+                                              const PremiumLimitDialog(
+                                                isSizeExceeded: false,
+                                                isDailyLimit: true,
+                                                value: 0,
+                                                limit: 3,
+                                              ),
+                                            );
+                                            if (upgrade == true) {
+                                              await Get.find<RevenueCatService>().presentPaywall(
+                                                placement: 'daily_limit',
+                                              );
+                                            }
+                                            return;
+                                          }
                                           controller.sliceDuration.value =
                                               result;
                                           Get.to(() => const ProcessView());

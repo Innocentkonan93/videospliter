@@ -12,7 +12,6 @@ import 'package:video_spliter/app/services/update_service.dart';
 import 'package:video_spliter/app/widgets/language_selection_sheet.dart';
 import 'package:video_spliter/app/modules/settings/controllers/settings_controller.dart';
 
-
 const String appName = 'Cutit';
 const String folderName = 'Cutit';
 const String introductionKey = 'introduction_key';
@@ -140,24 +139,24 @@ var settingsGroups = [
 
 var introductions = <Map<String, dynamic>>[
   {
-    "title": "intro_title_3".tr,
-    "description": "intro_desc_3".tr,
-    "image_path": "image3.png",
-  },
-  {
-    "title": "intro_title_1".tr,
-    "description": "intro_desc_1".tr,
-    "image_path": "image1.png",
-  },
-  {
     "title": "intro_title_2".tr,
     "description": "intro_desc_2".tr,
-    "image_path": "image0.png",
+    "image_path": "image0.webp",
+  },
+  {
+    "title": "intro_title_3".tr,
+    "description": "intro_desc_3".tr,
+    "image_path": "image3.webp",
+  },
+  {
+    "title": "intro_title_export".tr,
+    "description": "intro_desc_export".tr,
+    "image_path": "image6.webp",
   },
   {
     "title": "intro_title_4".tr,
     "description": "intro_desc_4".tr,
-    "image_path": "image4.png",
+    "image_path": "image4.webp",
   },
 ];
 var aboutApp = "about_cutit".tr;

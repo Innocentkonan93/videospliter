@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
@@ -66,37 +65,6 @@ class VideoService {
     // Dossier de sortie
     final tempDir = await getTemporaryDirectory();
 
-    String? watermarkTempPath;
-    int? watermarkWidth;
-    int? watermarkHeight;
-
-    if (!isPro) {
-      try {
-        final byteData = await DefaultAssetBundle.of(
-          Get.context!,
-        ).load('assets/logo/watermark.png');
-
-        final codec = await ui.instantiateImageCodec(
-          byteData.buffer.asUint8List(),
-        );
-        final frame = await codec.getNextFrame();
-        final image = frame.image;
-        watermarkWidth = image.width;
-        watermarkHeight = image.height;
-
-        final rawBytes = await image.toByteData(
-          format: ui.ImageByteFormat.rawRgba,
-        );
-        if (rawBytes != null) {
-          final file = File(p.join(tempDir.path, 'watermark_temp.raw'));
-          await file.writeAsBytes(rawBytes.buffer.asUint8List());
-          watermarkTempPath = file.path;
-        }
-      } catch (e) {
-        log('Error loading watermark asset: $e');
-      }
-    }
-
     // Récupérer la durée totale avec FFprobe (async)
     final probeSession = await FFprobeKit.getMediaInformation(videoFile.path);
     final info = probeSession.getMediaInformation(); // <-- await important
@@ -140,9 +108,6 @@ class VideoService {
         startTime: start,
         duration: segDur,
         isPro: isPro,
-        watermarkPath: watermarkTempPath,
-        watermarkWidth: watermarkWidth,
-        watermarkHeight: watermarkHeight,
       );
 
       // Completer pour ce segment

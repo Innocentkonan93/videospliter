@@ -40,7 +40,7 @@ class IntroductionView extends GetWidget<IntroductionController> {
                   Opacity(
                     opacity: .25,
                     child: Image.asset(
-                      "assets/images/bg.png",
+                      "assets/images/bg.webp",
                       fit: BoxFit.cover,
                       height: height,
                       width: size.width,

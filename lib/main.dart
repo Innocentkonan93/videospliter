@@ -2,6 +2,7 @@ import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:get/get.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -26,7 +27,8 @@ import 'app/routes/app_pages.dart';
 bool isIntroductionViewed = false;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await CacheHelper.init();
 
@@ -72,6 +74,8 @@ void main() async {
     projectId: "s204qm61cv",
     logLevel: LogLevel.None,
   );
+
+  FlutterNativeSplash.remove();
 
   runApp(ClarityWidget(app: MyApp(), clarityConfig: config));
 }

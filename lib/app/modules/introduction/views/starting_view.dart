@@ -17,7 +17,7 @@ class StartingView extends GetWidget<IntroductionController> {
               height: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/logo/logo.png"),
+                  image: AssetImage("assets/logo/logo.webp"),
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),

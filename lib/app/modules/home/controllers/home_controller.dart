@@ -286,7 +286,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     final isPro = FeatureManager.isProUser;
 
-    final bgTaskId = await BackgroundProcessingService.start('Découpage de vidéo en cours...');
+    final bgTaskId = await BackgroundProcessingService.start(
+      'Découpage de vidéo en cours...',
+    );
 
     try {
       final parts = await VideoService.splitBySSAsync(
@@ -338,7 +340,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     final isPro = FeatureManager.isProUser;
 
-    final bgTaskId = await BackgroundProcessingService.start('Découpage parallèle de vidéo...');
+    final bgTaskId = await BackgroundProcessingService.start(
+      'Découpage parallèle de vidéo...',
+    );
 
     try {
       final parts = await ParallelVideoService.splitBySSParallelAsync(
@@ -452,12 +456,63 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  /// Vérifie si la limite journalière est dépassée pour l'utilisateur gratuit
+  Future<bool> checkDailyLimit() async {
+    final isPro = FeatureManager.isProUser;
+    log("🔍 [Daily Limit] Vérification : isProUser = $isPro");
+    if (isPro) return true;
+
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final lastExportDate = await CacheHelper.getString(key: 'last_export_date');
+    int exportsCount = CacheHelper.getInteger(key: 'daily_exports_count');
+
+    log(
+      "📊 [Daily Limit] Date actuelle : $today | Dernière date de découpe : '$lastExportDate' | Compteur actuel : $exportsCount",
+    );
+
+    if (lastExportDate != today) {
+      log(
+        "♻️ [Daily Limit] Nouvelle journée détectée. Réinitialisation du compteur.",
+      );
+      exportsCount = 0;
+      await CacheHelper.saveData(key: 'last_export_date', value: today);
+      await CacheHelper.saveData(key: 'daily_exports_count', value: 0);
+    }
+
+    const int maxDailyFreeCuts = 3;
+    if (exportsCount >= maxDailyFreeCuts) {
+      log(
+        "🚫 [Daily Limit] Limite journalière de $maxDailyFreeCuts atteinte ! Accès refusé.",
+      );
+      return false;
+    }
+
+    log(
+      "✅ [Daily Limit] Autorisé. ${maxDailyFreeCuts - exportsCount} découpes restantes pour aujourd'hui.",
+    );
+    return true;
+  }
+
+  /// Incrémente le nombre d'exports quotidiens pour l'utilisateur gratuit
+  Future<void> incrementDailyExportCount() async {
+    if (FeatureManager.isProUser) return;
+    final exportsCount = CacheHelper.getInteger(key: 'daily_exports_count');
+    await CacheHelper.saveData(
+      key: 'daily_exports_count',
+      value: exportsCount + 1,
+    );
+    log(
+      "📈 [Daily Limit] Compteur incrémenté. Nouvelle valeur en cache : ${exportsCount + 1}",
+    );
+  }
+
   // ==================== MÉTHODES DE GESTION DES ÉVÉNEMENTS ====================
 
   /// Appelée après un découpage réussi
   /// Gère l'affichage des publicités et les demandes d'évaluation
-  void onSplitDone() {
+  Future<void> onSplitDone() async {
     successfulCuts.value++;
+    await incrementDailyExportCount();
 
     // Affiche une publicité récompensée tous les 5 découpages (Supprimé : on passe en Opt-in pour l'Export HD)
 
