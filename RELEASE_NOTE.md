@@ -1,3 +1,23 @@
+## Nouveautés de cette version (1.2.0+46)
+
+**Date : 12 Juin 2026**
+
+### Fonctionnalités
+- **Découpage en Arrière-plan** : Le traitement vidéo continue en tâche de fond sous Android (via un service de premier plan avec notification) et sous iOS, éliminant le besoin de garder l'application ouverte.
+- **Mode Turbo (Pro)** : Découpage vidéo parallèle multi-thread pour les utilisateurs Premium, permettant une vitesse jusqu'à 4 fois supérieure avec une grille de progression interactive.
+- **Nettoyage Automatique & Manuel** : Optimisation de l'espace de stockage avec un nettoyage intelligent des fichiers temporaires à chaque lancement.
+- **Slicing Custom Gratuit** : La fonctionnalité de découpage sur mesure (durée personnalisée) est désormais accessible gratuitement à tous les utilisateurs.
+
+### Améliorations
+- **Parcours d'Onboarding** : Refonte totale de l'écran d'introduction avec des designs épurés en glassmorphism et des transitions fluides.
+- **Expérience d'Export** : L'écran de chargement d'exportation est désormais non-bloquant avec une option de fermeture rapide.
+
+### Correctifs
+- **Stabilité Android & iOS** : Résolution de crashs critiques de décodage vidéo (MediaCodec) et correction des problèmes de compilation sur les simulateurs Apple Silicon.
+- **Interface Utilisateur** : Ajustement des bordures de sélection et des débordements de textes sur les écrans étroits.
+
+------
+
 ## Nouveautés de cette version (1.1.4+42)
 
 **Date : 20 Mai 2026**

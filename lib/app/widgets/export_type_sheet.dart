@@ -191,7 +191,7 @@ class _ExportTypeSheetState extends State<ExportTypeSheet> {
                   icon: HugeIcons.strokeRoundedAiVideo,
                   isSelected: isProSelected,
                   color: AppColors.orange,
-                  isProBadge: true,
+                  isProBadge: false,
                   isProUser: isUserPro,
                   onTap: () => setState(() => isProSelected = true),
                 ),

@@ -22,6 +22,7 @@ class MyCutoutsView extends StatefulWidget {
 
 class _MyCutoutsViewState extends State<MyCutoutsView> {
   List<Directory> splitFolders = [];
+  Map<String, int> folderItemCounts = {};
   bool isLoading = false;
 
   @override
@@ -51,14 +52,19 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
       if (!await baseDir.exists()) return;
 
       final List<Directory> validFolders = [];
+      final Map<String, int> counts = {};
       await for (var entity in baseDir.list(recursive: false)) {
         if (entity is Directory) {
           final List<FileSystemEntity> files = await entity.list().toList();
-          final hasMp4 = files.any(
-            (e) => e is File && e.path.toLowerCase().endsWith('.mp4'),
-          );
-          if (hasMp4) {
+          final mp4Files =
+              files
+                  .where(
+                    (e) => e is File && e.path.toLowerCase().endsWith('.mp4'),
+                  )
+                  .toList();
+          if (mp4Files.isNotEmpty) {
             validFolders.add(entity);
+            counts[entity.path] = mp4Files.length;
           }
         }
       }
@@ -68,6 +74,7 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
       );
       setState(() {
         splitFolders = validFolders;
+        folderItemCounts = counts;
       });
     } catch (e) {
       print('${'error_loading_video'.tr}: $e');
@@ -123,16 +130,18 @@ class _MyCutoutsViewState extends State<MyCutoutsView> {
                           crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 5,
-                          childAspectRatio: 1,
+                          childAspectRatio: 1.1,
                         ),
                         itemBuilder: (context, index) {
                           final folder = splitFolders[index];
                           final folderName = p.basename(folder.path);
                           final createdAt = folder.statSync().modified;
+                          final itemCount = folderItemCounts[folder.path] ?? 0;
                           return FolderItem(
                             folder: folder,
                             folderName: folderName,
                             createdAt: createdAt,
+                            itemCount: itemCount,
                           );
                         },
                       ),

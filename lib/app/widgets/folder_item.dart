@@ -16,11 +16,13 @@ class FolderItem extends GetWidget<HomeController> {
     required this.folder,
     required this.folderName,
     required this.createdAt,
+    required this.itemCount,
   });
 
   final Directory folder;
   final String folderName;
   final DateTime createdAt;
+  final int itemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +82,44 @@ class FolderItem extends GetWidget<HomeController> {
                           ),
                         ),
                         Positioned(
+                          top: 45,
+                          left: 15,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.white.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: AppColors.white.withValues(alpha: 0.2),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedVideo01,
+                                  color: AppColors.white,
+                                  size: 14,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '$itemCount',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
                           bottom: 30,
-                          left: 20,
+                          right: 10,
                           child: Text(
                             DateFormat('dd.MM.yyyy').format(createdAt),
                             style: theme.textTheme.bodyMedium?.copyWith(

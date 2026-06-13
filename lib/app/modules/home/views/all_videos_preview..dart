@@ -174,7 +174,9 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                                       clipBehavior: Clip.hardEdge,
                                       child:
                                           index < currentPage
-                                              ? Container(color: Colors.white)
+                                              ? Container(
+                                                color: AppColors.orange,
+                                              )
                                               : index > currentPage
                                               ? Container(
                                                 color: Colors.white.withValues(
@@ -204,9 +206,7 @@ class _AllVideosPreviewState extends State<AllVideosPreview> {
                                                         widthFactor: progress,
                                                         child: Container(
                                                           color:
-                                                              Theme.of(
-                                                                context,
-                                                              ).primaryColor,
+                                                              AppColors.orange,
                                                         ),
                                                       ),
                                                     ],

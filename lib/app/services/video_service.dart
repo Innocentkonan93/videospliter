@@ -246,7 +246,7 @@ class VideoService {
       'processing'.tr,
       'please_wait'.tr,
       // showProgressIndicator: true,
-      snackPosition: SnackPosition.TOP,
+      snackPosition: SnackPosition.BOTTOM,
       backgroundColor: AppColors.white,
       colorText: AppColors.black,
       isDismissible: false,
