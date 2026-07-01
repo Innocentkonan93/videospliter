@@ -28,7 +28,7 @@ Future<void> launchUri(Uri parse) async {
   await launchUrl(parse);
 }
 
-final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60];
+final List<int> predefinedDurations = [3, 5, 10, 15, 30, 60, 90, 180];
 
 var settingsGroups = [
   {
@@ -197,7 +197,13 @@ var socialMedia = <Map<String, dynamic>>[
   {
     'name': 'Whatsapp',
     'icon': HugeIcons.strokeRoundedWhatsapp,
-    'duration': 60.0,
+    'duration': 90.0,
     'color': const Color(0xFF25D366),
+  },
+  {
+    'name': 'Youtube',
+    'icon': HugeIcons.strokeRoundedYoutube,
+    'duration': 180.0,
+    'color': const Color(0xFFFF0000),
   },
 ];

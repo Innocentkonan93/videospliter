@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -160,7 +161,8 @@ class _ProcessViewState extends State<ProcessView> {
         );
       }
     } catch (e) {
-      // print(e);
+      log(e.toString());
+      print(e);
       final isPro = FeatureManager.isProUser;
       FeedbackService().send(
         message: isPro ? 'Découpage parallèle échoué' : 'Découpage échoué',

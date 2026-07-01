@@ -39,12 +39,13 @@ class BackgroundProcessingService {
         if (!await FlutterForegroundTask.isRunningService) {
           final ServiceRequestResult result =
               await FlutterForegroundTask.startService(
-            notificationTitle: title,
-            notificationText: 'Veuillez patienter...',
-            notificationIcon: const NotificationIcon(
-              metaDataName: 'com.pravera.flutter_foreground_task.notification_icon',
-            ),
-          );
+                notificationTitle: title,
+                notificationText: 'Veuillez patienter...',
+                notificationIcon: const NotificationIcon(
+                  metaDataName:
+                      'com.pravera.flutter_foreground_task.notification_icon',
+                ),
+              );
           return result is ServiceRequestSuccess;
         }
         return true;
@@ -54,10 +55,12 @@ class BackgroundProcessingService {
       }
     } else if (Platform.isIOS) {
       try {
-        const MethodChannel channel =
-            MethodChannel('com.meetsum.cutit/background_task');
-        final dynamic result =
-            await channel.invokeMethod('beginBackgroundTask');
+        const MethodChannel channel = MethodChannel(
+          'com.meetsum.cutit/background_task',
+        );
+        final dynamic result = await channel.invokeMethod(
+          'beginBackgroundTask',
+        );
         return result;
       } catch (e) {
         print('❌ Error starting iOS background task: $e');
@@ -71,9 +74,7 @@ class BackgroundProcessingService {
     if (Platform.isAndroid) {
       try {
         if (await FlutterForegroundTask.isRunningService) {
-          await FlutterForegroundTask.updateService(
-            notificationText: message,
-          );
+          await FlutterForegroundTask.updateService(notificationText: message);
         }
       } catch (e) {
         print('❌ Error updating foreground service: $e');
@@ -93,8 +94,9 @@ class BackgroundProcessingService {
     } else if (Platform.isIOS) {
       if (taskId != null) {
         try {
-          const MethodChannel channel =
-              MethodChannel('com.meetsum.cutit/background_task');
+          const MethodChannel channel = MethodChannel(
+            'com.meetsum.cutit/background_task',
+          );
           await channel.invokeMethod('endBackgroundTask', {'id': taskId});
         } catch (e) {
           print('❌ Error stopping iOS background task: $e');

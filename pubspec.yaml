@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A tool for video splitting"
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.2.0+46
+version: 1.2.0+47
 
 environment:
   sdk: ^3.7.0

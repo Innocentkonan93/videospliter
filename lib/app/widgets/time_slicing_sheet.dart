@@ -43,8 +43,10 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 24.0,
+                    runSpacing: 16.0,
                     children: [
                       // Social media icons
                       ...socialMedia.map(
@@ -255,8 +257,8 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                       Expanded(
                                         child: Slider(
                                           min: 1,
-                                          max: 60,
-                                          divisions: 60,
+                                          max: 180,
+                                          divisions: 180,
                                           label:
                                               '${controller.sliceDuration.value.toInt()}s',
                                           thumbColor: AppColors.orange,
@@ -273,7 +275,7 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        '60s',
+                                        '180s',
                                         style: theme.textTheme.titleMedium,
                                       ),
                                     ],
