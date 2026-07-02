@@ -85,10 +85,11 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
                   onPressed: () {
                     controller.clearAll();
                     controller.update();
+                    Get.back();
                   },
                   icon: const HugeIcon(
-                    icon: HugeIcons.strokeRoundedDelete01,
-                    color: AppColors.red,
+                    icon: HugeIcons.strokeRoundedCancel01,
+                    color: AppColors.white,
                     size: 15,
                   ),
                   style: IconButton.styleFrom(
@@ -118,12 +119,25 @@ class _CustomVideoPlayerWidgetState extends State<CustomVideoPlayerWidget> {
                   ),
                 ),
               ),
-              // Center(
-              //   child: IconButton(
-              //     icon: const Icon(Icons.pause_circle_filled),
-              //     onPressed: _togglePlayPause,
-              //   ),
-              // ),
+              if (_controller.value.isPlaying)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: VideoProgressIndicator(
+                    _controller,
+                    allowScrubbing: true,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
+                    colors: const VideoProgressColors(
+                      playedColor: AppColors.primary,
+                      bufferedColor: Colors.white38,
+                      backgroundColor: Colors.white12,
+                    ),
+                  ),
+                ),
             ],
           ),
         );

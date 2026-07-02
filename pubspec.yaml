@@ -1,7 +1,7 @@
 name: video_spliter
 description: "A tool for video splitting"
 publish_to: "none" #Remove this line if you wish to publish to pub.dev
-version: 1.2.0+47
+version: 1.2.1+48
 
 environment:
   sdk: ^3.7.0
@@ -65,8 +65,9 @@ dev_dependencies:
     sdk: flutter
   rxdart: ^0.28.0
 
-dependency_overrides: null
-# ffmpeg_kit_flutter_new: ^2.0.0
+dependency_overrides:
+  path_provider_foundation: 2.3.2
+  shared_preferences_foundation: 2.3.5
 flutter:
   uses-material-design: true
   assets:

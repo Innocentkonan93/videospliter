@@ -124,90 +124,22 @@ class HomeView extends GetView<HomeController> {
                                     ],
                                   ),
                                 )
-                                : controller.selectedVideo.value == null
-                                ? Center(
-                                  child: IconButton(
-                                        onPressed: () {
-                                          controller.pickVideo();
-                                        },
-                                        style: IconButton.styleFrom(
-                                          backgroundColor: AppColors.white,
-                                          foregroundColor: AppColors.primary,
-                                          elevation: 10,
-                                          minimumSize: Size(60, 60),
-                                        ),
-                                        tooltip: "Ajouter une vidéo",
-                                        icon: const HugeIcon(
-                                          icon: HugeIcons.strokeRoundedAdd01,
-                                          color: AppColors.primary,
-                                        ),
-                                      )
-                                      .animate(
-                                        autoPlay: true,
-                                        onPlay: (controller) {
-                                          controller.repeat();
-                                        },
-                                      )
-                                      .scale(
-                                        duration: const Duration(
-                                          milliseconds: 1000,
-                                        ),
-                                        curve: Curves.easeInOut,
-                                        begin: const Offset(1.0, 1.0),
-                                        end: const Offset(1.1, 1.1),
-                                      )
-                                      .then()
-                                      .scale(
-                                        duration: const Duration(
-                                          milliseconds: 700,
-                                        ),
-                                        curve: Curves.easeInOut,
-                                        begin: const Offset(1.1, 1.1),
-                                        end: const Offset(1.0, 1.0),
-                                      ),
-                                )
-                                : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      constraints: BoxConstraints(
-                                        maxWidth: 400,
-                                      ),
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 0,
-                                      ),
-                                      child: CustomVideoPlayerWidget(
-                                        videoFile:
-                                            controller.selectedVideo.value!,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 16),
-                                    ElevatedButton.icon(
-                                      icon: const HugeIcon(
-                                        icon: HugeIcons.strokeRoundedScissor,
-                                        color: AppColors.primary,
-                                        size: 24,
-                                      ),
-                                      label: Text(
-                                        'cut_video'.tr,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                      ),
-                                      onPressed: () async {
+                                : Center(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      await controller.pickVideo();
+                                      if (controller.selectedVideo.value !=
+                                          null) {
                                         final result =
                                             await showModalBottomSheet(
                                               context: context,
                                               showDragHandle: true,
                                               isScrollControlled: true,
                                               enableDrag: false,
+                                              shape: RoundedSuperellipseBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(40),
+                                              ),
                                               backgroundColor: AppColors.white,
                                               builder: (context) {
                                                 return const TimeSlicingSheet();
@@ -215,30 +147,88 @@ class HomeView extends GetView<HomeController> {
                                             );
                                         if (result != null &&
                                             result is double) {
-                                          final canProceed = await controller.checkDailyLimit();
+                                          final canProceed =
+                                              await controller
+                                                  .checkDailyLimit();
                                           if (!canProceed) {
-                                            final upgrade = await Get.dialog<bool>(
-                                              const PremiumLimitDialog(
-                                                isSizeExceeded: false,
-                                                isDailyLimit: true,
-                                                value: 0,
-                                                limit: 3,
-                                              ),
-                                            );
+                                            final upgrade =
+                                                await Get.dialog<bool>(
+                                                  const PremiumLimitDialog(
+                                                    isSizeExceeded: false,
+                                                    isDailyLimit: true,
+                                                    value: 0,
+                                                    limit: 3,
+                                                  ),
+                                                );
                                             if (upgrade == true) {
-                                              await Get.find<RevenueCatService>().presentPaywall(
-                                                placement: 'daily_limit',
-                                              );
+                                              await Get.find<
+                                                    RevenueCatService
+                                                  >()
+                                                  .presentPaywall(
+                                                    placement: 'daily_limit',
+                                                  );
                                             }
                                             return;
                                           }
                                           controller.sliceDuration.value =
                                               result;
                                           Get.to(() => const ProcessView());
+                                        } else {
+                                          controller.selectedVideo.value = null;
                                         }
-                                      },
+                                      }
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                              padding: const EdgeInsets.all(20),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.white,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: AppColors.white
+                                                        .withValues(alpha: .2),
+                                                    blurRadius: 20,
+                                                    spreadRadius: 5,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: const HugeIcon(
+                                                icon:
+                                                    HugeIcons
+                                                        .strokeRoundedAdd01,
+                                                color: AppColors.primary,
+                                                size: 36,
+                                              ),
+                                            )
+                                            .animate(
+                                              onPlay:
+                                                  (controller) => controller
+                                                      .repeat(reverse: true),
+                                            )
+                                            .scale(
+                                              begin: const Offset(1.0, 1.0),
+                                              end: const Offset(1.08, 1.08),
+                                              duration: const Duration(
+                                                milliseconds: 1200,
+                                              ),
+                                              curve: Curves.easeInOut,
+                                            ),
+                                        // const SizedBox(height: 24),
+                                        // Text(
+                                        //   "import_video".tr,
+                                        //   textAlign: TextAlign.center,
+                                        //   style: theme.textTheme.titleLarge
+                                        //       ?.copyWith(
+                                        //         color: AppColors.white,
+                                        //         fontWeight: FontWeight.bold,
+                                        //       ),
+                                        // ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                             const Spacer(flex: 2),
                             SafeArea(
