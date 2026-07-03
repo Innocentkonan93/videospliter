@@ -87,6 +87,7 @@ class SettingsView extends GetWidget<SettingsController> {
                                 ),
                                 child: ListView.builder(
                                   shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: items.length,
                                   // separatorBuilder:

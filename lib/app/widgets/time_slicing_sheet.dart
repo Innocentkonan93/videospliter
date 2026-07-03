@@ -381,32 +381,7 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
                           ),
                         ],
                       ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedSuperellipseBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          if (!GetPlatform.isMobile) {
-                            Get.snackbar('error'.tr, 'only_mobile'.tr);
-                            return;
-                          }
-                          Get.back(result: controller.sliceDuration.value);
-                        },
-                        child: Text(
-                          'cut'.tr,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ),
+                      child: _buildCutButton(context),
                     ),
                   ],
                 ),
@@ -416,6 +391,65 @@ class _TimeSlicingSheetState extends State<TimeSlicingSheet> {
         ),
       ),
     );
+  }
+
+  Widget _buildCutButton(BuildContext context) {
+    return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: AppColors.primary.withValues(alpha: 0.4),
+            //     blurRadius: 24,
+            //     spreadRadius: 2,
+            //     offset: const Offset(0, 8),
+            //   ),
+            // ],
+          ),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              shape: RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              elevation: 0,
+            ),
+            onPressed: () {
+              if (!GetPlatform.isMobile) {
+                Get.snackbar('error'.tr, 'only_mobile'.tr);
+                return;
+              }
+              Get.back(result: controller.sliceDuration.value);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HugeIcon(
+                  icon: HugeIcons.strokeRoundedScissor01,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'cut'.tr,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+        .animate(onPlay: (c) => c.repeat(reverse: false))
+        .shimmer(
+          duration: Duration(seconds: 5),
+          color: Colors.white.withValues(alpha: 0.3),
+        );
   }
 }
 

@@ -85,7 +85,7 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Settings',
-      'purchases': 'Purchases',
+      'purchases': 'Cutit Pro',
       'restore_purchases': 'Restore Purchases',
       'no_active_subscription': 'No active subscription found to restore.',
       'purchases_restored': 'Purchases restored successfully.',
@@ -351,8 +351,8 @@ class Localization extends Translations {
       'size': 'Taille',
       // Settings
       'settings': 'Paramètres',
-      'purchases': 'Achats',
-      'restore_purchases': 'Restaurer les achats',
+      'purchases': 'Cutit Pro',
+      'restore_purchases': 'Restaurer mon achat',
       'no_active_subscription': 'Aucun abonnement actif trouvé à restaurer.',
       'purchases_restored': 'Achats restaurés avec succès.',
       'general': 'Général',
@@ -611,7 +611,7 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Configuración',
-      'purchases': 'Compras',
+      'purchases': 'Cutit Pro',
       'restore_purchases': 'Restaurar compras',
       'no_active_subscription':
           'No se encontró ninguna suscripción activa para restaurar.',
@@ -878,7 +878,7 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'Configurações',
-      'purchases': 'Compras',
+      'purchases': 'Cutit Pro',
       'restore_purchases': 'Restaurar compras',
       'no_active_subscription':
           'Nenhuma assinatura ativa encontrada para restaurar.',
@@ -1141,7 +1141,7 @@ class Localization extends Translations {
 
       // Settings
       'settings': 'الإعدادات',
-      'purchases': 'المشتريات',
+      'purchases': 'Cutit Pro',
       'restore_purchases': 'استعادة المشتريات',
       'no_active_subscription': 'لم يتم العثور على اشتراك نشط لاستعادته.',
       'purchases_restored': 'تم استعادة المشتريات بنجاح.',

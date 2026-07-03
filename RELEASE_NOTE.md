@@ -1,3 +1,21 @@
+## Nouveautés de cette version (1.2.1+48)
+
+**Date : 3 Juillet 2026**
+
+### Fonctionnalités
+- **Parcours simplifié** : Le flux de découpage a été accéléré avec un accès direct au choix des formats dès la sélection de la vidéo.
+- **Lecteur optimisé** : Ajout d'une barre de progression interactive pour naviguer facilement dans vos vidéos.
+
+### Améliorations
+- **Expérience Premium** : Les boutons de sélection profitent désormais d'animations tactiles premium (effets de rebond et tremblement) pour une navigation plus agréable.
+- **Cutit Pro** : La section "Achats" a été renommée "Cutit Pro" pour plus de clarté sur tous vos appareils.
+
+### Correctifs
+- **Stabilité iOS** : Correction d'un bug critique (PlatformException) qui causait un crash lors du rechargement de vues vidéo natives.
+- **UI** : L'interface des paramètres est désormais mieux alignée en supprimant un espace inutile en bas de liste.
+
+------
+
 ## Nouveautés de cette version (1.2.0+46)
 
 **Date : 12 Juin 2026**
